@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { toPng } from "html-to-image";
+import jsPDF from "jspdf";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import {
@@ -21,9 +23,11 @@ import {
 
 export default function BookingReceiptPage() {
   const params = useParams();
+  const receiptRef = useRef<HTMLDivElement>(null);
   const [booking, setBooking] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     const fetchBooking = async () => {
@@ -63,8 +67,30 @@ export default function BookingReceiptPage() {
     );
   }
 
-  const handleDownload = () => {
-    alert("Downloading receipt as PDF... (Feature in progress)");
+  const handleDownload = async () => {
+    if (!receiptRef.current || downloading) return;
+    
+    setDownloading(true);
+    try {
+      const imgData = await toPng(receiptRef.current, {
+        quality: 1.0,
+        backgroundColor: "#ffffff",
+        pixelRatio: 2
+      });
+      
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`Khadmat_AI_Receipt_${booking?.booking_ref || "download"}.pdf`);
+    } catch (err) {
+      console.error("Failed to generate PDF", err);
+      alert("Failed to download receipt. Please try again.");
+    } finally {
+      setDownloading(false);
+    }
   };
 
   return (
@@ -78,8 +104,9 @@ export default function BookingReceiptPage() {
         <span className="text-[var(--text-primary)]">Confirmation</span>
       </div>
 
-      {/* Success Banner */}
-      <div className="bg-[#E1F5EE] border border-[#5DCAA5] rounded-xl p-4 sm:p-5 flex items-center gap-3.5 mb-6">
+      <div ref={receiptRef} className="bg-[var(--bg-primary)] p-4 -mx-4 sm:-mx-6 sm:px-6 rounded-xl">
+        {/* Success Banner */}
+        <div className="bg-[#E1F5EE] border border-[#5DCAA5] rounded-xl p-4 sm:p-5 flex items-center gap-3.5 mb-6">
         <div className="w-10 h-10 bg-[#1D9E75] rounded-full flex items-center justify-center shrink-0 text-white shadow-sm">
           <Check size={20} />
         </div>
@@ -193,6 +220,7 @@ export default function BookingReceiptPage() {
           {booking.reminder.trigger_at.split("T").pop() || "9:00 AM"}
         </span>
       </div>
+      </div>
 
       {/* Action Buttons */}
       <div className="flex gap-2.5 flex-wrap">
@@ -202,8 +230,9 @@ export default function BookingReceiptPage() {
         <Link href="/book" className="bg-[var(--bg-primary)] text-[var(--text-primary)] border border-[var(--border-secondary)] px-4 py-2.5 rounded-lg text-[13px] hover:bg-[var(--bg-secondary)] transition-colors flex items-center gap-1.5 no-underline">
           <Plus size={16} /> Book another service
         </Link>
-        <button onClick={handleDownload} className="bg-[var(--bg-primary)] text-[var(--text-primary)] border border-[var(--border-secondary)] px-4 py-2.5 rounded-lg text-[13px] hover:bg-[var(--bg-secondary)] transition-colors flex items-center gap-1.5">
-          <Download size={16} /> Download receipt
+        <button onClick={handleDownload} disabled={downloading} className="bg-[var(--bg-primary)] text-[var(--text-primary)] border border-[var(--border-secondary)] px-4 py-2.5 rounded-lg text-[13px] hover:bg-[var(--bg-secondary)] transition-colors flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed">
+          {downloading ? <Loader2 size={16} className="animate-spin" /> : <Download size={16} />}
+          {downloading ? "Downloading..." : "Download receipt"}
         </button>
       </div>
     </div>
