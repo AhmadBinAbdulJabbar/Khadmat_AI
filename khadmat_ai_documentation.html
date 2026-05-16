@@ -1,0 +1,1903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Khadmat AI — System Documentation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --green: #1D9E75;
+    --green-dark: #0F6E56;
+    --green-deep: #085041;
+    --green-light: #E1F5EE;
+    --green-mid: #9FE1CB;
+    --amber: #EF9F27;
+    --amber-light: #FAEEDA;
+    --red: #E24B4A;
+    --red-light: #FCEBEB;
+    --purple: #534AB7;
+    --purple-light: #EEEDFE;
+    --blue: #185FA5;
+    --blue-light: #E6F1FB;
+    --bg: #F8F9FA;
+    --surface: #FFFFFF;
+    --border: #E5E7EB;
+    --border-light: #F0F2F4;
+    --text-primary: #111827;
+    --text-secondary: #6B7280;
+    --text-muted: #9CA3AF;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sora', sans-serif;
+    --sidebar-w: 280px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.7;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ─────────────────────────────────────── */
+  .sidebar {
+    width: var(--sidebar-w);
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-header {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0;
+    background: var(--surface);
+    z-index: 1;
+  }
+
+  .logo-row {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 4px;
+  }
+
+  .logo-mark {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--green); display: flex; align-items: center;
+    justify-content: center; color: #fff;
+    font-weight: 700; font-size: 14px; flex-shrink: 0;
+  }
+
+  .logo-name { font-size: 15px; font-weight: 600; }
+  .logo-sub { font-size: 11px; color: var(--text-muted); font-family: var(--mono); }
+
+  .nav-section {
+    padding: 16px 20px 6px;
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.08em; color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 9px;
+    padding: 8px 20px; font-size: 13px; color: var(--text-secondary);
+    cursor: pointer; transition: all 0.15s; text-decoration: none;
+    border-left: 2px solid transparent;
+  }
+
+  .nav-item:hover { background: var(--bg); color: var(--text-primary); }
+
+  .nav-item.active {
+    background: var(--green-light); color: var(--green-dark);
+    font-weight: 500; border-left-color: var(--green);
+  }
+
+  .nav-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── MAIN CONTENT ─────────────────────────────────── */
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    max-width: 960px;
+    padding: 40px 48px;
+  }
+
+  /* ── SECTIONS ─────────────────────────────────────── */
+  .doc-section {
+    margin-bottom: 72px;
+    scroll-margin-top: 32px;
+  }
+
+  .section-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px; color: var(--green);
+    letter-spacing: 0.06em; margin-bottom: 6px;
+  }
+
+  .section-title {
+    font-size: 26px; font-weight: 700;
+    color: var(--text-primary); margin-bottom: 8px;
+    line-height: 1.25;
+  }
+
+  .section-desc {
+    font-size: 14px; color: var(--text-secondary);
+    max-width: 640px; margin-bottom: 28px; line-height: 1.8;
+  }
+
+  /* ── PAGE CARD ────────────────────────────────────── */
+  .page-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .page-card-header {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border-light);
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+
+  .page-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; font-weight: 500;
+    padding: 3px 10px; border-radius: 20px;
+    flex-shrink: 0; margin-top: 2px;
+  }
+
+  .badge-customer { background: var(--blue-light); color: var(--blue); }
+  .badge-provider { background: var(--purple-light); color: var(--purple); }
+  .badge-shared { background: var(--green-light); color: var(--green-dark); }
+  .badge-critical { background: #FEF3C7; color: #92400E; }
+
+  .page-title-block { flex: 1; }
+
+  .page-name {
+    font-size: 16px; font-weight: 600;
+    margin-bottom: 3px;
+  }
+
+  .page-file {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .page-card-body {
+    padding: 20px 22px;
+  }
+
+  /* ── FEATURE LIST ─────────────────────────────────── */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .feature-item {
+    background: var(--bg);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+
+  .feature-name {
+    font-size: 13px; font-weight: 500;
+    margin-bottom: 3px; color: var(--text-primary);
+  }
+
+  .feature-desc {
+    font-size: 12px; color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ── CONNECTIONS ──────────────────────────────────── */
+  .connections {
+    background: var(--green-light);
+    border: 1px solid var(--green-mid);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+
+  .connections-title {
+    font-size: 12px; font-weight: 600;
+    color: var(--green-deep); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .conn-list {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+
+  .conn-chip {
+    font-size: 11px;
+    background: var(--surface);
+    border: 1px solid var(--green-mid);
+    color: var(--green-dark);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-family: var(--mono);
+    display: flex; align-items: center; gap: 4px;
+  }
+
+  /* ── LOOPHOLES ────────────────────────────────────── */
+  .loopholes {
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+
+  .loopholes-title {
+    font-size: 12px; font-weight: 600;
+    color: #92400E; margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .loophole-item {
+    font-size: 12px; color: #78350F;
+    margin-bottom: 5px; padding-left: 14px;
+    position: relative; line-height: 1.6;
+  }
+
+  .loophole-item::before {
+    content: '⚠';
+    position: absolute; left: 0;
+    font-size: 10px;
+  }
+
+  /* ── RECOMMENDATIONS ──────────────────────────────── */
+  .recommendations {
+    background: var(--blue-light);
+    border: 1px solid #BAD6F0;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+
+  .rec-title {
+    font-size: 12px; font-weight: 600;
+    color: var(--blue); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .rec-item {
+    font-size: 12px; color: #1E3A5F;
+    margin-bottom: 5px; padding-left: 14px;
+    position: relative; line-height: 1.6;
+  }
+
+  .rec-item::before {
+    content: '→';
+    position: absolute; left: 0;
+    color: var(--blue);
+  }
+
+  /* ── FLOW DIAGRAM ─────────────────────────────────── */
+  .flow {
+    display: flex; align-items: center;
+    gap: 8px; flex-wrap: wrap;
+    margin: 12px 0;
+  }
+
+  .flow-node {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px; font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .flow-node.green { background: var(--green-light); border-color: var(--green-mid); color: var(--green-dark); }
+  .flow-node.amber { background: var(--amber-light); border-color: #F6D490; color: #7C3F00; }
+  .flow-node.purple { background: var(--purple-light); border-color: #C0BBF4; color: var(--purple); }
+  .flow-node.red { background: var(--red-light); border-color: #F5C0C0; color: #991B1B; }
+  .flow-node.blue { background: var(--blue-light); border-color: #BAD6F0; color: var(--blue); }
+
+  .flow-arrow {
+    color: var(--text-muted); font-size: 14px;
+  }
+
+  /* ── DB TABLE ─────────────────────────────────────── */
+  .db-table {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    font-size: 12px;
+  }
+
+  .db-table-header {
+    background: #F9FAFB;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600; font-family: var(--mono);
+    color: var(--text-secondary);
+    font-size: 11px;
+  }
+
+  .db-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border-light);
+    align-items: start;
+  }
+
+  .db-row:last-child { border-bottom: none; }
+
+  .db-field {
+    font-family: var(--mono); color: var(--text-secondary);
+    font-size: 11px; padding-top: 1px;
+  }
+
+  .db-desc { color: var(--text-secondary); line-height: 1.5; }
+
+  /* ── AGENTS ───────────────────────────────────────── */
+  .agent-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .agent-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    background: var(--surface);
+  }
+
+  .agent-name {
+    font-size: 13px; font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .agent-tool {
+    font-family: var(--mono); font-size: 10px;
+    color: var(--green); background: var(--green-light);
+    padding: 2px 7px; border-radius: 20px;
+    display: inline-block; margin-bottom: 6px;
+  }
+
+  .agent-desc {
+    font-size: 11px; color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ── HERO SECTION ─────────────────────────────────── */
+  .doc-hero {
+    background: linear-gradient(135deg, #065F46 0%, #1D9E75 60%, #059669 100%);
+    border-radius: 16px;
+    padding: 40px 44px;
+    margin-bottom: 48px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .doc-hero::before {
+    content: '';
+    position: absolute; top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .doc-hero::after {
+    content: '';
+    position: absolute; bottom: -60px; right: 60px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff; font-size: 11px; font-weight: 500;
+    padding: 4px 12px; border-radius: 20px;
+    margin-bottom: 14px; font-family: var(--mono);
+  }
+
+  .hero-title {
+    font-size: 32px; font-weight: 700;
+    line-height: 1.2; margin-bottom: 10px;
+  }
+
+  .hero-desc {
+    font-size: 14px; color: rgba(255,255,255,0.8);
+    max-width: 520px; line-height: 1.8; margin-bottom: 24px;
+  }
+
+  .hero-stats {
+    display: flex; gap: 32px;
+  }
+
+  .hero-stat-val {
+    font-size: 22px; font-weight: 700; margin-bottom: 2px;
+  }
+
+  .hero-stat-label {
+    font-size: 11px; color: rgba(255,255,255,0.7);
+  }
+
+  /* ── OVERVIEW TABLE ───────────────────────────────── */
+  .overview-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .overview-table th {
+    background: #F9FAFB;
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px; font-weight: 600;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .overview-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: top;
+  }
+
+  .overview-table tr:last-child td { border-bottom: none; }
+
+  .overview-table tr:hover td { background: var(--bg); }
+
+  /* ── DIVIDER ──────────────────────────────────────── */
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  /* ── INLINE CODE ──────────────────────────────────── */
+  code {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--green-dark);
+  }
+
+  /* ── CALLOUT ──────────────────────────────────────── */
+  .callout {
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    border: 1px solid;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .callout-green { background: var(--green-light); border-color: var(--green-mid); color: var(--green-deep); }
+  .callout-amber { background: var(--amber-light); border-color: #F6D490; color: #7C3F00; }
+  .callout-red { background: var(--red-light); border-color: #F5C0C0; color: #991B1B; }
+
+  .callout strong { font-weight: 600; display: block; margin-bottom: 4px; }
+
+  /* ── SCROLL BEHAVIOR ──────────────────────────────── */
+  html { scroll-behavior: smooth; }
+
+  /* ── ACTIVE STATE ─────────────────────────────────── */
+  .tag {
+    display: inline-block;
+    font-size: 10px; font-weight: 500;
+    padding: 2px 8px; border-radius: 20px;
+    margin-right: 4px; margin-bottom: 4px;
+  }
+
+  .tag-green { background: var(--green-light); color: var(--green-dark); }
+  .tag-amber { background: var(--amber-light); color: #7C3F00; }
+  .tag-red { background: var(--red-light); color: #991B1B; }
+  .tag-blue { background: var(--blue-light); color: var(--blue); }
+  .tag-purple { background: var(--purple-light); color: var(--purple); }
+
+  /* ── RESPONSIVE ───────────────────────────────────── */
+  @media (max-width: 900px) {
+    .feature-grid { grid-template-columns: 1fr; }
+    .agent-grid { grid-template-columns: 1fr 1fr; }
+    .main { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══════════════════════════════════════════ -->
+<nav class="sidebar">
+  <div class="sidebar-header">
+    <div class="logo-row">
+      <div class="logo-mark">K</div>
+      <div>
+        <div class="logo-name">Khadmat AI</div>
+        <div class="logo-sub">System Documentation</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-section">Overview</div>
+  <a class="nav-item active" href="#overview">
+    <div class="nav-dot" style="background:#1D9E75"></div>System Overview
+  </a>
+  <a class="nav-item" href="#architecture">
+    <div class="nav-dot" style="background:#1D9E75"></div>Architecture & Agents
+  </a>
+  <a class="nav-item" href="#pages-map">
+    <div class="nav-dot" style="background:#1D9E75"></div>All Pages Map
+  </a>
+  <a class="nav-item" href="#data-model">
+    <div class="nav-dot" style="background:#1D9E75"></div>Data Model
+  </a>
+
+  <div class="nav-section">Customer Journey</div>
+  <a class="nav-item" href="#auth">
+    <div class="nav-dot" style="background:#185FA5"></div>Auth — Login / Signup
+  </a>
+  <a class="nav-item" href="#landing">
+    <div class="nav-dot" style="background:#185FA5"></div>Landing Page
+  </a>
+  <a class="nav-item" href="#chat-booking">
+    <div class="nav-dot" style="background:#185FA5"></div>AI Chat Booking
+  </a>
+  <a class="nav-item" href="#manual-booking">
+    <div class="nav-dot" style="background:#185FA5"></div>Manual Booking Form
+  </a>
+  <a class="nav-item" href="#receipt">
+    <div class="nav-dot" style="background:#185FA5"></div>Booking Receipt
+  </a>
+  <a class="nav-item" href="#bookings-dashboard">
+    <div class="nav-dot" style="background:#185FA5"></div>My Bookings
+  </a>
+  <a class="nav-item" href="#providers-page">
+    <div class="nav-dot" style="background:#185FA5"></div>Browse Providers
+  </a>
+
+  <div class="nav-section">Provider Portal</div>
+  <a class="nav-item" href="#provider-dashboard">
+    <div class="nav-dot" style="background:#534AB7"></div>Provider Dashboard
+  </a>
+  <a class="nav-item" href="#provider-jobs">
+    <div class="nav-dot" style="background:#534AB7"></div>My Jobs
+  </a>
+  <a class="nav-item" href="#provider-schedule">
+    <div class="nav-dot" style="background:#534AB7"></div>Schedule / Calendar
+  </a>
+  <a class="nav-item" href="#provider-earnings">
+    <div class="nav-dot" style="background:#534AB7"></div>Earnings
+  </a>
+  <a class="nav-item" href="#provider-profile">
+    <div class="nav-dot" style="background:#534AB7"></div>Profile & Reviews
+  </a>
+  <a class="nav-item" href="#provider-settings">
+    <div class="nav-dot" style="background:#534AB7"></div>Settings
+  </a>
+
+  <div class="nav-section">Analysis</div>
+  <a class="nav-item" href="#loopholes-master">
+    <div class="nav-dot" style="background:#EF9F27"></div>All Loopholes
+  </a>
+  <a class="nav-item" href="#recommendations-master">
+    <div class="nav-dot" style="background:#EF9F27"></div>Recommendations
+  </a>
+</nav>
+
+<!-- ══ MAIN ═════════════════════════════════════════════ -->
+<main class="main">
+
+  <!-- ── HERO ── -->
+  <div class="doc-hero" id="overview">
+    <div class="hero-badge">v1.0 · Google Antigravity Hackathon</div>
+    <div class="hero-title">Khadmat AI<br/>System Documentation</div>
+    <div class="hero-desc">
+      A complete analysis of every page, feature, its purpose, its connections to other pages, and all identified loopholes. Built for the team to understand the full system before coding.
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-val">18</div>
+        <div class="hero-stat-label">Total pages designed</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">2</div>
+        <div class="hero-stat-label">User roles</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">5</div>
+        <div class="hero-stat-label">AI agents</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">5</div>
+        <div class="hero-stat-label">DB tables</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SYSTEM OVERVIEW ── -->
+  <div class="doc-section">
+    <div class="section-eyebrow">WHAT IS THIS SYSTEM</div>
+    <div class="section-title">System Overview</div>
+    <div class="section-desc">
+      Khadmat AI is an AI-powered home services booking platform designed for Pakistan's informal economy. Customers describe what they need in Urdu, Roman Urdu, or English — and five AI agents handle everything from understanding the request to booking a provider and scheduling reminders. Providers get a full portal to manage jobs, earnings, and availability.
+    </div>
+
+    <div class="callout callout-green">
+      <strong>Core Insight</strong>
+      This is NOT a simple listing/booking app. The central value is agentic automation — the AI understands natural language, finds the best provider, makes a decision, and confirms the booking without the user having to fill any form. The manual booking form exists only as a fallback.
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-item">
+        <div class="feature-name">Two distinct user roles</div>
+        <div class="feature-desc">Customers book services. Providers receive and manage jobs. Both share the auth system but route to completely different dashboards after login.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-name">Two booking modes</div>
+        <div class="feature-desc">AI Chat (primary) lets customers type naturally. Manual Form (fallback) is a traditional step-by-step flow for users who prefer direct control.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-name">Multilingual by default</div>
+        <div class="feature-desc">The AI chat accepts Urdu, Roman Urdu, and English. The <code>language.py</code> utility detects which script/dialect is being used before passing to agents.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-name">Agent trace as a feature</div>
+        <div class="feature-desc">Every AI decision is logged and shown to the user in real time on the chat page. This is a transparency and trust-building feature, not just a debugging tool.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider"/>
+
+  <!-- ── ARCHITECTURE ── -->
+  <div class="doc-section" id="architecture">
+    <div class="section-eyebrow">BACKEND / AI</div>
+    <div class="section-title">Architecture & Agent Pipeline</div>
+    <div class="section-desc">
+      The backend is a FastAPI server. When a customer sends a message, it passes through five agents orchestrated via Google Antigravity (ADK). Each agent has one job and hands off to the next.
+    </div>
+
+    <div class="flow">
+      <div class="flow-node amber">User Message</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node green">Intent Agent</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node green">Discovery Agent</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node green">Decision Agent</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node green">Booking Agent</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node green">Follow-up Agent</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node blue">Supabase + Receipt</div>
+    </div>
+
+    <div class="agent-grid">
+      <div class="agent-card">
+        <div class="agent-name">Intent Agent</div>
+        <div class="agent-tool">parse_intent()</div>
+        <div class="agent-desc">Parses the message to extract service type, location, and preferred time. Handles Urdu, Roman Urdu, and English. Outputs structured JSON for the next agent.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-name">Discovery Agent</div>
+        <div class="agent-tool">search_providers()</div>
+        <div class="agent-desc">Queries the providers table filtered by service category and area. Returns a list of available providers near the customer's location using haversine distance.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-name">Decision Agent</div>
+        <div class="agent-tool">rank_providers()</div>
+        <div class="agent-desc">Scores each provider: distance + rating + availability. Selects the best match. Outputs top 2–3 for the UI to display, with the top choice pre-selected.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-name">Booking Agent</div>
+        <div class="agent-tool">create_booking()</div>
+        <div class="agent-desc">Writes the booking to Supabase. Generates the BK-{date}-{id} reference. Marks the provider as unavailable for the booked slot. Returns confirmation data.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-name">Follow-up Agent</div>
+        <div class="agent-tool">schedule_reminder()</div>
+        <div class="agent-desc">Inserts a reminder record into the reminders table for 1 hour before the appointment. In production, this triggers a WhatsApp/SMS/push notification.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-name">Orchestrator</div>
+        <div class="agent-tool">orchestrate.py</div>
+        <div class="agent-desc">The Google Antigravity ADK chain that runs agents in sequence. Passes structured context between agents. Writes trace logs to agent_traces table after each step.</div>
+      </div>
+    </div>
+
+    <div class="callout callout-amber">
+      <strong>Loophole: Manual booking bypasses agents</strong>
+      The manual booking form (page 3) does not call the AI agent pipeline at all. It writes directly to the bookings table. This means there are no agent trace logs, no AI decision, and no follow-up reminder automatically scheduled. The follow-up agent must be called separately even for manual bookings.
+    </div>
+  </div>
+
+  <hr class="section-divider"/>
+
+  <!-- ── ALL PAGES MAP ── -->
+  <div class="doc-section" id="pages-map">
+    <div class="section-eyebrow">NAVIGATION STRUCTURE</div>
+    <div class="section-title">All Pages Map</div>
+    <div class="section-desc">
+      How all 18 pages relate to each other. The auth page is the gate for everything. After login, the role determines the branch the user enters.
+    </div>
+
+    <table class="overview-table">
+      <thead>
+        <tr>
+          <th>File</th>
+          <th>Page Name</th>
+          <th>Role</th>
+          <th>Enters From</th>
+          <th>Exits To</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>2_landing_page</code></td>
+          <td>Landing</td>
+          <td><span class="tag tag-green">Shared</span></td>
+          <td>Direct URL</td>
+          <td>Auth, Chat Booking, Providers</td>
+        </tr>
+        <tr>
+          <td><code>1_auth_login_signup</code></td>
+          <td>Auth</td>
+          <td><span class="tag tag-green">Shared</span></td>
+          <td>Landing, any protected page</td>
+          <td>Provider Dashboard OR Customer Bookings</td>
+        </tr>
+        <tr>
+          <td><code>4_chat_booking_page</code></td>
+          <td>AI Chat Booking</td>
+          <td><span class="tag tag-blue">Customer</span></td>
+          <td>Landing, Providers, Nav</td>
+          <td>Booking Receipt</td>
+        </tr>
+        <tr>
+          <td><code>3_customer_manual_booking</code></td>
+          <td>Manual Booking Form</td>
+          <td><span class="tag tag-blue">Customer</span></td>
+          <td>Providers page, direct link</td>
+          <td>Booking Receipt</td>
+        </tr>
+        <tr>
+          <td><code>5_booking_receipt_page</code></td>
+          <td>Booking Receipt</td>
+          <td><span class="tag tag-blue">Customer</span></td>
+          <td>Chat Booking (confirmed), Manual Booking</td>
+          <td>My Bookings, Chat Booking (new)</td>
+        </tr>
+        <tr>
+          <td><code>6_bookings_dashboard</code></td>
+          <td>My Bookings</td>
+          <td><span class="tag tag-blue">Customer</span></td>
+          <td>Receipt, Nav</td>
+          <td>Receipt (view), Chat Booking (new/rebook)</td>
+        </tr>
+        <tr>
+          <td><code>7_providers_page</code></td>
+          <td>Browse Providers</td>
+          <td><span class="tag tag-blue">Customer</span></td>
+          <td>Landing, Nav</td>
+          <td>Chat Booking (Book now), Provider profile</td>
+        </tr>
+        <tr>
+          <td><code>1_provider_dashboard</code></td>
+          <td>Provider Dashboard</td>
+          <td><span class="tag tag-purple">Provider</span></td>
+          <td>Auth (provider role)</td>
+          <td>My Jobs, Schedule, Earnings, Profile</td>
+        </tr>
+        <tr>
+          <td><code>2_provider_my_jobs</code></td>
+          <td>My Jobs</td>
+          <td><span class="tag tag-purple">Provider</span></td>
+          <td>Dashboard sidebar</td>
+          <td>Job detail (not designed), Reviews (request)</td>
+        </tr>
+        <tr>
+          <td><code>3_provider_schedule</code></td>
+          <td>Schedule / Calendar</td>
+          <td><span class="tag tag-purple">Provider</span></td>
+          <td>Dashboard sidebar</td>
+          <td>My Jobs (click event)</td>
+        </tr>
+        <tr>
+          <td><code>4_provider_earnings</code></td>
+          <td>Earnings</td>
+          <td><span class="tag tag-purple">Provider</span></td>
+          <td>Dashboard sidebar</td>
+          <td>Payout flow (not designed)</td>
+        </tr>
+        <tr>
+          <td><code>5_provider_reviews_profile</code></td>
+          <td>Profile & Reviews (combined)</td>
+          <td><span class="tag tag-purple">Provider</span></td>
+          <td>Dashboard sidebar</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><code>6_provider_reviews_full</code></td>
+          <td>Reviews (standalone full)</td>
+          <td><span class="tag tag-purple">Provider</span></td>
+          <td>Dashboard sidebar → Reviews</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><code>7_provider_settings_full</code></td>
+          <td>Settings</td>
+          <td><span class="tag tag-purple">Provider</span></td>
+          <td>Dashboard sidebar</td>
+          <td>Auth (sign out)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-amber">
+      <strong>Missing pages (not yet designed)</strong>
+      Job detail page (when provider taps a specific job), Customer provider profile view, Admin dashboard, Payout/withdrawal flow, Password reset, OTP verification, and Public provider profile (the page customers see when they click "View profile" on the providers page).
+    </div>
+  </div>
+
+  <hr class="section-divider"/>
+
+  <!-- ── DATA MODEL ── -->
+  <div class="doc-section" id="data-model">
+    <div class="section-eyebrow">DATABASE</div>
+    <div class="section-title">Data Model</div>
+    <div class="section-desc">
+      Five Supabase tables power the platform. Understanding their relationships is critical before building any API endpoint.
+    </div>
+
+    <div class="db-table">
+      <div class="db-table-header">providers</div>
+      <div class="db-row"><div class="db-field">id</div><div class="db-desc">UUID primary key</div></div>
+      <div class="db-row"><div class="db-field">name</div><div class="db-desc">Business/personal name shown on cards</div></div>
+      <div class="db-row"><div class="db-field">category</div><div class="db-desc">AC Technician, Plumber, Electrician, etc. Used by Discovery Agent to filter</div></div>
+      <div class="db-row"><div class="db-field">area / city</div><div class="db-desc">G-13, DHA, F-10 etc. Used with lat/lng for distance ranking</div></div>
+      <div class="db-row"><div class="db-field">lat / lng</div><div class="db-desc">Coordinates for haversine distance calculation in <code>distance.py</code></div></div>
+      <div class="db-row"><div class="db-field">rating</div><div class="db-desc">Average rating 0–5. Updated after each review. Used in ranking formula</div></div>
+      <div class="db-row"><div class="db-field">is_available</div><div class="db-desc">Boolean. Booking Agent sets this to false when a slot is booked. Must reset after job completes — this logic is NOT yet designed</div></div>
+    </div>
+
+    <div class="db-table">
+      <div class="db-table-header">bookings</div>
+      <div class="db-row"><div class="db-field">id</div><div class="db-desc">UUID primary key</div></div>
+      <div class="db-row"><div class="db-field">ref</div><div class="db-desc">Human-readable reference BK-{date}-{id}, generated by <code>ref_gen.py</code></div></div>
+      <div class="db-row"><div class="db-field">provider_id</div><div class="db-desc">Foreign key → providers. Links booking to a specific provider</div></div>
+      <div class="db-row"><div class="db-field">user_id</div><div class="db-desc">Foreign key → users. The customer who made the booking</div></div>
+      <div class="db-row"><div class="db-field">status</div><div class="db-desc">PENDING → CONFIRMED → COMPLETED or CANCELLED. Status drives all UI badge colors</div></div>
+      <div class="db-row"><div class="db-field">scheduled_at</div><div class="db-desc">DateTime of the appointment. Reminder is set 1 hour before this</div></div>
+    </div>
+
+    <div class="db-table">
+      <div class="db-table-header">reminders</div>
+      <div class="db-row"><div class="db-field">id</div><div class="db-desc">UUID primary key</div></div>
+      <div class="db-row"><div class="db-field">booking_id</div><div class="db-desc">Foreign key → bookings</div></div>
+      <div class="db-row"><div class="db-field">remind_at</div><div class="db-desc">scheduled_at minus 1 hour. A cron job checks this table and fires notifications</div></div>
+      <div class="db-row"><div class="db-field">sent</div><div class="db-desc">Boolean. Prevents duplicate sends if the cron runs twice</div></div>
+    </div>
+
+    <div class="db-table">
+      <div class="db-table-header">agent_traces</div>
+      <div class="db-row"><div class="db-field">session_id</div><div class="db-desc">Groups all agent steps from one chat session for the trace panel display</div></div>
+      <div class="db-row"><div class="db-field">agent</div><div class="db-desc">Which agent ran: intent, discovery, decision, booking, followup</div></div>
+      <div class="db-row"><div class="db-field">status</div><div class="db-desc">done / active / error</div></div>
+      <div class="db-row"><div class="db-field">detail</div><div class="db-desc">Human-readable summary shown in the Trace panel</div></div>
+      <div class="db-row"><div class="db-field">tool</div><div class="db-desc">The function call made, e.g. <code>search_providers()</code></div></div>
+    </div>
+
+    <div class="db-table">
+      <div class="db-table-header">users</div>
+      <div class="db-row"><div class="db-field">id</div><div class="db-desc">UUID, matches Supabase Auth user ID</div></div>
+      <div class="db-row"><div class="db-field">name / phone / email</div><div class="db-desc">Core contact fields collected at signup</div></div>
+      <div class="db-row"><div class="db-field">city</div><div class="db-desc">Default location for provider search. Customer sets this at signup</div></div>
+      <div class="db-row"><div class="db-field">role</div><div class="db-desc"><strong>customer</strong> or <strong>provider</strong>. This single field determines which dashboard the user sees after login</div></div>
+    </div>
+
+    <div class="callout callout-amber">
+      <strong>Missing: reviews table</strong>
+      Reviews are shown extensively across three pages (provider profile, reviews tab, full reviews page) but there is no reviews table in the schema. A reviews table needs: id, booking_id, provider_id, user_id, rating (1–5), comment, tags[], created_at.
+    </div>
+  </div>
+
+  <hr class="section-divider"/>
+
+  <!-- ════════════════════════════════════
+       CUSTOMER PAGES
+  ═════════════════════════════════════════ -->
+
+  <div class="section-eyebrow" style="font-size:13px;font-weight:600;margin-bottom:16px;color:var(--blue);">
+    ── CUSTOMER JOURNEY ──────────────────────────────
+  </div>
+
+  <!-- ── AUTH ── -->
+  <div class="doc-section" id="auth">
+    <div class="page-card">
+      <div class="page-card-header">
+        <span class="page-badge badge-shared">Shared</span>
+        <div class="page-title-block">
+          <div class="page-name">Authentication — Login & Signup</div>
+          <div class="page-file">1_auth_login_signup.html · /auth/page.tsx</div>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-name">Split layout (brand left, form right)</div>
+            <div class="feature-desc">The left panel shows platform value props — roles, tagline — so users understand what Khadmat is before they sign up. This reduces drop-off by giving context before the form.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Role selection cards on signup</div>
+            <div class="feature-desc">Customer vs Service Provider. Selecting Provider reveals extra fields (professions, experience, price range). This is the only moment the <code>role</code> field in users table is set — it cannot be changed later (no role-switch in settings).</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Profession multi-select (providers)</div>
+            <div class="feature-desc">Providers can tag multiple professions (AC + Electrician). This is important: the providers table needs a categories[] array or a many-to-many join table, not just a single category field.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Google OAuth button</div>
+            <div class="feature-desc">Sign in with Google is shown but the signup form also collects phone number and city — data Google doesn't supply. A post-OAuth onboarding step is needed but not designed.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">City selection at signup</div>
+            <div class="feature-desc">Sets the user's default city (Karachi / Lahore / Islamabad). This populates the location field when the AI chat runs provider discovery, so users don't have to type their city every time.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Tab switching (Sign in / Create account)</div>
+            <div class="feature-desc">JS toggles between login and signup views in the same page. The button label also changes ("Create account" vs "Join as provider") based on role selection.</div>
+          </div>
+        </div>
+
+        <div class="connections">
+          <div class="connections-title">🔗 Connected to</div>
+          <div class="conn-list">
+            <span class="conn-chip">→ Provider Dashboard (provider role)</span>
+            <span class="conn-chip">→ Customer Bookings Dashboard (customer role)</span>
+            <span class="conn-chip">← Landing Page (Sign in CTA)</span>
+            <span class="conn-chip">← Any protected page redirect</span>
+          </div>
+        </div>
+
+        <div class="loopholes">
+          <div class="loopholes-title">⚠ Loopholes Found</div>
+          <div class="loophole-item">Google OAuth users bypass city and phone fields — no post-OAuth onboarding page exists. City defaults to nothing, breaking the AI's location-aware search.</div>
+          <div class="loophole-item">No OTP/phone verification step. Phone number is collected but not verified — fake numbers will be stored.</div>
+          <div class="loophole-item">No password strength indicator on the signup form, though the placeholder says "Min. 8 characters."</div>
+          <div class="loophole-item">Role cannot be changed after signup. If a customer wants to also become a provider, they need a second account.</div>
+          <div class="loophole-item">Provider profession chips are cosmetic only in the design — the profession data must also seed the providers table correctly so the Discovery Agent can filter by it.</div>
+          <div class="loophole-item">The "Forgot password?" link has no target page designed.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── LANDING ── -->
+  <div class="doc-section" id="landing">
+    <div class="page-card">
+      <div class="page-card-header">
+        <span class="page-badge badge-shared">Shared</span>
+        <div class="page-title-block">
+          <div class="page-name">Landing Page</div>
+          <div class="page-file">2_landing_page.html · /app/page.tsx</div>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-name">Hero with example query</div>
+            <div class="feature-desc">Shows a real Urdu query in the demo input. This immediately communicates the multilingual value prop without needing to explain it in text. The example is clickable and routes to the chat booking page.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Stats row (5,000+ bookings, 200+ providers, 3 cities)</div>
+            <div class="feature-desc">Social proof numbers. These must be dynamic in production — pulled from a <code>GET /api/stats</code> endpoint. Hardcoded for the demo. If left hardcoded in production, they will become stale and misleading.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Service category chips</div>
+            <div class="feature-desc">8 service categories shown as clickable chips. Each routes to the chat booking page. In a more complete design, each could pre-fill the chat with the relevant service query.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">How it works (4 steps)</div>
+            <div class="feature-desc">Sets expectations for first-time users. The 4 steps match the actual agent pipeline: Describe → Agents find → Best match → Confirmed. This is accurate and worth keeping.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">sendPrompt() buttons</div>
+            <div class="feature-desc">Multiple CTAs use a <code>sendPrompt()</code> function that fires a message into the chat. This presumes the landing page and chat share a JS context — only valid if they're on the same SPA page or there's state passed via URL.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Language pills (Urdu / Roman Urdu / English)</div>
+            <div class="feature-desc">Visual reassurance that all three are supported. Not interactive — purely informational. Could become a language switcher for the whole app in a future version.</div>
+          </div>
+        </div>
+
+        <div class="connections">
+          <div class="connections-title">🔗 Connected to</div>
+          <div class="conn-list">
+            <span class="conn-chip">→ Auth (Sign in / Sign up)</span>
+            <span class="conn-chip">→ Chat Booking (all CTAs)</span>
+            <span class="conn-chip">→ Providers Page (Browse)</span>
+          </div>
+        </div>
+
+        <div class="loopholes">
+          <div class="loopholes-title">⚠ Loopholes Found</div>
+          <div class="loophole-item">The <code>sendPrompt()</code> function is used on both the landing page and the chat page — but they are different HTML files. The function will not exist on the landing page unless it is imported or redefined. Clicking "Book a service" should simply navigate to <code>/book</code>.</div>
+          <div class="loophole-item">No "Browse providers" link in the nav for logged-in users. The nav shows the same items regardless of auth state — no user avatar, no "My bookings" link when logged in.</div>
+          <div class="loophole-item">Service category clicks all lead to the generic chat booking page, not pre-filtered by service type. A better flow: each chip passes the service as a query param so the AI starts with that context.</div>
+          <div class="loophole-item">Stats are hardcoded. In a live product, stale numbers destroy credibility.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CHAT BOOKING ── -->
+  <div class="doc-section" id="chat-booking">
+    <div class="page-card">
+      <div class="page-card-header">
+        <span class="page-badge badge-critical">Critical</span>
+        <span class="page-badge badge-customer" style="margin-left:6px">Customer</span>
+        <div class="page-title-block">
+          <div class="page-name">AI Chat Booking</div>
+          <div class="page-file">4_chat_booking_page.html · /book/page.tsx</div>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="callout callout-green">
+          <strong>This is the core feature.</strong>
+          Every other page exists to support this one. The agent pipeline runs entirely from a message typed here.
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-name">Chat conversation UI</div>
+            <div class="feature-desc">Two-column layout: chat on the left, agent trace panel on the right. Messages are streamed as the AI responds. Provider cards appear inline inside the AI bubble — not as a separate page.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Inline provider cards in AI bubble</div>
+            <div class="feature-desc">After the Discovery + Decision agents run, the AI response contains ranked provider cards. The top match is pre-highlighted with a "best match" badge. The user can click to select a different provider before confirming.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">One-message booking confirmation</div>
+            <div class="feature-desc">User types "Ali ko book karo" and the Booking + Follow-up agents run immediately. The confirmation message shows the receipt inline — ref number, provider, time, reminder set — without leaving the page.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Agent trace panel (right column)</div>
+            <div class="feature-desc">Shows all 5 agents with status (done/active/pending), what they did, and which tool they called. This is a real-time transparency feature — it makes the AI feel trustworthy by showing its reasoning.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Session info footer</div>
+            <div class="feature-desc">Shows session ID, response duration (3.2s), model used (gemini-1.5-flash), and "All agents complete." This is useful for debugging but also reassures users that the system is fast and working.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Microphone icon in input</div>
+            <div class="feature-desc">Suggests voice input support. This is not implemented in the design — no recording logic exists. Either remove it or implement voice-to-text before shipping.</div>
+          </div>
+        </div>
+
+        <div class="flow">
+          <div class="flow-node amber">User types request</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node green">POST /api/chat</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node green">5 Agents run</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node green">AI reply + provider cards shown</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node amber">User confirms</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node blue">Receipt inline</div>
+        </div>
+
+        <div class="connections">
+          <div class="connections-title">🔗 Connected to</div>
+          <div class="conn-list">
+            <span class="conn-chip">← Landing Page (all CTAs)</span>
+            <span class="conn-chip">← Providers Page (Book now)</span>
+            <span class="conn-chip">← My Bookings (New booking)</span>
+            <span class="conn-chip">→ Booking Receipt (full receipt page)</span>
+            <span class="conn-chip">→ POST /api/chat (backend)</span>
+            <span class="conn-chip">→ GET /api/trace/:id (trace panel)</span>
+          </div>
+        </div>
+
+        <div class="loopholes">
+          <div class="loopholes-title">⚠ Loopholes Found</div>
+          <div class="loophole-item">There is no "View full receipt" button in the chat after booking is confirmed. The inline receipt is compact — users need a link to the full receipt page (<code>/booking/[id]</code>) to see the database state change panel and download the receipt.</div>
+          <div class="loophole-item">If the user wants to change the time or provider after seeing the AI suggestion, there is no UI for that. The chat just shows a suggestion and "Ali ko book karun?" — but there is no way to edit the time slot without starting a new message.</div>
+          <div class="loophole-item">The microphone icon implies voice input but nothing is wired up. Remove it or build it.</div>
+          <div class="loophole-item">No multi-turn memory — each message is independent. If the user says "change the time to 3 PM" after a booking suggestion, the AI won't know what booking they're referring to unless session/conversation history is passed in every API call.</div>
+          <div class="loophole-item">The trace panel is hardcoded to 5 agents always completing. A failed agent (network error, no providers found) needs an error state in the trace panel.</div>
+          <div class="loophole-item">No loading/typing indicator while the agents are running (which takes 3.2s per the session info). Users will see a frozen UI for several seconds.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MANUAL BOOKING ── -->
+  <div class="doc-section" id="manual-booking">
+    <div class="page-card">
+      <div class="page-card-header">
+        <span class="page-badge badge-customer">Customer</span>
+        <div class="page-title-block">
+          <div class="page-name">Manual Booking Form</div>
+          <div class="page-file">3_customer_manual_booking.html · (not in file structure)</div>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="callout callout-amber">
+          <strong>Important:</strong> This page is NOT in the file structure document. It exists as a UI design but has no corresponding route or backend file defined. It needs to be added to the Next.js app at <code>/book/manual/page.tsx</code> and connected to <code>POST /api/bookings</code> directly.
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-name">4-step progress bar</div>
+            <div class="feature-desc">Service → Details → Provider → Confirm. The current design shows all steps on one scrollable page (step 2 is "active" but steps 3 and 4 are also visible). This is inconsistent — it should either be a true multi-step wizard or a single scrollable page with the progress bar just as decoration.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Service category grid (8 icons)</div>
+            <div class="feature-desc">Customer selects a service type. Only one can be selected. This value filters the providers shown in the provider list section below on the same page.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Time slot picker</div>
+            <div class="feature-desc">Shows 8 slots with some marked "busy" (grey, strikethrough). The busy slots come from the provider's schedule. This requires a real-time API call to fetch the selected provider's booked slots — which is complex and not addressed in the backend.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Provider list (radio select)</div>
+            <div class="feature-desc">Three providers shown ranked by rating/distance. User picks one. Picking a provider should update the time slot grid to show that provider's availability — this cross-dependency is not handled in the current JS.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Live booking summary sidebar</div>
+            <div class="feature-desc">Right panel updates in real time as the customer selects options. Shows service, provider, date, time, location, and price estimate. This is purely JS-driven — no API calls during selection, only on final "Confirm booking."</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">"Let AI book for you" banner</div>
+            <div class="feature-desc">A prominent banner at the top of the sidebar that routes users to the AI chat. Good — it reminds users of the faster alternative, but should also be a persistent nudge rather than a one-time banner they can miss.</div>
+          </div>
+        </div>
+
+        <div class="connections">
+          <div class="connections-title">🔗 Connected to</div>
+          <div class="conn-list">
+            <span class="conn-chip">← Providers Page (Book now → manual)</span>
+            <span class="conn-chip">→ Booking Receipt (on confirm)</span>
+            <span class="conn-chip">→ POST /api/bookings (direct)</span>
+            <span class="conn-chip">→ Chat Booking (via AI banner)</span>
+          </div>
+        </div>
+
+        <div class="loopholes">
+          <div class="loopholes-title">⚠ Loopholes Found</div>
+          <div class="loophole-item">This page is missing from the file structure — no route, no backend handler is defined for it.</div>
+          <div class="loophole-item">The time slot "busy" states are hardcoded in the design. In production, busy slots must come from a <code>GET /api/providers/:id/availability?date=</code> endpoint that checks existing bookings in the database.</div>
+          <div class="loophole-item">Selecting a different provider does not refresh the time slots. If Ali has 10 AM free but Hassan doesn't, the time grid must update — but no JS handles this.</div>
+          <div class="loophole-item">The platform fee (PKR 50) appears in the price card but is not in any DB schema or business logic document. Where does this money go? Is it added to the booking record?</div>
+          <div class="loophole-item">Notes field is a free-text textarea but there's no notes column in the bookings table schema.</div>
+          <div class="loophole-item">"You can cancel up to 2 hours before" — this cancellation policy has no enforcement logic anywhere in the system.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RECEIPT ── -->
+  <div class="doc-section" id="receipt">
+    <div class="page-card">
+      <div class="page-card-header">
+        <span class="page-badge badge-customer">Customer</span>
+        <div class="page-title-block">
+          <div class="page-name">Booking Receipt / Confirmation</div>
+          <div class="page-file">5_booking_receipt_page.html · /booking/[id]/page.tsx</div>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-name">Success banner</div>
+            <div class="feature-desc">Green banner confirms the booking and names the provider. First thing users see — establishes confidence immediately.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Booking receipt card</div>
+            <div class="feature-desc">Service, date/time, location, price estimate, and status pill. The reference number (BK-20250521-001) is the unique identifier linking to the bookings table.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Provider card</div>
+            <div class="feature-desc">Shows provider name, category, rating, distance, and contact number. The contact number is shown here — this is the only place in the customer journey where the provider's phone appears. This is intentional: customers should only get the number after a booking is confirmed.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Database state change panel</div>
+            <div class="feature-desc">A "before vs after" panel showing what changed in the database: is_available flipped to false, booking_ref written, status set to CONFIRMED. This is a transparency feature — it shows the user that the system actually did something real. Critical for a hackathon demo.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Reminder confirmation card</div>
+            <div class="feature-desc">Amber card showing "Reminder scheduled — 9:00 AM" with a time badge. Confirms the Follow-up Agent worked. Gives the customer confidence they won't forget.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Action buttons</div>
+            <div class="feature-desc">View my bookings, Book another service, and Download receipt. The download is not implemented in the design — it needs to generate a PDF of the receipt.</div>
+          </div>
+        </div>
+
+        <div class="connections">
+          <div class="connections-title">🔗 Connected to</div>
+          <div class="conn-list">
+            <span class="conn-chip">← Chat Booking (after confirmation)</span>
+            <span class="conn-chip">← Manual Booking (after confirm)</span>
+            <span class="conn-chip">← My Bookings (View receipt)</span>
+            <span class="conn-chip">→ My Bookings (View my bookings btn)</span>
+            <span class="conn-chip">→ Chat Booking (Book another)</span>
+          </div>
+        </div>
+
+        <div class="loopholes">
+          <div class="loopholes-title">⚠ Loopholes Found</div>
+          <div class="loophole-item">The "Download receipt" button is not implemented. A PDF receipt requires either a backend PDF generator or a client-side print-to-PDF approach.</div>
+          <div class="loophole-item">The database state change panel is hardcoded for the demo. In production it should be populated from the actual API response returned after booking creation.</div>
+          <div class="loophole-item">No cancel booking option here. The My Bookings page has cancel, but it would be natural to also cancel from the receipt immediately after booking if the user changed their mind.</div>
+          <div class="loophole-item">The provider contact number (0300-123) is truncated in the design — showing an incomplete number in the final product would be a critical UX failure.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MY BOOKINGS ── -->
+  <div class="doc-section" id="bookings-dashboard">
+    <div class="page-card">
+      <div class="page-card-header">
+        <span class="page-badge badge-customer">Customer</span>
+        <div class="page-title-block">
+          <div class="page-name">My Bookings Dashboard</div>
+          <div class="page-file">6_bookings_dashboard.html · /dashboard/page.tsx</div>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-name">4 stat cards</div>
+            <div class="feature-desc">Total / Confirmed / Completed / Cancelled. Gives the customer a quick snapshot. These must be computed from the bookings table filtered by user_id, not hardcoded.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Status filter pills</div>
+            <div class="feature-desc">All / Confirmed / Completed / Cancelled. Filters the booking list by status. The "All" filter is active by default.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Search box</div>
+            <div class="feature-desc">Lets users search their own bookings by service or provider name. Client-side filtering is fine here — the list will rarely exceed 20 items.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Booking cards with actions</div>
+            <div class="feature-desc">Each booking shows service, provider, date, time, price, ref, and status. Confirmed bookings show Cancel + View receipt. Completed bookings show Rate provider + View receipt. Cancelled shows Rebook.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Pagination</div>
+            <div class="feature-desc">Shows 4 of 12 bookings with page buttons. In production, this should be server-side pagination via <code>GET /api/bookings?page=1&limit=4</code>.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Reminder shown inline</div>
+            <div class="feature-desc">Confirmed bookings show "Reminder set 9 AM" as an action link. This is read-only in the design — there is no way to modify or delete a reminder from this page.</div>
+          </div>
+        </div>
+
+        <div class="connections">
+          <div class="connections-title">🔗 Connected to</div>
+          <div class="conn-list">
+            <span class="conn-chip">← Booking Receipt (View my bookings)</span>
+            <span class="conn-chip">→ Booking Receipt (View receipt)</span>
+            <span class="conn-chip">→ Chat Booking (New booking, Rebook)</span>
+            <span class="conn-chip">→ Rate provider (not designed)</span>
+          </div>
+        </div>
+
+        <div class="loopholes">
+          <div class="loopholes-title">⚠ Loopholes Found</div>
+          <div class="loophole-item">"Rate provider" link on completed bookings has no destination page. A rating flow needs to be designed: a modal or page where the customer gives 1–5 stars and a text review.</div>
+          <div class="loophole-item">The "Cancel" action has no confirmation dialog. One accidental click cancels the booking. A confirmation step ("Are you sure?") is needed.</div>
+          <div class="loophole-item">"Rebook" does not pre-fill any context. It should ideally route to the chat booking page with the previous service pre-loaded, or at minimum pass the provider_id.</div>
+          <div class="loophole-item">No way to modify an existing booking (reschedule). Users can only cancel or view — no edit/reschedule option.</div>
+          <div class="loophole-item">The customer has no view of the provider portal — there is no way to see if the provider actually accepted the job.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PROVIDERS PAGE ── -->
+  <div class="doc-section" id="providers-page">
+    <div class="page-card">
+      <div class="page-card-header">
+        <span class="page-badge badge-customer">Customer</span>
+        <div class="page-title-block">
+          <div class="page-name">Browse Providers</div>
+          <div class="page-file">7_providers_page.html · /providers/page.tsx</div>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-name">Search bar with city + area filters</div>
+            <div class="feature-desc">Three inputs: text search by name/service, city dropdown, area dropdown. These should chain: selecting a city should filter the area dropdown to that city's areas.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Service category filter chips</div>
+            <div class="feature-desc">All / AC / Plumber / Electrician / Tutor / Cleaner. Filters the grid by category. Clicking a chip should also update the URL (query param) so the filtered state is shareable.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Sort by: Rating / Distance / Price</div>
+            <div class="feature-desc">Three sort options. Rating is default (top-rated first). Distance requires the customer's location — which needs GPS permission or falls back to their city from their profile.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Provider cards with availability badge</div>
+            <div class="feature-desc">Available (green) or Busy (grey). Busy providers show a disabled "Unavailable" button instead of "Book now." The is_available flag drives this.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Featured / Top rated card</div>
+            <div class="feature-desc">City Tutor Network has a "Top rated" badge and a thicker border. This is based on rating score — providers with 4.8+ get featured. No paid promotion implied.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">"View profile" link on each card</div>
+            <div class="feature-desc">Should route to a public provider profile page at <code>/providers/[id]</code>. This page does NOT exist in the designs — it is a missing page.</div>
+          </div>
+        </div>
+
+        <div class="connections">
+          <div class="connections-title">🔗 Connected to</div>
+          <div class="conn-list">
+            <span class="conn-chip">← Landing Page</span>
+            <span class="conn-chip">→ Chat Booking (Book now)</span>
+            <span class="conn-chip">→ Manual Booking (alternate Book now target)</span>
+            <span class="conn-chip">→ Public Provider Profile [NOT DESIGNED]</span>
+          </div>
+        </div>
+
+        <div class="loopholes">
+          <div class="loopholes-title">⚠ Loopholes Found</div>
+          <div class="loophole-item">All "Book now" buttons route to the generic chat booking page with no context about which provider was selected. The user has to re-state the provider in the chat. The chat AI should receive the selected provider_id as context.</div>
+          <div class="loophole-item">"View profile" links to a page that doesn't exist in the design or the file structure.</div>
+          <div class="loophole-item">Sort by "Distance" has no distance baseline — whose location is it sorting from? If the user hasn't granted GPS, distance sort is meaningless.</div>
+          <div class="loophole-item">The city and area filters are independent dropdowns that don't chain. Selecting "Lahore" should limit area choices to Lahore areas only.</div>
+          <div class="loophole-item">Only 6 of 15 providers are shown in the design with no pagination or infinite scroll. The results count says "15 providers found" but only 6 cards are visible.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider"/>
+
+  <!-- ════════════════════════════════════
+       PROVIDER PAGES
+  ═════════════════════════════════════════ -->
+
+  <div class="section-eyebrow" style="font-size:13px;font-weight:600;margin-bottom:16px;color:var(--purple);">
+    ── PROVIDER PORTAL ───────────────────────────────
+  </div>
+
+  <!-- ── PROVIDER DASHBOARD ── -->
+  <div class="doc-section" id="provider-dashboard">
+    <div class="page-card">
+      <div class="page-card-header">
+        <span class="page-badge badge-provider">Provider</span>
+        <div class="page-title-block">
+          <div class="page-name">Provider Dashboard</div>
+          <div class="page-file">1_provider_dashboard.html · /provider/dashboard/page.tsx</div>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="callout callout-green">
+          <strong>Design decision:</strong> The provider sidebar uses a dark background (#1a1a1a) — distinct from the customer-facing light UI. This color difference makes it immediately obvious which role you're in, reducing confusion during demos.
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-name">Availability toggle (global)</div>
+            <div class="feature-desc">The toggle in the sidebar sets is_available in the providers table. When OFF, the provider disappears from customer search results and browse pages. This is the most important control for a provider. It appears on every provider page in the sidebar — always accessible.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">4 stat cards</div>
+            <div class="feature-desc">Today's jobs / This month earnings / Rating / Total completed. The dashboard snapshot. "Today's jobs" counts bookings where scheduled_at is today's date and status is CONFIRMED or PENDING.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Incoming requests feed</div>
+            <div class="feature-desc">New job requests appear here with Accept / Decline buttons. New requests have an amber highlighted border to draw attention. Accepting a request changes the booking status from PENDING to CONFIRMED and sends a notification to the customer.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Profile summary at bottom</div>
+            <div class="feature-desc">Quick view of profession, experience, price range, service areas, and availability status. "Edit profile" routes to the Profile tab on the profile/reviews page.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Notification bell with red dot</div>
+            <div class="feature-desc">Shows unread notifications. The red dot is always on in the design — in production, this must only appear when there are unread items. Needs a real-time subscription (Supabase realtime) to update instantly.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Sidebar navigation (7 items)</div>
+            <div class="feature-desc">Dashboard / My Jobs / Schedule / Earnings / Profile / Reviews / Settings. The navigation is the same across all provider pages — consistent and persistent.</div>
+          </div>
+        </div>
+
+        <div class="connections">
+          <div class="connections-title">🔗 Connected to</div>
+          <div class="conn-list">
+            <span class="conn-chip">← Auth (provider role login)</span>
+            <span class="conn-chip">→ My Jobs (sidebar)</span>
+            <span class="conn-chip">→ Schedule (sidebar)</span>
+            <span class="conn-chip">→ Earnings (sidebar)</span>
+            <span class="conn-chip">→ Profile & Reviews (sidebar)</span>
+            <span class="conn-chip">→ Settings (sidebar)</span>
+            <span class="conn-chip">→ PATCH /api/providers/:id/availability</span>
+          </div>
+        </div>
+
+        <div class="loopholes">
+          <div class="loopholes-title">⚠ Loopholes Found</div>
+          <div class="loophole-item">When the provider clicks Accept on a job, what happens? The design shows the button but there is no state change in the UI — the card doesn't move to "Confirmed" state. Accept/Decline must call <code>PATCH /api/bookings/:id/status</code> and update the UI in real time.</div>
+          <div class="loophole-item">The availability toggle is visual only in the design — no JS wires it to an API call. The provider could toggle it but nothing would update in the database.</div>
+          <div class="loophole-item">No real-time updates — if a new booking comes in while the provider is on this page, they won't see it without refreshing. Supabase realtime subscriptions are needed.</div>
+          <div class="loophole-item">The notification bell always shows a red dot in the design. An "all read" state needs to be designed.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PROVIDER MY JOBS ── -->
+  <div class="doc-section" id="provider-jobs">
+    <div class="page-card">
+      <div class="page-card-header">
+        <span class="page-badge badge-provider">Provider</span>
+        <div class="page-title-block">
+          <div class="page-name">My Jobs</div>
+          <div class="page-file">2_provider_my_jobs.html · /provider/jobs/page.tsx</div>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-name">Summary row (New / Confirmed / Total)</div>
+            <div class="feature-desc">Three numbers at the top: 2 new requests, 3 confirmed today, 212 total completed. Gives the provider immediate situational awareness.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Status filter tabs</div>
+            <div class="feature-desc">All / New / Confirmed / Completed / Cancelled. Same pattern as customer My Bookings — consistent design language.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">New request cards (amber highlight)</div>
+            <div class="feature-desc">New jobs have an amber border and background. Accept / Decline buttons. Accepted jobs move to Confirmed. Declined jobs should be removed from the list or moved to Cancelled.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Customer contact info on cards</div>
+            <div class="feature-desc">Each job card shows the customer's name and phone (partially masked: 0300-xxx-xxxx). Phone is only shown after Accept — but in the design it's visible on New (pending) jobs too. This is a privacy issue.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">"Request review" on completed jobs</div>
+            <div class="feature-desc">Button to request a review from the customer. This would send a notification to the customer prompting them to rate the job. The flow for this is not designed.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Job count badge on "My Jobs" nav item</div>
+            <div class="feature-desc">Red badge showing "4" new/pending items. This must update when jobs are accepted or declined. Driven by a count of PENDING bookings for this provider.</div>
+          </div>
+        </div>
+
+        <div class="connections">
+          <div class="connections-title">🔗 Connected to</div>
+          <div class="conn-list">
+            <span class="conn-chip">← Provider Dashboard (sidebar)</span>
+            <span class="conn-chip">→ PATCH /api/bookings/:id/status</span>
+            <span class="conn-chip">→ Job Detail [NOT DESIGNED]</span>
+            <span class="conn-chip">→ Reviews (Request review action)</span>
+          </div>
+        </div>
+
+        <div class="loopholes">
+          <div class="loopholes-title">⚠ Loopholes Found</div>
+          <div class="loophole-item">Customer phone number is visible before the job is accepted. In a real product, the phone should only reveal after Accept to protect both parties.</div>
+          <div class="loophole-item">No job detail page. "View details" button appears on confirmed jobs but has no destination page in the design or file structure.</div>
+          <div class="loophole-item">"Mark as completed" — there is no button to mark a job done once the provider finishes the work. Without this, the job stays in "Confirmed" forever and earnings can never be processed.</div>
+          <div class="loophole-item">Search by customer name is in the design but requires filtering bookings joined with users table — the backend query is non-trivial.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PROVIDER SCHEDULE ── -->
+  <div class="doc-section" id="provider-schedule">
+    <div class="page-card">
+      <div class="page-card-header">
+        <span class="page-badge badge-provider">Provider</span>
+        <div class="page-title-block">
+          <div class="page-name">Schedule / Weekly Calendar</div>
+          <div class="page-file">3_provider_schedule.html · /provider/schedule/page.tsx</div>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-name">7-day calendar grid</div>
+            <div class="feature-desc">Monday–Sunday with 7 time slots visible (8 AM–4 PM). Today's date is highlighted with a green circle. Each cell can hold a job event color-coded by status (Confirmed green, New amber, Completed grey-green, Blocked grey).</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Week navigation (prev/next arrows)</div>
+            <div class="feature-desc">Lets the provider browse past and future weeks. The current week is shown by default. This requires fetching bookings filtered by date range from the API.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Working days toggle</div>
+            <div class="feature-desc">7 day chips at the bottom (Mon–Sun). Clicking toggles a day on/off. OFF days are greyed out in the calendar and the provider is automatically marked unavailable for those days. This is linked to the Settings page's working hours.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Blocked time slots (weekend)</div>
+            <div class="feature-desc">Saturday and Sunday cells are filled with a grey "blocked" pattern. This reflects the working days toggle — the provider has Sat/Sun toggled off.</div>
+          </div>
+        </div>
+
+        <div class="connections">
+          <div class="connections-title">🔗 Connected to</div>
+          <div class="conn-list">
+            <span class="conn-chip">← Provider Dashboard / My Jobs (sidebar)</span>
+            <span class="conn-chip">→ My Jobs (clicking a calendar event)</span>
+            <span class="conn-chip">→ GET /api/providers/:id/schedule?week=</span>
+            <span class="conn-chip">→ Settings (working hours sync)</span>
+          </div>
+        </div>
+
+        <div class="loopholes">
+          <div class="loopholes-title">⚠ Loopholes Found</div>
+          <div class="loophole-item">Clicking a calendar event (a job) has no handler. It should open the job detail or at minimum show a tooltip/popover with the customer name and job info.</div>
+          <div class="loophole-item">Working days toggle changes are visual only in the design — no API call to persist the changes to the provider's profile.</div>
+          <div class="loophole-item">The calendar only shows 7 time slots (8 AM–4 PM). If a provider has jobs at 5 PM or 6 PM, they won't appear. The calendar needs either more rows or a scroll.</div>
+          <div class="loophole-item">No way to manually block time (e.g., "I have a personal appointment Thursday 12–2 PM"). The only blocking is via working days or the vacation setting in Settings.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PROVIDER EARNINGS ── -->
+  <div class="doc-section" id="provider-earnings">
+    <div class="page-card">
+      <div class="page-card-header">
+        <span class="page-badge badge-provider">Provider</span>
+        <div class="page-title-block">
+          <div class="page-name">Earnings</div>
+          <div class="page-file">4_provider_earnings.html · /provider/earnings/page.tsx</div>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-name">Available balance hero card</div>
+            <div class="feature-desc">Shows PKR 12,800 available to withdraw. "Last payout" shown below. Withdraw button triggers the payout flow (not designed). This balance is earnings minus already-withdrawn amounts.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">3 stat cards (This month / Last month / This year)</div>
+            <div class="feature-desc">Monthly and yearly earnings summaries. Must be computed from the bookings table for completed jobs with this provider_id. The job count alongside earnings is valuable context.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Bar chart (6 months)</div>
+            <div class="feature-desc">Visual earnings trend. CSS-only bar chart with height percentages. The current month bar is green, others are lighter green. Simple and readable. Toggle between 6 months / 1 year.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Transaction history table</div>
+            <div class="feature-desc">Service / Customer / Date / Amount with a Paid or Pending status badge. Most recent first. "Download PDF" button to export the history — not implemented.</div>
+          </div>
+        </div>
+
+        <div class="connections">
+          <div class="connections-title">🔗 Connected to</div>
+          <div class="conn-list">
+            <span class="conn-chip">← Provider Dashboard (sidebar)</span>
+            <span class="conn-chip">→ Payout/Withdraw flow [NOT DESIGNED]</span>
+            <span class="conn-chip">→ GET /api/providers/:id/earnings</span>
+          </div>
+        </div>
+
+        <div class="loopholes">
+          <div class="loopholes-title">⚠ Loopholes Found</div>
+          <div class="loophole-item">Withdraw button has no destination flow. The payout process (bank account, Easypaisa, JazzCash) is not designed at all.</div>
+          <div class="loophole-item">There is no earnings column in the bookings table schema. Earnings must be derived from the job's price — but price is stored as a range (PKR 800–1500), not a fixed amount. Final price needs to be stored when a job is marked complete.</div>
+          <div class="loophole-item">The "Download PDF" earnings report is not implemented.</div>
+          <div class="loophole-item">The platform fee (PKR 50 mentioned on the manual booking form) is never accounted for on this page. Provider earnings should show gross minus platform commission.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PROVIDER PROFILE & REVIEWS ── -->
+  <div class="doc-section" id="provider-profile">
+    <div class="page-card">
+      <div class="page-card-header">
+        <span class="page-badge badge-provider">Provider</span>
+        <div class="page-title-block">
+          <div class="page-name">Profile & Reviews (combined page)</div>
+          <div class="page-file">5_provider_reviews_profile.html + 6_provider_reviews_full.html · /provider/profile/page.tsx</div>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="callout callout-amber">
+          <strong>Two files for one page:</strong> File 5 is a combined Profile + Reviews tab page. File 6 is the full reviews page with more detail (reply functionality, metrics, filters). These should be unified into one page with a tab switcher, not two separate files/routes.
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-name">Profile tab — personal info</div>
+            <div class="feature-desc">Name, phone, email, city. Provider can edit all fields. Photo upload with 2MB limit. Changes saved via <code>PATCH /api/providers/:id</code>.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Profession multi-select chips</div>
+            <div class="feature-desc">Same chip UI as signup. Allows adding/removing professions after account creation. Changes must update the categories[] field in the providers table.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Service area chips (add/remove)</div>
+            <div class="feature-desc">Current areas shown as removable chips (G-13, G-10, F-10, F-8). "Add area" button. This directly affects which customer searches the provider appears in.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Rating overview with bar chart</div>
+            <div class="feature-desc">4.7 avg, 212 reviews, star distribution bars. "Top 5% of providers" benchmark badge. The distribution bars are purely visual — driven by the reviews table data.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Review cards with reply (file 6)</div>
+            <div class="feature-desc">Each review has a "Reply" button that expands a textarea for the provider to respond. Replies become visible on the public provider profile. Reply text needs its own column in the reviews table.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Review metrics (file 6)</div>
+            <div class="feature-desc">96% would recommend, 4.9 punctuality, 4.8 value for money. These are separate sub-scores — the reviews table must store them as individual fields, not just one overall rating.</div>
+          </div>
+        </div>
+
+        <div class="connections">
+          <div class="connections-title">🔗 Connected to</div>
+          <div class="conn-list">
+            <span class="conn-chip">← Provider Dashboard (Profile / Reviews sidebar)</span>
+            <span class="conn-chip">→ PATCH /api/providers/:id</span>
+            <span class="conn-chip">→ POST /api/reviews/:id/reply</span>
+            <span class="conn-chip">→ Public Provider Profile (customer view) [NOT DESIGNED]</span>
+          </div>
+        </div>
+
+        <div class="loopholes">
+          <div class="loopholes-title">⚠ Loopholes Found</div>
+          <div class="loophole-item">No reviews table in the DB schema, yet this is one of the most detailed pages in the whole system. Reviews are referenced from provider cards, rating scores, and the reviews pages.</div>
+          <div class="loophole-item">Review sub-scores (punctuality, value for money) are displayed but not in the schema. The reviews table must include these as separate numeric fields.</div>
+          <div class="loophole-item">Provider replies have no storage defined. The reviews table needs a provider_reply field.</div>
+          <div class="loophole-item">Files 5 and 6 overlap in purpose — the Reviews tab in file 5 has a simplified version while file 6 is a full standalone reviews page. Pick one pattern and unify.</div>
+          <div class="loophole-item">"Unanswered (8)" filter in file 6 requires a database query for reviews where provider_reply IS NULL. This filter is useful but the backend must explicitly support it.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PROVIDER SETTINGS ── -->
+  <div class="doc-section" id="provider-settings">
+    <div class="page-card">
+      <div class="page-card-header">
+        <span class="page-badge badge-provider">Provider</span>
+        <div class="page-title-block">
+          <div class="page-name">Settings</div>
+          <div class="page-file">7_provider_settings_full.html · /provider/settings/page.tsx</div>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-name">Notifications section</div>
+            <div class="feature-desc">9 toggles: New booking, Reminder, Cancellation, Review, Payment, Payout, Push, Email, WhatsApp. WhatsApp alerts are the most Pakistan-relevant channel — most providers will want this most. WhatsApp Business API or Twilio is required.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Availability & work schedule</div>
+            <div class="feature-desc">Online status toggle, auto-offline after hours, working hours start/end, max jobs per day, set vacation/leave. These are the most operationally important settings — they directly control what customers can book.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Payout settings</div>
+            <div class="feature-desc">Payout schedule (weekly/bi-weekly/monthly), minimum payout threshold (PKR 5000), next payout date. Links to the earnings page's withdraw flow.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Security section</div>
+            <div class="feature-desc">Change password, 2FA (SMS OTP), active sessions (2 devices), login history. 2FA is shown as "Off" by default — this is correct since it's an optional feature.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">Privacy controls</div>
+            <div class="feature-desc">Show full name / Show phone (only after confirmed booking) / Show exact location / Show reviews publicly. The phone visibility rule (only after booking confirmed) is a critical trust and safety feature.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-name">App preferences</div>
+            <div class="feature-desc">Dark mode, Language (English / Urdu / Roman Urdu), Currency display (PKR / USD), Sound alerts. The language switcher here can change the entire app's UI language.</div>
+          </div>
+        </div>
+
+        <div class="callout callout-green">
+          <strong>Best page in the design.</strong> Settings has the most thorough thought put into it. The WhatsApp notification option, the "auto go offline" feature, and the privacy controls (phone only visible after booking) are all well-reasoned for the Pakistani market. Keep all of these.
+        </div>
+
+        <div class="connections">
+          <div class="connections-title">🔗 Connected to</div>
+          <div class="conn-list">
+            <span class="conn-chip">← Provider Dashboard (sidebar)</span>
+            <span class="conn-chip">→ Auth (Sign out)</span>
+            <span class="conn-chip">→ PATCH /api/providers/:id/settings</span>
+            <span class="conn-chip">→ Schedule (working hours sync)</span>
+            <span class="conn-chip">→ Earnings (payout schedule sync)</span>
+          </div>
+        </div>
+
+        <div class="loopholes">
+          <div class="loopholes-title">⚠ Loopholes Found</div>
+          <div class="loophole-item">"Set vacation / leave" is listed but expands to nothing in the design — there is no date picker or calendar block UI for it.</div>
+          <div class="loophole-item">WhatsApp alerts require WhatsApp Business API access — a paid and approval-gated product. This should be noted as a dependency with a fallback to SMS.</div>
+          <div class="loophole-item">Delete account says "Cannot be undone" but there is no confirmation flow, no warning about pending bookings, and no data export prompt before deletion.</div>
+          <div class="loophole-item">Max jobs per day setting must also be enforced server-side — if the provider sets 4 and already has 4 confirmed bookings, the 5th booking attempt should fail at the API level, not just be blocked visually.</div>
+          <div class="loophole-item">Working hours set here must stay in sync with the Schedule page's working days toggle. There is no documented sync mechanism between the two.</div>
+          <div class="loophole-item">There is no equivalent Settings page designed for customers. Customer settings (notification preferences, city, language, password) have no home in the current design.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider"/>
+
+  <!-- ── MASTER LOOPHOLES ── -->
+  <div class="doc-section" id="loopholes-master">
+    <div class="section-eyebrow">ANALYSIS</div>
+    <div class="section-title">All Loopholes — Master List</div>
+    <div class="section-desc">
+      Consolidated view of every gap and inconsistency found across the full design. Prioritized by impact.
+    </div>
+
+    <div class="page-card">
+      <div class="page-card-header">
+        <span class="page-badge badge-critical">Critical — Must Fix Before Demo</span>
+      </div>
+      <div class="page-card-body">
+        <div class="loophole-item">No reviews table in the DB schema, despite reviews being shown on 3+ pages. Add: reviews (id, booking_id, provider_id, user_id, rating, punctuality, value_for_money, comment, tags[], provider_reply, created_at).</div>
+        <div class="loophole-item">Manual booking page (/book/manual) is not in the file structure — no Next.js route, no API handler defined.</div>
+        <div class="loophole-item">The provider's is_available flag is set to false on booking but NEVER reset to true. After a job completes, the provider stays permanently unavailable. Need a "Mark complete" action or automatic reset at scheduled_at + estimated_duration.</div>
+        <div class="loophole-item">No "Mark job complete" button on the provider side. Without it, bookings stay CONFIRMED forever and earnings cannot be finalized.</div>
+        <div class="loophole-item">Providers with multiple professions: the current DB schema has a single category field, but the UI allows multi-select. Need categories[] (array) or a provider_categories junction table.</div>
+        <div class="loophole-item">Manual booking does not call the agent pipeline — no reminder is automatically scheduled. The Follow-up Agent must be called explicitly for manual bookings too.</div>
+      </div>
+    </div>
+
+    <div class="page-card">
+      <div class="page-card-header">
+        <span class="page-badge badge-shared" style="background:#FAEEDA;color:#7C3F00;">High Priority — Before Launch</span>
+      </div>
+      <div class="page-card-body">
+        <div class="loophole-item">Public provider profile page (/providers/[id]) — customers can't see a provider's full info before booking.</div>
+        <div class="loophole-item">Rating/review submission flow — customers have no page to rate a completed job.</div>
+        <div class="loophole-item">Google OAuth post-onboarding — no step to collect city and phone after signing in with Google.</div>
+        <div class="loophole-item">Time slot availability API — manual booking's busy slots are hardcoded; needs GET /api/providers/:id/availability?date= endpoint.</div>
+        <div class="loophole-item">Chat multi-turn memory — conversation history must be sent with every API call for context continuity.</div>
+        <div class="loophole-item">Payout/withdrawal flow — completely missing. Provider earnings have no way to actually reach the provider's bank/JazzCash.</div>
+        <div class="loophole-item">Booking cancellation confirmation dialog — one click cancels a booking with no warning.</div>
+        <div class="loophole-item">Provider phone visibility — currently shown on New (pending) jobs; should only reveal after Accept.</div>
+        <div class="loophole-item">Customer settings page — no place for customers to change their city, language, notifications, or password.</div>
+      </div>
+    </div>
+
+    <div class="page-card">
+      <div class="page-card-header">
+        <span class="page-badge" style="background:#F1F5F9;color:#475569;">Medium Priority — Nice to Have</span>
+      </div>
+      <div class="page-card-body">
+        <div class="loophole-item">Landing page sendPrompt() function doesn't exist outside the chat page context.</div>
+        <div class="loophole-item">Chat loading state — no typing indicator while agents are processing (3.2s wait).</div>
+        <div class="loophole-item">Stats on landing page are hardcoded — will go stale in production.</div>
+        <div class="loophole-item">Service category filter chips don't pass pre-context to the chat AI.</div>
+        <div class="loophole-item">City/area filter chaining on providers page — selecting a city doesn't filter the area dropdown.</div>
+        <div class="loophole-item">Providers page missing pagination for remaining 9 of 15 providers.</div>
+        <div class="loophole-item">Calendar events have no click handler — can't view job detail from Schedule page.</div>
+        <div class="loophole-item">Notes field in manual booking has no corresponding column in the bookings table.</div>
+        <div class="loophole-item">Platform fee (PKR 50) is shown to customers but not deducted from provider earnings display.</div>
+        <div class="loophole-item">Microphone icon in chat implies voice input that is not implemented.</div>
+        <div class="loophole-item">Files 5 and 6 in the provider section both cover reviews — should be unified into one page.</div>
+        <div class="loophole-item">Admin dashboard is completely absent — no way to manage platform users, view all bookings, or resolve disputes.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RECOMMENDATIONS ── -->
+  <div class="doc-section" id="recommendations-master">
+    <div class="section-eyebrow">ANALYSIS</div>
+    <div class="section-title">Recommendations</div>
+    <div class="section-desc">
+      What the team should build, change, or add before the hackathon demo and before a production launch.
+    </div>
+
+    <div class="recommendations">
+      <div class="rec-title">🗄 Database — Add These Now</div>
+      <div class="rec-item">Add reviews table: id, booking_id, provider_id, user_id, rating, punctuality_score, value_score, comment, tags[], provider_reply, created_at.</div>
+      <div class="rec-item">Change providers.category to providers.categories (text array) to support multi-profession providers.</div>
+      <div class="rec-item">Add notes column to bookings table for customer problem descriptions.</div>
+      <div class="rec-item">Add final_price column to bookings — set when provider marks complete. This is what earnings are calculated from.</div>
+      <div class="rec-item">Add provider_settings table (or JSONB column on providers) to store notification preferences, working hours, max jobs, payout preferences.</div>
+    </div>
+
+    <div class="recommendations">
+      <div class="rec-title">🏗 Architecture — Changes to Make</div>
+      <div class="rec-item">Add POST /api/bookings/manual endpoint that also calls the Follow-up Agent to schedule reminders — manual bookings should get the same treatment as AI bookings.</div>
+      <div class="rec-item">Add PATCH /api/bookings/:id/complete endpoint that: sets status to COMPLETED, resets provider is_available to true, sets final_price.</div>
+      <div class="rec-item">Add GET /api/providers/:id/availability?date= endpoint for the manual booking time slot grid.</div>
+      <div class="rec-item">Use Supabase Realtime on the provider dashboard to push new booking requests instantly without polling.</div>
+      <div class="rec-item">Pass service_id and provider_id as URL params to /book when coming from Providers page or service chips, so the AI starts with context pre-loaded.</div>
+    </div>
+
+    <div class="recommendations">
+      <div class="rec-title">📱 Pages to Design (Missing)</div>
+      <div class="rec-item">/providers/[id] — Public provider profile: full info, all reviews, book button. This is what "View profile" links to.</div>
+      <div class="rec-item">/bookings/[id]/rate — Review submission page: star rating, sub-scores, comment, tags.</div>
+      <div class="rec-item">/auth/onboarding — Post-OAuth step: collect city, phone, role for Google sign-in users.</div>
+      <div class="rec-item">/auth/forgot-password and /auth/reset-password — Password reset flow.</div>
+      <div class="rec-item">/provider/jobs/[id] — Individual job detail page.</div>
+      <div class="rec-item">/customer/settings — Customer settings (city, language, notifications, password).</div>
+    </div>
+
+    <div class="recommendations">
+      <div class="rec-title">✅ Things That Are Well Designed — Keep These</div>
+      <div class="rec-item">Agent trace panel — the real-time transparency of AI reasoning is exactly right for a demo and for building trust.</div>
+      <div class="rec-item">Provider availability toggle on every sidebar page — always accessible, no hunting required.</div>
+      <div class="rec-item">Phone number shown only after booking confirmed (privacy settings) — correct for Pakistan context.</div>
+      <div class="rec-item">Dark sidebar for provider portal vs light customer UI — role distinction through color is a smart design decision.</div>
+      <div class="rec-item">WhatsApp notification option — highly relevant for Pakistani market where WhatsApp is primary communication.</div>
+      <div class="rec-item">Database state change panel on receipt — best demo feature; shows the system actually did real work.</div>
+      <div class="rec-item">Multilingual chat — accepting Urdu, Roman Urdu, and English in the same input without mode-switching.</div>
+      <div class="rec-item">Reminder confirmation on receipt — closes the loop and justifies the Follow-up Agent's existence.</div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:40px 0 20px;color:var(--text-muted);font-size:12px;font-family:var(--mono);">
+    Khadmat AI System Documentation · Google Antigravity Hackathon · 2026<br/>
+    Generated from 18 page designs + 1 proposal + architecture diagram
+  </div>
+
+</main>
+
+<script>
+  // Highlight active nav item on scroll
+  const sections = document.querySelectorAll('.doc-section[id], .doc-hero[id]');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navItems.forEach(item => {
+          item.classList.toggle('active', item.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

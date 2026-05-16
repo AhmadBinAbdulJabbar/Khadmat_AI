@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Sparkles,
   MessageCircle,
@@ -102,6 +103,17 @@ const STATS = [
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [query, setQuery] = useState("");
+  const router = useRouter();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query.trim()) {
+      router.push(`/chat?q=${encodeURIComponent(query)}`);
+    } else {
+      router.push(`/chat?q=Mujhe%20kal%20subah%20G-13%20mein%20AC%20technician%20chahiye`);
+    }
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -284,17 +296,21 @@ export default function LandingPage() {
           <div className="text-[11px] tracking-wider text-[var(--text-tertiary)] font-medium mb-2 uppercase">
             Try an example
           </div>
-          <div className="flex items-center gap-3 bg-[var(--bg-primary)] border border-[var(--border-primary)] rounded-lg px-4 py-3 group hover:border-[var(--accent-border)] transition-colors">
-            <span className="flex-1 text-sm text-[var(--text-secondary)]">
-              &ldquo;Mujhe kal subah G-13 mein AC technician chahiye&rdquo;
-            </span>
-            <Link
-              href="/book"
-              className="flex-shrink-0 w-9 h-9 bg-[var(--accent)] text-white rounded-lg flex items-center justify-center hover:bg-[var(--accent-dark)] transition-all active:scale-90 shadow-sm animate-pulse-glow no-underline"
+          <form onSubmit={handleSearch} className="flex items-center gap-3 bg-[var(--bg-primary)] border border-[var(--border-primary)] rounded-lg px-4 py-3 group hover:border-[var(--accent-border)] transition-colors focus-within:border-[var(--accent)] focus-within:ring-2 focus-within:ring-[var(--accent-light)]">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Mujhe kal subah G-13 mein AC technician chahiye"
+              className="flex-1 text-sm text-[var(--text-primary)] bg-transparent outline-none placeholder:text-[var(--text-tertiary)]"
+            />
+            <button
+              type="submit"
+              className="flex-shrink-0 w-9 h-9 bg-[var(--accent)] text-white rounded-lg flex items-center justify-center hover:bg-[var(--accent-dark)] transition-all active:scale-90 shadow-sm animate-pulse-glow no-underline cursor-pointer border-none"
             >
               <ArrowUp size={16} />
-            </Link>
-          </div>
+            </button>
+          </form>
           <div className="flex gap-2 mt-3">
             {["Urdu", "Roman Urdu", "English"].map((lang) => (
               <span

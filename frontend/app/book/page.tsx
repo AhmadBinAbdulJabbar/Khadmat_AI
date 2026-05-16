@@ -566,6 +566,11 @@ export default function BookServicePage() {
       >
         <BookingForm />
       </Suspense>
+
+      {/* Floating AI Button */}
+      <Link href="/chat" className="fixed bottom-6 right-6 w-14 h-14 bg-[var(--accent)] rounded-full flex items-center justify-center text-white shadow-lg hover:bg-[var(--accent-dark)] hover:scale-105 transition-all z-50 group no-underline">
+        <Sparkles size={24} className="group-hover:animate-pulse" />
+      </Link>
     </div>
   );
 }
