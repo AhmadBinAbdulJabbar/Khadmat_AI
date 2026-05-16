@@ -3,52 +3,52 @@
 ## Frontend Tasks
 
 ### F-PROF-01: Build Profile Page with Tabs
-- Create `app/provider/profile/page.tsx`
-- Tab navigation: Profile | Reviews (count)
-- Tab content switching (show/hide)
-- Fetch profile data and reviews on mount
+- [ ] Create `app/provider/profile/page.tsx`
+- [ ] Tab navigation: Profile | Reviews (count)
+- [ ] Tab content switching (show/hide)
+- [ ] Fetch profile data and reviews on mount
 
 ### F-PROF-02: Build Personal Info Form
-- Profile photo section: avatar + upload button
-- Two-column form: name, phone, email, city
-- Pre-populate with current user data from API
+- [ ] Profile photo section: avatar + upload button
+- [ ] Two-column form: name, phone, email, city
+- [ ] Pre-populate with current user data from API
 
 ### F-PROF-03: Build Profession Details Form
-- Profession chip multi-select component
-- Toggle chips on/off (green selected, gray default)
-- Experience dropdown
-- Min/max price inputs
-- Bio textarea
+- [ ] Profession chip multi-select component
+- [ ] Toggle chips on/off (green selected, gray default)
+- [ ] Experience dropdown
+- [ ] Min/max price inputs
+- [ ] Bio textarea
 
 ### F-PROF-04: Build Service Areas Section
-- Area chips with X (remove) button
-- "Add area" button → dropdown or modal to select new area
-- Area options based on city
+- [ ] Area chips with X (remove) button
+- [ ] "Add area" button → dropdown or modal to select new area
+- [ ] Area options based on city
 
 ### F-PROF-05: Build Photo Upload
-- Click "Upload photo" → file picker
-- Validate: JPG/PNG, max 2MB
-- Upload to Supabase Storage or server
-- Show preview after upload
+- [ ] Click "Upload photo" → file picker
+- [ ] Validate: JPG/PNG, max 2MB
+- [ ] Upload to Supabase Storage or server
+- [ ] Show preview after upload
 
 ### F-PROF-06: Save Profile
-- "Save changes" → `PUT /api/provider/profile`
-- Validate required fields
-- Show loading spinner during save
-- Toast on success/error
+- [ ] "Save changes" → `PUT /api/provider/profile`
+- [ ] Validate required fields
+- [ ] Show loading spinner during save
+- [ ] Toast on success/error
 
 ### F-PROF-07: Build Reviews Tab (Read-only)
-- Rating overview: large number + star visualization + breakdown bars
-- Review cards: avatar, name, service, date, stars, text
-- Paginated review list
+- [ ] Rating overview: large number + star visualization + breakdown bars
+- [ ] Review cards: avatar, name, service, date, stars, text
+- [ ] Paginated review list
 
 ---
 
 ## Backend Tasks
 
 ### B-PROF-01: Get Provider Profile
-- `GET /api/provider/profile?provider_id={id}`
-- Returns full profile:
+- [ ] `GET /api/provider/profile?provider_id={id}`
+- [ ] Returns full profile:
 ```json
 {
   "user": { "first_name", "last_name", "email", "phone", "city" },
@@ -65,23 +65,23 @@
 ```
 
 ### B-PROF-02: Update Provider Profile
-- `PUT /api/provider/profile`
-- Request: full profile object (same as GET response structure)
-- Update `users` table (name, phone, email, city)
-- Update `provider_profiles` table (professions, experience, prices, bio, areas)
-- Return updated profile
+- [ ] `PUT /api/provider/profile`
+- [ ] Request: full profile object (same as GET response structure)
+- [ ] Update `users` table (name, phone, email, city)
+- [ ] Update `provider_profiles` table (professions, experience, prices, bio, areas)
+- [ ] Return updated profile
 
 ### B-PROF-03: Upload Profile Photo
-- `POST /api/provider/profile/photo`
-- Accept multipart form data (image file)
-- Validate: JPG/PNG, max 2MB
-- Upload to Supabase Storage bucket
-- Save URL in `provider_profiles.photo_url`
-- Return photo URL
+- [ ] `POST /api/provider/profile/photo`
+- [ ] Accept multipart form data (image file)
+- [ ] Validate: JPG/PNG, max 2MB
+- [ ] Upload to Supabase Storage bucket
+- [ ] Save URL in `provider_profiles.photo_url`
+- [ ] Return photo URL
 
 ### B-PROF-04: Get Provider Reviews (Summary)
-- `GET /api/provider/reviews?provider_id={id}&page={n}&limit={n}`
-- Returns:
+- [ ] `GET /api/provider/reviews?provider_id={id}&page={n}&limit={n}`
+- [ ] Returns:
 ```json
 {
   "summary": {
