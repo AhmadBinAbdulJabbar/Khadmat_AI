@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import {
   Check,
   ChevronDown,
@@ -88,6 +88,7 @@ const PROVIDERS = [
 
 function BookingForm() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const initialService = searchParams.get("service") || "AC Technician";
 
   // Form State
@@ -129,57 +130,13 @@ function BookingForm() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || "Failed to submit booking");
 
-      setSuccessData(data.booking);
+      router.push(`/booking/${data.booking.id}`);
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred.");
     } finally {
       setLoading(false);
     }
   };
-
-  if (successData) {
-    return (
-      <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-full max-w-md bg-[var(--bg-primary)] border border-[var(--border-tertiary)] rounded-2xl p-8 text-center shadow-sm animate-fade-in-up">
-          <div className="w-16 h-16 bg-[var(--accent-light)] text-[var(--accent)] rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle2 size={32} />
-          </div>
-          <h2 className="text-2xl font-semibold text-[var(--text-primary)] mb-2">
-            Booking Confirmed!
-          </h2>
-          <p className="text-[var(--text-secondary)] mb-6 text-sm">
-            {successData.message}
-          </p>
-          <div className="bg-[var(--bg-secondary)] border border-[var(--border-tertiary)] rounded-xl p-4 mb-6 text-left space-y-2">
-            <div className="flex justify-between text-sm">
-              <span className="text-[var(--text-secondary)]">Booking ID:</span>
-              <span className="font-medium text-[var(--text-primary)] truncate max-w-[150px]">
-                {successData.id}
-              </span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-[var(--text-secondary)]">Service:</span>
-              <span className="font-medium text-[var(--text-primary)]">
-                {successData.service_type}
-              </span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-[var(--text-secondary)]">Status:</span>
-              <span className="font-medium text-[var(--accent)] capitalize">
-                {successData.status}
-              </span>
-            </div>
-          </div>
-          <Link
-            href="/"
-            className="block w-full bg-[var(--bg-secondary)] text-[var(--text-primary)] border border-[var(--border-secondary)] font-medium py-3 rounded-lg hover:bg-[var(--border-tertiary)] transition-all no-underline"
-          >
-            Back to Home
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-0 min-h-[calc(100vh-57px)]">
