@@ -162,10 +162,10 @@ export default function LandingPage() {
             Providers
           </Link>
           <Link
-            href="/book"
+            href="/auth"
             className="inline-flex items-center gap-2 bg-[var(--accent)] text-white text-sm font-medium px-5 py-2 rounded-lg hover:bg-[var(--accent-dark)] transition-all active:scale-[0.97] shadow-sm hover:shadow-md no-underline"
           >
-            Try now
+            Sign in
           </Link>
         </div>
 
@@ -213,10 +213,10 @@ export default function LandingPage() {
               Providers
             </Link>
             <Link
-              href="/book"
+              href="/auth"
               className="mt-4 flex items-center justify-center gap-2 bg-[var(--accent)] text-white text-base font-medium py-3 rounded-lg hover:bg-[var(--accent-dark)] transition-all no-underline"
             >
-              Try now
+              Sign in
             </Link>
           </div>
         </div>
@@ -480,40 +480,6 @@ export default function LandingPage() {
         </Link>
       </section>
 
-      {/* ── Footer ── */}
-      <footer
-        id="footer"
-        className="px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-4"
-      >
-        <div className="text-xs text-[var(--text-tertiary)]">
-          © 2026 Khadmat AI · Google Antigravity Hackathon
-        </div>
-        <div className="flex items-center gap-5">
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-xs text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors no-underline"
-          >
-            <ExternalLink size={12} />
-            GitHub
-          </a>
-          <a
-            href="#"
-            className="flex items-center gap-1.5 text-xs text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors no-underline"
-          >
-            <ExternalLink size={12} />
-            Docs
-          </a>
-          <a
-            href="#"
-            className="flex items-center gap-1.5 text-xs text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors no-underline"
-          >
-            <ExternalLink size={12} />
-            About
-          </a>
-        </div>
-      </footer>
     </div>
   );
 }
