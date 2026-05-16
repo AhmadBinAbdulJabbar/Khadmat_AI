@@ -1,0 +1,338 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.shell{display:grid;grid-template-columns:190px 1fr;min-height:680px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.sb{border-right:0.5px solid var(--color-border-tertiary);background:#1a1a1a;display:flex;flex-direction:column}
+.sb-top{padding:16px 14px;border-bottom:0.5px solid #333}
+.sb-ava{width:36px;height:36px;border-radius:50%;background:#1D9E75;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#fff;margin-bottom:8px}
+.sb-name{font-size:13px;font-weight:500;color:#fff}
+.sb-cat{font-size:11px;color:#888;margin-bottom:6px}
+.tog-row{display:flex;align-items:center;gap:6px}
+.tog{width:28px;height:16px;background:#1D9E75;border-radius:8px;position:relative;flex-shrink:0;cursor:pointer}
+.tog-thumb{position:absolute;top:2px;right:2px;width:12px;height:12px;background:#fff;border-radius:50%;transition:right .2s}
+.avail{font-size:11px;color:#1D9E75;font-weight:500}
+.ni{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:13px;color:#888;cursor:pointer}
+.ni:hover{color:#fff;background:rgba(255,255,255,0.05)}
+.ni.on{color:#1D9E75;font-weight:500;background:rgba(29,158,117,0.1)}
+.ni i{font-size:16px}
+.ns{font-size:10px;color:#555;padding:12px 14px 4px;letter-spacing:0.05em}
+.main{background:var(--color-background-primary);display:grid;grid-template-columns:180px 1fr}
+.settings-nav{border-right:0.5px solid var(--color-border-tertiary);padding:16px 0;background:var(--color-background-secondary)}
+.sn-item{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:13px;color:var(--color-text-secondary);cursor:pointer}
+.sn-item:hover{background:var(--color-background-primary);color:var(--color-text-primary)}
+.sn-item.on{background:var(--color-background-primary);color:#1D9E75;font-weight:500;border-right:2px solid #1D9E75}
+.sn-item i{font-size:15px}
+.sn-sep{height:0.5px;background:var(--color-border-tertiary);margin:8px 14px}
+.content{padding:20px;overflow:auto}
+.sec{margin-bottom:22px}
+.sec-title{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;display:flex;align-items:center;gap:7px}
+.sec-sub{font-size:12px;color:var(--color-text-secondary);margin-bottom:14px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:10px}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.setting-row:last-child{border-bottom:none}
+.sr-left{display:flex;align-items:center;gap:10px}
+.sr-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.sr-label{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.sr-sub{font-size:11px;color:var(--color-text-secondary);margin-top:1px}
+.sr-right{display:flex;align-items:center;gap:8px}
+.toggle{width:36px;height:20px;border-radius:10px;position:relative;cursor:pointer;flex-shrink:0;transition:background .2s}
+.toggle.on{background:#1D9E75}
+.toggle.off{background:var(--color-border-secondary)}
+.toggle-knob{position:absolute;top:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:left .2s}
+.toggle.on .toggle-knob{left:18px}
+.toggle.off .toggle-knob{left:2px}
+.tag-green{font-size:11px;background:#E1F5EE;color:#085041;padding:2px 8px;border-radius:10px;font-weight:500}
+.tag-gray{font-size:11px;background:var(--color-background-secondary);color:var(--color-text-secondary);padding:2px 8px;border-radius:10px}
+.tag-amber{font-size:11px;background:#FAEEDA;color:#633806;padding:2px 8px;border-radius:10px;font-weight:500}
+.tag-red{font-size:11px;background:#FCEBEB;color:#791F1F;padding:2px 8px;border-radius:10px;font-weight:500}
+.chevron{font-size:14px;color:var(--color-text-tertiary)}
+.inp{width:100%;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:8px 11px;font-size:13px;color:var(--color-text-primary);outline:none}
+.inp:focus{border-color:#1D9E75;box-shadow:0 0 0 2px #E1F5EE}
+.inp::placeholder{color:var(--color-text-tertiary)}
+.inp-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 16px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.inp-row:last-child{border-bottom:none}
+.inp-single{padding:12px 16px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.inp-single:last-child{border-bottom:none}
+.flabel{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;display:block}
+.btn-save{background:#1D9E75;color:#fff;border:none;padding:7px 16px;border-radius:var(--border-radius-md);font-size:12px;font-weight:500;cursor:pointer}
+.btn-save:hover{background:#0F6E56}
+.btn-outline{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:7px 14px;font-size:12px;cursor:pointer;color:var(--color-text-secondary)}
+.btn-outline:hover{background:var(--color-background-secondary)}
+.btn-danger{background:var(--color-background-primary);border:0.5px solid #F09595;border-radius:var(--border-radius-md);padding:7px 14px;font-size:12px;cursor:pointer;color:#A32D2D}
+.btn-danger:hover{background:#FCEBEB}
+.danger-zone{background:#FCEBEB;border:0.5px solid #F09595;border-radius:var(--border-radius-lg);overflow:hidden}
+.payout-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin:0 16px 14px;display:flex;align-items:center;justify-content:space-between}
+.pc-bank{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.pc-num{font-size:12px;color:var(--color-text-secondary);margin-top:1px}
+.tab-content{display:none}
+.tab-content.on{display:block}
+.active-section{font-size:10px;color:var(--color-text-tertiary);padding:12px 16px 6px;letter-spacing:0.04em;border-bottom:0.5px solid var(--color-border-tertiary)}
+</style>
+
+<h2 class="sr-only">Service provider settings page with notifications, security, payout, and account sections</h2>
+
+<div class="shell">
+  <div class="sb">
+    <div class="sb-top">
+      <div class="sb-ava">AA</div>
+      <div class="sb-name">Ali AC Services</div>
+      <div class="sb-cat">AC Technician · G-13</div>
+      <div class="tog-row"><div class="tog" onclick="toggleAvail(this)"><div class="tog-thumb"></div></div><span class="avail" id="avail-label">Available</span></div>
+    </div>
+    <div class="ni"><i class="ti ti-layout-dashboard" aria-hidden="true"></i>Dashboard</div>
+    <div class="ni"><i class="ti ti-calendar" aria-hidden="true"></i>My jobs</div>
+    <div class="ni"><i class="ti ti-clock" aria-hidden="true"></i>Schedule</div>
+    <div class="ni"><i class="ti ti-currency-rupee" aria-hidden="true"></i>Earnings</div>
+    <div class="ns">ACCOUNT</div>
+    <div class="ni"><i class="ti ti-user" aria-hidden="true"></i>Profile</div>
+    <div class="ni"><i class="ti ti-star" aria-hidden="true"></i>Reviews</div>
+    <div class="ni on"><i class="ti ti-settings" aria-hidden="true"></i>Settings</div>
+  </div>
+
+  <div class="main">
+    <div class="settings-nav">
+      <div class="sn-item on" id="snav-notif" onclick="showSection('notif')"><i class="ti ti-bell" aria-hidden="true"></i>Notifications</div>
+      <div class="sn-item" id="snav-avail" onclick="showSection('avail')"><i class="ti ti-clock" aria-hidden="true"></i>Availability</div>
+      <div class="sn-item" id="snav-payout" onclick="showSection('payout')"><i class="ti ti-building-bank" aria-hidden="true"></i>Payout</div>
+      <div class="sn-item" id="snav-security" onclick="showSection('security')"><i class="ti ti-lock" aria-hidden="true"></i>Security</div>
+      <div class="sn-item" id="snav-privacy" onclick="showSection('privacy')"><i class="ti ti-eye" aria-hidden="true"></i>Privacy</div>
+      <div class="sn-item" id="snav-app" onclick="showSection('app')"><i class="ti ti-device-mobile" aria-hidden="true"></i>App</div>
+      <div class="sn-sep"></div>
+      <div class="sn-item" id="snav-account" onclick="showSection('account')" style="color:#A32D2D"><i class="ti ti-alert-circle" aria-hidden="true"></i>Account</div>
+    </div>
+
+    <div class="content">
+
+      <div class="tab-content on" id="sec-notif">
+        <div class="sec">
+          <div class="sec-title"><i class="ti ti-bell" style="font-size:15px;color:var(--color-text-secondary)" aria-hidden="true"></i>Notifications</div>
+          <div class="sec-sub">Choose how and when you receive alerts</div>
+          <div class="card">
+            <div class="active-section">JOB REQUESTS</div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#E1F5EE"><i class="ti ti-calendar-plus" style="color:#0F6E56" aria-hidden="true"></i></div><div><div class="sr-label">New booking request</div><div class="sr-sub">Alert when a customer sends you a request</div></div></div>
+              <div class="sr-right"><div class="toggle on" onclick="tog(this)"><div class="toggle-knob"></div></div></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#E1F5EE"><i class="ti ti-clock" style="color:#0F6E56" aria-hidden="true"></i></div><div><div class="sr-label">Booking reminder</div><div class="sr-sub">1 hour before each scheduled job</div></div></div>
+              <div class="sr-right"><div class="toggle on" onclick="tog(this)"><div class="toggle-knob"></div></div></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#FAEEDA"><i class="ti ti-x" style="color:#854F0B" aria-hidden="true"></i></div><div><div class="sr-label">Booking cancelled</div><div class="sr-sub">When a customer cancels their booking</div></div></div>
+              <div class="sr-right"><div class="toggle on" onclick="tog(this)"><div class="toggle-knob"></div></div></div>
+            </div>
+            <div class="active-section">REVIEWS & PAYMENTS</div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#FAEEDA"><i class="ti ti-star" style="color:#854F0B" aria-hidden="true"></i></div><div><div class="sr-label">New review received</div><div class="sr-sub">When a customer leaves a rating</div></div></div>
+              <div class="sr-right"><div class="toggle on" onclick="tog(this)"><div class="toggle-knob"></div></div></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#EAF3DE"><i class="ti ti-currency-rupee" style="color:#3B6D11" aria-hidden="true"></i></div><div><div class="sr-label">Payment received</div><div class="sr-sub">Confirmation when PKR is credited</div></div></div>
+              <div class="sr-right"><div class="toggle on" onclick="tog(this)"><div class="toggle-knob"></div></div></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#EAF3DE"><i class="ti ti-arrow-up" style="color:#3B6D11" aria-hidden="true"></i></div><div><div class="sr-label">Payout sent</div><div class="sr-sub">When your weekly payout is processed</div></div></div>
+              <div class="sr-right"><div class="toggle on" onclick="tog(this)"><div class="toggle-knob"></div></div></div>
+            </div>
+            <div class="active-section">CHANNELS</div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#E6F1FB"><i class="ti ti-device-mobile" style="color:#185FA5" aria-hidden="true"></i></div><div><div class="sr-label">Push notifications</div><div class="sr-sub">On this device</div></div></div>
+              <div class="sr-right"><div class="toggle on" onclick="tog(this)"><div class="toggle-knob"></div></div></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#E6F1FB"><i class="ti ti-mail" style="color:#185FA5" aria-hidden="true"></i></div><div><div class="sr-label">Email notifications</div><div class="sr-sub">ali@example.com</div></div></div>
+              <div class="sr-right"><div class="toggle off" onclick="tog(this)"><div class="toggle-knob"></div></div></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#EAF3DE"><i class="ti ti-brand-whatsapp" style="color:#3B6D11" aria-hidden="true"></i></div><div><div class="sr-label">WhatsApp alerts</div><div class="sr-sub">0300-1234567</div></div></div>
+              <div class="sr-right"><div class="toggle on" onclick="tog(this)"><div class="toggle-knob"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="sec-avail">
+        <div class="sec">
+          <div class="sec-title"><i class="ti ti-clock" style="font-size:15px;color:var(--color-text-secondary)" aria-hidden="true"></i>Availability settings</div>
+          <div class="sec-sub">Control when you accept bookings</div>
+          <div class="card">
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#E1F5EE"><i class="ti ti-toggle-right" style="color:#0F6E56" aria-hidden="true"></i></div><div><div class="sr-label">Online status</div><div class="sr-sub">You are currently visible to customers</div></div></div>
+              <div class="sr-right"><span class="tag-green">Online</span><div class="toggle on" onclick="tog(this)"><div class="toggle-knob"></div></div></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#FAEEDA"><i class="ti ti-moon" style="color:#854F0B" aria-hidden="true"></i></div><div><div class="sr-label">Auto go offline</div><div class="sr-sub">After working hours (set below)</div></div></div>
+              <div class="sr-right"><div class="toggle on" onclick="tog(this)"><div class="toggle-knob"></div></div></div>
+            </div>
+            <div class="inp-row">
+              <div><label class="flabel">Working hours start</label><select class="inp"><option>7:00 AM</option><option selected>8:00 AM</option><option>9:00 AM</option></select></div>
+              <div><label class="flabel">Working hours end</label><select class="inp"><option>5:00 PM</option><option selected>6:00 PM</option><option>8:00 PM</option></select></div>
+            </div>
+            <div class="inp-single">
+              <label class="flabel">Max jobs per day</label>
+              <select class="inp" style="max-width:200px"><option>2 jobs</option><option>3 jobs</option><option selected>4 jobs</option><option>5 jobs</option><option>Unlimited</option></select>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#FCEBEB"><i class="ti ti-calendar-off" style="color:#A32D2D" aria-hidden="true"></i></div><div><div class="sr-label">Set vacation / leave</div><div class="sr-sub">Block dates when you are unavailable</div></div></div>
+              <div class="sr-right"><span class="tag-gray">No dates blocked</span><i class="ti ti-chevron-right chevron" aria-hidden="true"></i></div>
+            </div>
+          </div>
+          <button class="btn-save">Save availability settings</button>
+        </div>
+      </div>
+
+      <div class="tab-content" id="sec-payout">
+        <div class="sec">
+          <div class="sec-title"><i class="ti ti-building-bank" style="font-size:15px;color:var(--color-text-secondary)" aria-hidden="true"></i>Payout settings</div>
+          <div class="sec-sub">Manage your bank account and payout schedule</div>
+          <div class="card">
+            <div class="active-section">LINKED BANK ACCOUNT</div>
+            <div class="payout-card">
+              <div>
+                <div class="pc-bank">Meezan Bank — Savings Account</div>
+                <div class="pc-num">••••  ••••  ••••  4521</div>
+              </div>
+              <div style="display:flex;gap:6px">
+                <button class="btn-outline" style="font-size:11px;padding:5px 10px">Change</button>
+                <span class="tag-green">Verified</span>
+              </div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#EAF3DE"><i class="ti ti-calendar-repeat" style="color:#3B6D11" aria-hidden="true"></i></div><div><div class="sr-label">Payout schedule</div><div class="sr-sub">How often earnings are transferred</div></div></div>
+              <div class="sr-right"><select class="inp" style="width:130px;padding:5px 8px;font-size:12px"><option>Weekly</option><option selected>Bi-weekly</option><option>Monthly</option></select></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#E1F5EE"><i class="ti ti-currency-rupee" style="color:#0F6E56" aria-hidden="true"></i></div><div><div class="sr-label">Minimum payout amount</div><div class="sr-sub">Transfer only when balance exceeds this</div></div></div>
+              <div class="sr-right"><div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-text-secondary)">PKR <input class="inp" value="5000" style="width:80px;padding:5px 8px;font-size:12px"/></div></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#E1F5EE"><i class="ti ti-receipt" style="color:#0F6E56" aria-hidden="true"></i></div><div><div class="sr-label">Next payout</div><div class="sr-sub">Estimated transfer date</div></div></div>
+              <div class="sr-right"><span class="tag-green">30 May 2026</span></div>
+            </div>
+          </div>
+          <button class="btn-save">Save payout settings</button>
+        </div>
+      </div>
+
+      <div class="tab-content" id="sec-security">
+        <div class="sec">
+          <div class="sec-title"><i class="ti ti-lock" style="font-size:15px;color:var(--color-text-secondary)" aria-hidden="true"></i>Security</div>
+          <div class="sec-sub">Keep your account safe</div>
+          <div class="card">
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#EEEDFE"><i class="ti ti-key" style="color:#534AB7" aria-hidden="true"></i></div><div><div class="sr-label">Change password</div><div class="sr-sub">Last changed 3 months ago</div></div></div>
+              <div class="sr-right"><button class="btn-outline" style="font-size:11px;padding:5px 12px">Change</button></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#EEEDFE"><i class="ti ti-shield-check" style="color:#534AB7" aria-hidden="true"></i></div><div><div class="sr-label">Two-factor authentication</div><div class="sr-sub">Extra security via SMS OTP</div></div></div>
+              <div class="sr-right"><span class="tag-amber">Off</span><div class="toggle off" onclick="tog(this)"><div class="toggle-knob"></div></div></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#E6F1FB"><i class="ti ti-device-laptop" style="color:#185FA5" aria-hidden="true"></i></div><div><div class="sr-label">Active sessions</div><div class="sr-sub">2 devices logged in</div></div></div>
+              <div class="sr-right"><button class="btn-outline" style="font-size:11px;padding:5px 12px;color:#A32D2D;border-color:#F09595">Sign out all</button></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#E1F5EE"><i class="ti ti-history" style="color:#0F6E56" aria-hidden="true"></i></div><div><div class="sr-label">Login history</div><div class="sr-sub">Last login: Today 8:32 AM · Islamabad</div></div></div>
+              <div class="sr-right"><i class="ti ti-chevron-right chevron" aria-hidden="true"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="sec-privacy">
+        <div class="sec">
+          <div class="sec-title"><i class="ti ti-eye" style="font-size:15px;color:var(--color-text-secondary)" aria-hidden="true"></i>Privacy</div>
+          <div class="sec-sub">Control what customers can see</div>
+          <div class="card">
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#E1F5EE"><i class="ti ti-user" style="color:#0F6E56" aria-hidden="true"></i></div><div><div class="sr-label">Show full name on profile</div><div class="sr-sub">Customers see "Ali Hassan"</div></div></div>
+              <div class="sr-right"><div class="toggle on" onclick="tog(this)"><div class="toggle-knob"></div></div></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#E6F1FB"><i class="ti ti-phone" style="color:#185FA5" aria-hidden="true"></i></div><div><div class="sr-label">Show phone number</div><div class="sr-sub">Only after booking is confirmed</div></div></div>
+              <div class="sr-right"><div class="toggle on" onclick="tog(this)"><div class="toggle-knob"></div></div></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#FAEEDA"><i class="ti ti-map-pin" style="color:#854F0B" aria-hidden="true"></i></div><div><div class="sr-label">Show exact location</div><div class="sr-sub">Show area only (e.g. G-13) not full address</div></div></div>
+              <div class="sr-right"><div class="toggle off" onclick="tog(this)"><div class="toggle-knob"></div></div></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#EAF3DE"><i class="ti ti-star" style="color:#3B6D11" aria-hidden="true"></i></div><div><div class="sr-label">Show reviews publicly</div><div class="sr-sub">All ratings visible on your profile</div></div></div>
+              <div class="sr-right"><div class="toggle on" onclick="tog(this)"><div class="toggle-knob"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="sec-app">
+        <div class="sec">
+          <div class="sec-title"><i class="ti ti-device-mobile" style="font-size:15px;color:var(--color-text-secondary)" aria-hidden="true"></i>App preferences</div>
+          <div class="sec-sub">Customise your experience</div>
+          <div class="card">
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#1a1a1a"><i class="ti ti-moon" style="color:#fff" aria-hidden="true"></i></div><div><div class="sr-label">Dark mode</div><div class="sr-sub">Use dark theme across all pages</div></div></div>
+              <div class="sr-right"><div class="toggle on" onclick="tog(this)"><div class="toggle-knob"></div></div></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#E6F1FB"><i class="ti ti-language" style="color:#185FA5" aria-hidden="true"></i></div><div><div class="sr-label">Language</div><div class="sr-sub">App display language</div></div></div>
+              <div class="sr-right"><select class="inp" style="width:120px;padding:5px 8px;font-size:12px"><option selected>English</option><option>اردو</option><option>Roman Urdu</option></select></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#EAF3DE"><i class="ti ti-currency-rupee" style="color:#3B6D11" aria-hidden="true"></i></div><div><div class="sr-label">Currency display</div><div class="sr-sub">How prices are shown</div></div></div>
+              <div class="sr-right"><select class="inp" style="width:120px;padding:5px 8px;font-size:12px"><option selected>PKR</option><option>USD</option></select></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#FAEEDA"><i class="ti ti-volume" style="color:#854F0B" aria-hidden="true"></i></div><div><div class="sr-label">Sound alerts</div><div class="sr-sub">Play sound on new job request</div></div></div>
+              <div class="sr-right"><div class="toggle on" onclick="tog(this)"><div class="toggle-knob"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="sec-account">
+        <div class="sec">
+          <div class="sec-title" style="color:#A32D2D"><i class="ti ti-alert-circle" style="font-size:15px" aria-hidden="true"></i>Account</div>
+          <div class="sec-sub">Manage or remove your Khadmat AI account</div>
+          <div class="card" style="margin-bottom:10px">
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#FAEEDA"><i class="ti ti-download" style="color:#854F0B" aria-hidden="true"></i></div><div><div class="sr-label">Download my data</div><div class="sr-sub">Get a copy of all your bookings and earnings</div></div></div>
+              <div class="sr-right"><button class="btn-outline" style="font-size:11px;padding:5px 12px">Request export</button></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#FAEEDA"><i class="ti ti-pause" style="color:#854F0B" aria-hidden="true"></i></div><div><div class="sr-label">Pause account</div><div class="sr-sub">Temporarily stop receiving bookings</div></div></div>
+              <div class="sr-right"><button class="btn-outline" style="font-size:11px;padding:5px 12px">Pause</button></div>
+            </div>
+          </div>
+          <div class="danger-zone">
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#FCEBEB"><i class="ti ti-logout" style="color:#A32D2D" aria-hidden="true"></i></div><div><div class="sr-label" style="color:#A32D2D">Sign out</div><div class="sr-sub">Sign out of this device</div></div></div>
+              <div class="sr-right"><button class="btn-danger" style="font-size:11px;padding:5px 12px">Sign out</button></div>
+            </div>
+            <div class="setting-row">
+              <div class="sr-left"><div class="sr-icon" style="background:#FCEBEB"><i class="ti ti-trash" style="color:#A32D2D" aria-hidden="true"></i></div><div><div class="sr-label" style="color:#A32D2D">Delete account</div><div class="sr-sub">Permanently remove all data. Cannot be undone.</div></div></div>
+              <div class="sr-right"><button class="btn-danger" style="font-size:11px;padding:5px 12px">Delete</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function tog(el){el.classList.toggle('on');el.classList.toggle('off')}
+function toggleAvail(el){
+  el.classList.toggle('on');el.classList.toggle('off');
+  var lbl=document.getElementById('avail-label');
+  lbl.textContent=el.classList.contains('on')?'Available':'Offline';
+  lbl.style.color=el.classList.contains('on')?'#1D9E75':'#888';
+}
+function showSection(id){
+  var ids=['notif','avail','payout','security','privacy','app','account'];
+  ids.forEach(function(s){
+    document.getElementById('sec-'+s).className='tab-content'+(s===id?' on':'');
+    document.getElementById('snav-'+s).className='sn-item'+(s===id?' on':'');
+  });
+}
+</script>

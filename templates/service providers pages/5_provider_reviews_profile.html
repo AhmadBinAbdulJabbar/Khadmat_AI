@@ -1,0 +1,193 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.shell{display:grid;grid-template-columns:190px 1fr;min-height:620px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.sb{border-right:0.5px solid var(--color-border-tertiary);background:#1a1a1a;display:flex;flex-direction:column}
+.sb-profile{padding:16px 14px;border-bottom:0.5px solid #333}
+.sb-ava{width:36px;height:36px;border-radius:50%;background:#1D9E75;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#fff;margin-bottom:8px}
+.sb-name{font-size:13px;font-weight:500;color:#fff}.sb-cat{font-size:11px;color:#888;margin-bottom:6px}
+.avail-row{display:flex;align-items:center;gap:6px}
+.tog{width:28px;height:16px;background:#1D9E75;border-radius:8px;position:relative;cursor:pointer;flex-shrink:0}
+.tog-thumb{position:absolute;top:2px;right:2px;width:12px;height:12px;background:#fff;border-radius:50%}
+.avail-text{font-size:11px;color:#1D9E75;font-weight:500}
+.nav-item{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:13px;color:#888;cursor:pointer}
+.nav-item:hover{color:#fff;background:rgba(255,255,255,0.05)}
+.nav-item.active{color:#1D9E75;font-weight:500;background:rgba(29,158,117,0.1)}
+.nav-item i{font-size:16px}
+.nav-section{font-size:10px;color:#555;padding:12px 14px 4px;letter-spacing:0.05em}
+.main{background:var(--color-background-primary);overflow:auto}
+.page-tabs{display:flex;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+.ptab{padding:12px 20px;font-size:13px;cursor:pointer;color:var(--color-text-secondary);border-bottom:2px solid transparent}
+.ptab.on{color:#1D9E75;border-bottom-color:#1D9E75;font-weight:500;background:var(--color-background-primary)}
+.tab-content{padding:20px;display:none}
+.tab-content.on{display:block}
+.rating-overview{display:grid;grid-template-columns:120px 1fr;gap:20px;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:16px}
+.big-rating{text-align:center}
+.big-num{font-size:36px;font-weight:500;color:var(--color-text-primary)}
+.stars{color:#EF9F27;font-size:16px;letter-spacing:1px}
+.rating-count{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.rating-bars{display:flex;flex-direction:column;gap:5px;justify-content:center}
+.rb-row{display:flex;align-items:center;gap:6px;font-size:11px}
+.rb-label{width:30px;color:var(--color-text-secondary);text-align:right}
+.rb-track{flex:1;height:6px;background:var(--color-background-primary);border-radius:3px;overflow:hidden}
+.rb-fill{height:100%;border-radius:3px;background:#EF9F27}
+.rb-count{width:24px;color:var(--color-text-secondary)}
+.review-list{display:flex;flex-direction:column;gap:10px}
+.review-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px}
+.rv-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
+.rv-user{display:flex;align-items:center;gap:8px}
+.rv-ava{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
+.rv-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.rv-service{font-size:11px;color:var(--color-text-secondary)}
+.rv-stars{color:#EF9F27;font-size:13px}
+.rv-date{font-size:11px;color:var(--color-text-tertiary)}
+.rv-text{font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pf-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px}
+.pf-full{grid-column:1/-1}
+.pf-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px;display:flex;align-items:center;gap:5px}
+.flabel{font-size:12px;color:var(--color-text-secondary);margin-bottom:4px;display:block}
+.inp{width:100%;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:8px 10px;font-size:13px;color:var(--color-text-primary);outline:none;margin-bottom:10px}
+.inp:focus{border-color:#1D9E75}
+select.inp{cursor:pointer}
+.prof-photo{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.prof-ava-lg{width:56px;height:56px;border-radius:50%;background:#E1F5EE;border:0.5px solid #9FE1CB;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:500;color:#085041}
+.photo-actions{display:flex;flex-direction:column;gap:4px}
+.photo-btn{font-size:12px;color:#1D9E75;cursor:pointer;padding:3px 0}
+.profession-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.pchip{border:0.5px solid var(--color-border-tertiary);border-radius:20px;padding:4px 10px;font-size:11px;cursor:pointer;color:var(--color-text-secondary);background:var(--color-background-primary)}
+.pchip.on{background:#E1F5EE;border-color:#1D9E75;color:#085041;font-weight:500}
+.save-btn{background:#1D9E75;color:#fff;border:none;padding:9px 20px;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;cursor:pointer}
+.save-btn:hover{background:#0F6E56}
+.area-chips{display:flex;flex-wrap:wrap;gap:5px}
+.achip{background:#E1F5EE;border:0.5px solid #9FE1CB;color:#085041;font-size:11px;padding:3px 9px;border-radius:20px;display:flex;align-items:center;gap:4px;cursor:pointer}
+.achip i{font-size:11px}
+.add-area{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);font-size:11px;padding:3px 9px;border-radius:20px;cursor:pointer}
+.add-area:hover{border-color:#1D9E75;color:#1D9E75}
+</style>
+<h2 class="sr-only">Provider reviews and profile edit pages</h2>
+<div class="shell">
+<div class="sb">
+  <div class="sb-profile">
+    <div class="sb-ava">AA</div>
+    <div class="sb-name">Ali AC Services</div>
+    <div class="sb-cat">AC Technician · G-13</div>
+    <div class="avail-row"><div class="tog"><div class="tog-thumb"></div></div><span class="avail-text">Available</span></div>
+  </div>
+  <div class="nav-item"><i class="ti ti-layout-dashboard" aria-hidden="true"></i>Dashboard</div>
+  <div class="nav-item"><i class="ti ti-calendar" aria-hidden="true"></i>My jobs</div>
+  <div class="nav-item"><i class="ti ti-clock" aria-hidden="true"></i>Schedule</div>
+  <div class="nav-item"><i class="ti ti-currency-rupee" aria-hidden="true"></i>Earnings</div>
+  <div class="nav-section">ACCOUNT</div>
+  <div class="nav-item active"><i class="ti ti-user" aria-hidden="true"></i>Profile</div>
+  <div class="nav-item"><i class="ti ti-star" aria-hidden="true"></i>Reviews</div>
+  <div class="nav-item"><i class="ti ti-settings" aria-hidden="true"></i>Settings</div>
+</div>
+<div class="main">
+  <div class="page-tabs">
+    <div class="ptab on" id="tab-profile" onclick="switchTab('profile')"><i class="ti ti-user" style="font-size:14px;margin-right:5px" aria-hidden="true"></i>Profile</div>
+    <div class="ptab" id="tab-reviews" onclick="switchTab('reviews')"><i class="ti ti-star" style="font-size:14px;margin-right:5px" aria-hidden="true"></i>Reviews (212)</div>
+  </div>
+
+  <div class="tab-content on" id="content-profile">
+    <div class="profile-grid">
+      <div class="pf-card pf-full">
+        <div class="pf-title"><i class="ti ti-user-circle" style="font-size:15px;color:var(--color-text-secondary)" aria-hidden="true"></i>Personal info</div>
+        <div class="prof-photo">
+          <div class="prof-ava-lg">AA</div>
+          <div class="photo-actions">
+            <span class="photo-btn"><i class="ti ti-upload" style="font-size:12px" aria-hidden="true"></i> Upload photo</span>
+            <span style="font-size:11px;color:var(--color-text-tertiary)">JPG or PNG, max 2MB</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div><label class="flabel">Full name</label><input class="inp" value="Ali Hassan" /></div>
+          <div><label class="flabel">Phone number</label><input class="inp" value="0300-1234567" /></div>
+          <div><label class="flabel">Email</label><input class="inp" value="ali@example.com" /></div>
+          <div><label class="flabel">City</label><select class="inp"><option selected>Islamabad</option><option>Karachi</option><option>Lahore</option></select></div>
+        </div>
+      </div>
+      <div class="pf-card pf-full">
+        <div class="pf-title"><i class="ti ti-briefcase" style="font-size:15px;color:var(--color-text-secondary)" aria-hidden="true"></i>Profession details</div>
+        <label class="flabel">Professions (select all that apply)</label>
+        <div class="profession-chips" style="margin-bottom:12px">
+          <div class="pchip on">AC Technician</div>
+          <div class="pchip">Plumber</div>
+          <div class="pchip">Electrician</div>
+          <div class="pchip">Carpenter</div>
+          <div class="pchip">Painter</div>
+          <div class="pchip">Cleaner</div>
+          <div class="pchip">Other</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+          <div><label class="flabel">Experience</label><select class="inp"><option>1–2 years</option><option>3–5 years</option><option selected>5–10 years</option><option>10+ years</option></select></div>
+          <div><label class="flabel">Min price (PKR)</label><input class="inp" value="800" /></div>
+          <div><label class="flabel">Max price (PKR)</label><input class="inp" value="1500" /></div>
+        </div>
+        <label class="flabel">Bio / description</label>
+        <textarea class="inp" rows="2" style="resize:none">Experienced AC technician with 7+ years. Specialise in installation, gas refill, and servicing all major brands.</textarea>
+      </div>
+      <div class="pf-card pf-full">
+        <div class="pf-title"><i class="ti ti-map-pin" style="font-size:15px;color:var(--color-text-secondary)" aria-hidden="true"></i>Service areas</div>
+        <div class="area-chips">
+          <div class="achip">G-13 <i class="ti ti-x" aria-hidden="true"></i></div>
+          <div class="achip">G-10 <i class="ti ti-x" aria-hidden="true"></i></div>
+          <div class="achip">F-10 <i class="ti ti-x" aria-hidden="true"></i></div>
+          <div class="achip">F-8 <i class="ti ti-x" aria-hidden="true"></i></div>
+          <div class="add-area"><i class="ti ti-plus" style="font-size:11px" aria-hidden="true"></i> Add area</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:14px"><button class="save-btn"><i class="ti ti-check" style="margin-right:5px" aria-hidden="true"></i>Save changes</button></div>
+  </div>
+
+  <div class="tab-content" id="content-reviews">
+    <div class="rating-overview">
+      <div class="big-rating">
+        <div class="big-num">4.7</div>
+        <div class="stars">★★★★★</div>
+        <div class="rating-count">212 reviews</div>
+      </div>
+      <div class="rating-bars">
+        <div class="rb-row"><span class="rb-label">5★</span><div class="rb-track"><div class="rb-fill" style="width:78%"></div></div><span class="rb-count">165</span></div>
+        <div class="rb-row"><span class="rb-label">4★</span><div class="rb-track"><div class="rb-fill" style="width:14%"></div></div><span class="rb-count">30</span></div>
+        <div class="rb-row"><span class="rb-label">3★</span><div class="rb-track"><div class="rb-fill" style="width:5%"></div></div><span class="rb-count">11</span></div>
+        <div class="rb-row"><span class="rb-label">2★</span><div class="rb-track"><div class="rb-fill" style="width:2%"></div></div><span class="rb-count">4</span></div>
+        <div class="rb-row"><span class="rb-label">1★</span><div class="rb-track"><div class="rb-fill" style="width:1%"></div></div><span class="rb-count">2</span></div>
+      </div>
+    </div>
+    <div class="review-list">
+      <div class="review-card">
+        <div class="rv-top">
+          <div class="rv-user"><div class="rv-ava" style="background:#EEEDFE;color:#3C3489">AU</div><div><div class="rv-name">Ahmed Usman</div><div class="rv-service">AC filter clean · 21 May</div></div></div>
+          <div style="text-align:right"><div class="rv-stars">★★★★★</div><div class="rv-date">5.0</div></div>
+        </div>
+        <div class="rv-text">Bahut acha kaam kiya! Punctual tha aur AC bilkul theek ho gaya. Definitely recommend karunga.</div>
+      </div>
+      <div class="review-card">
+        <div class="rv-top">
+          <div class="rv-user"><div class="rv-ava" style="background:#E1F5EE;color:#085041">SK</div><div><div class="rv-name">Sara Khan</div><div class="rv-service">AC gas refill · 20 May</div></div></div>
+          <div style="text-align:right"><div class="rv-stars">★★★★★</div><div class="rv-date">5.0</div></div>
+        </div>
+        <div class="rv-text">Very professional. Came on time, explained everything clearly. Price was fair. Will book again.</div>
+      </div>
+      <div class="review-card">
+        <div class="rv-top">
+          <div class="rv-user"><div class="rv-ava" style="background:#FAEEDA;color:#633806">BA</div><div><div class="rv-name">Bilal Ahmed</div><div class="rv-service">AC installation · 19 May</div></div></div>
+          <div style="text-align:right"><div class="rv-stars" style="color:#EF9F27">★★★★<span style="color:var(--color-border-secondary)">★</span></div><div class="rv-date">4.0</div></div>
+        </div>
+        <div class="rv-text">Good work overall. Took a bit longer than expected but the quality was solid. No complaints.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+function switchTab(t){
+  ['profile','reviews'].forEach(id=>{
+    document.getElementById('tab-'+id).className='ptab'+(id===t?' on':'');
+    document.getElementById('content-'+id).className='tab-content'+(id===t?' on':'');
+  });
+}
+document.querySelectorAll('.pchip').forEach(c=>c.onclick=function(){this.classList.toggle('on')});
+</script>

@@ -1,0 +1,218 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.page{padding:20px 24px}
+.page-header{margin-bottom:20px}
+.page-title{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.page-sub{font-size:13px;color:var(--color-text-secondary);margin-top:2px}
+.search-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.search-input{flex:1;min-width:160px;display:flex;align-items:center;gap:8px;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:8px 12px}
+.search-input input{background:none;border:none;outline:none;font-size:13px;color:var(--color-text-primary);width:100%}
+.search-input input::placeholder{color:var(--color-text-tertiary)}
+.select-box{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:8px 12px;font-size:13px;color:var(--color-text-secondary);cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.svc-filters{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.svc-btn{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:20px;padding:5px 12px;font-size:12px;cursor:pointer;color:var(--color-text-secondary);display:flex;align-items:center;gap:5px}
+.svc-btn.active{background:#E1F5EE;border-color:#5DCAA5;color:#0F6E56;font-weight:500}
+.svc-btn:hover{border-color:var(--color-border-secondary);color:var(--color-text-primary)}
+.results-info{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.results-count{font-size:13px;color:var(--color-text-secondary)}
+.sort-row{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--color-text-secondary)}
+.sort-opt{cursor:pointer;padding:3px 8px;border-radius:var(--border-radius-md)}
+.sort-opt.active{color:#1D9E75;font-weight:500;background:#E1F5EE}
+.sort-opt:hover{background:var(--color-background-secondary)}
+.provider-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.prov-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;cursor:pointer}
+.prov-card:hover{border-color:var(--color-border-secondary)}
+.prov-card.featured{border:1.5px solid #1D9E75}
+.prov-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.prov-ava{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0}
+.prov-info{flex:1}
+.prov-name{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:1px}
+.prov-cat{font-size:12px;color:var(--color-text-secondary)}
+.avail-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;flex-shrink:0}
+.avail-yes{background:#E1F5EE;color:#0F6E56}
+.avail-no{background:#F1EFE8;color:#5F5E5A}
+.prov-stats{display:flex;gap:12px;margin-bottom:12px}
+.prov-stat{font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:4px}
+.prov-price{font-size:12px;color:var(--color-text-secondary);margin-bottom:12px}
+.prov-footer{display:flex;align-items:center;justify-content:space-between}
+.book-btn{background:#1D9E75;color:#fff;border:none;padding:6px 14px;border-radius:var(--border-radius-md);font-size:12px;font-weight:500;cursor:pointer}
+.book-btn:hover{background:#0F6E56}
+.view-link{font-size:12px;color:var(--color-text-secondary);cursor:pointer;display:flex;align-items:center;gap:3px}
+.view-link:hover{color:var(--color-text-primary)}
+.featured-tag{font-size:10px;background:#E1F5EE;color:#0F6E56;padding:2px 8px;border-radius:10px;font-weight:500;margin-bottom:8px;display:inline-block}
+</style>
+
+<h2 class="sr-only">Khadmat AI provider browse page with search filters and provider cards</h2>
+
+<div class="page">
+  <div class="page-header">
+    <div class="page-title">Browse providers</div>
+    <div class="page-sub">Find verified service providers across Karachi, Lahore, and Islamabad</div>
+  </div>
+
+  <div class="search-bar">
+    <div class="search-input" style="flex:2">
+      <i class="ti ti-search" style="font-size:15px;color:var(--color-text-tertiary)" aria-hidden="true"></i>
+      <input placeholder="Search providers by name or service..." />
+    </div>
+    <div class="select-box">
+      <i class="ti ti-map-pin" style="font-size:14px" aria-hidden="true"></i>
+      All cities
+      <i class="ti ti-chevron-down" style="font-size:13px;margin-left:4px" aria-hidden="true"></i>
+    </div>
+    <div class="select-box">
+      <i class="ti ti-map" style="font-size:14px" aria-hidden="true"></i>
+      All areas
+      <i class="ti ti-chevron-down" style="font-size:13px;margin-left:4px" aria-hidden="true"></i>
+    </div>
+  </div>
+
+  <div class="svc-filters">
+    <button class="svc-btn active"><i class="ti ti-grid-3x3" style="font-size:13px" aria-hidden="true"></i>All</button>
+    <button class="svc-btn"><i class="ti ti-air-conditioning" style="font-size:13px" aria-hidden="true"></i>AC Technician</button>
+    <button class="svc-btn"><i class="ti ti-droplet" style="font-size:13px" aria-hidden="true"></i>Plumber</button>
+    <button class="svc-btn"><i class="ti ti-plug" style="font-size:13px" aria-hidden="true"></i>Electrician</button>
+    <button class="svc-btn"><i class="ti ti-book" style="font-size:13px" aria-hidden="true"></i>Tutor</button>
+    <button class="svc-btn"><i class="ti ti-home" style="font-size:13px" aria-hidden="true"></i>Cleaner</button>
+  </div>
+
+  <div class="results-info">
+    <span class="results-count">15 providers found</span>
+    <div class="sort-row">
+      Sort by:
+      <span class="sort-opt active">Rating</span>
+      <span class="sort-opt">Distance</span>
+      <span class="sort-opt">Price</span>
+    </div>
+  </div>
+
+  <div class="provider-grid">
+    <div class="prov-card featured">
+      <div class="featured-tag">Top rated</div>
+      <div class="prov-top">
+        <div class="prov-ava" style="background:#E1F5EE;color:#0F6E56">CT</div>
+        <div class="prov-info">
+          <div class="prov-name">City Tutor Network</div>
+          <div class="prov-cat">Tutor · Clifton, Karachi</div>
+        </div>
+        <span class="avail-badge avail-yes">Available</span>
+      </div>
+      <div class="prov-stats">
+        <span class="prov-stat"><i class="ti ti-star" aria-hidden="true"></i> 4.9</span>
+        <span class="prov-stat"><i class="ti ti-map-pin" aria-hidden="true"></i> 1.4 km</span>
+        <span class="prov-stat"><i class="ti ti-briefcase" aria-hidden="true"></i> 143 jobs</span>
+      </div>
+      <div class="prov-price"><i class="ti ti-currency-rupee" style="font-size:13px" aria-hidden="true"></i> PKR 800 – 2,000 per session</div>
+      <div class="prov-footer">
+        <button class="book-btn" onclick="sendPrompt('Show me the Khadmat AI chat booking page design')">Book now</button>
+        <span class="view-link"><i class="ti ti-external-link" style="font-size:12px" aria-hidden="true"></i>View profile</span>
+      </div>
+    </div>
+
+    <div class="prov-card">
+      <div class="prov-top">
+        <div class="prov-ava" style="background:#EEEDFE;color:#534AB7">RE</div>
+        <div class="prov-info">
+          <div class="prov-name">Rehman Electricals</div>
+          <div class="prov-cat">Electrician · G-13, Islamabad</div>
+        </div>
+        <span class="avail-badge avail-yes">Available</span>
+      </div>
+      <div class="prov-stats">
+        <span class="prov-stat"><i class="ti ti-star" aria-hidden="true"></i> 4.8</span>
+        <span class="prov-stat"><i class="ti ti-map-pin" aria-hidden="true"></i> 0.8 km</span>
+        <span class="prov-stat"><i class="ti ti-briefcase" aria-hidden="true"></i> 98 jobs</span>
+      </div>
+      <div class="prov-price"><i class="ti ti-currency-rupee" style="font-size:13px" aria-hidden="true"></i> PKR 600 – 1,200 per visit</div>
+      <div class="prov-footer">
+        <button class="book-btn" onclick="sendPrompt('Show me the Khadmat AI chat booking page design')">Book now</button>
+        <span class="view-link"><i class="ti ti-external-link" style="font-size:12px" aria-hidden="true"></i>View profile</span>
+      </div>
+    </div>
+
+    <div class="prov-card">
+      <div class="prov-top">
+        <div class="prov-ava" style="background:#E6F1FB;color:#185FA5">AA</div>
+        <div class="prov-info">
+          <div class="prov-name">Ali AC Services</div>
+          <div class="prov-cat">AC Technician · G-13, Islamabad</div>
+        </div>
+        <span class="avail-badge avail-yes">Available</span>
+      </div>
+      <div class="prov-stats">
+        <span class="prov-stat"><i class="ti ti-star" aria-hidden="true"></i> 4.7</span>
+        <span class="prov-stat"><i class="ti ti-map-pin" aria-hidden="true"></i> 2.1 km</span>
+        <span class="prov-stat"><i class="ti ti-briefcase" aria-hidden="true"></i> 212 jobs</span>
+      </div>
+      <div class="prov-price"><i class="ti ti-currency-rupee" style="font-size:13px" aria-hidden="true"></i> PKR 800 – 1,500 per visit</div>
+      <div class="prov-footer">
+        <button class="book-btn" onclick="sendPrompt('Show me the Khadmat AI chat booking page design')">Book now</button>
+        <span class="view-link"><i class="ti ti-external-link" style="font-size:12px" aria-hidden="true"></i>View profile</span>
+      </div>
+    </div>
+
+    <div class="prov-card">
+      <div class="prov-top">
+        <div class="prov-ava" style="background:#FAEEDA;color:#854F0B">MP</div>
+        <div class="prov-info">
+          <div class="prov-name">Master Plumbers Pk</div>
+          <div class="prov-cat">Plumber · DHA, Karachi</div>
+        </div>
+        <span class="avail-badge avail-yes">Available</span>
+      </div>
+      <div class="prov-stats">
+        <span class="prov-stat"><i class="ti ti-star" aria-hidden="true"></i> 4.6</span>
+        <span class="prov-stat"><i class="ti ti-map-pin" aria-hidden="true"></i> 3.2 km</span>
+        <span class="prov-stat"><i class="ti ti-briefcase" aria-hidden="true"></i> 177 jobs</span>
+      </div>
+      <div class="prov-price"><i class="ti ti-currency-rupee" style="font-size:13px" aria-hidden="true"></i> PKR 500 – 1,000 per visit</div>
+      <div class="prov-footer">
+        <button class="book-btn" onclick="sendPrompt('Show me the Khadmat AI chat booking page design')">Book now</button>
+        <span class="view-link"><i class="ti ti-external-link" style="font-size:12px" aria-hidden="true"></i>View profile</span>
+      </div>
+    </div>
+
+    <div class="prov-card">
+      <div class="prov-top">
+        <div class="prov-ava" style="background:#FAECE7;color:#993C1D">KC</div>
+        <div class="prov-info">
+          <div class="prov-name">Karim AC Repair</div>
+          <div class="prov-cat">AC Technician · F-10, Islamabad</div>
+        </div>
+        <span class="avail-badge avail-no">Busy</span>
+      </div>
+      <div class="prov-stats">
+        <span class="prov-stat"><i class="ti ti-star" aria-hidden="true"></i> 4.5</span>
+        <span class="prov-stat"><i class="ti ti-map-pin" aria-hidden="true"></i> 4.1 km</span>
+        <span class="prov-stat"><i class="ti ti-briefcase" aria-hidden="true"></i> 89 jobs</span>
+      </div>
+      <div class="prov-price"><i class="ti ti-currency-rupee" style="font-size:13px" aria-hidden="true"></i> PKR 900 – 1,800 per visit</div>
+      <div class="prov-footer">
+        <button class="book-btn" style="background:var(--color-background-secondary);color:var(--color-text-secondary);cursor:not-allowed">Unavailable</button>
+        <span class="view-link"><i class="ti ti-external-link" style="font-size:12px" aria-hidden="true"></i>View profile</span>
+      </div>
+    </div>
+
+    <div class="prov-card">
+      <div class="prov-top">
+        <div class="prov-ava" style="background:#EAF3DE;color:#3B6D11">HP</div>
+        <div class="prov-info">
+          <div class="prov-name">HomeClean Pro</div>
+          <div class="prov-cat">Cleaner · DHA, Lahore</div>
+        </div>
+        <span class="avail-badge avail-yes">Available</span>
+      </div>
+      <div class="prov-stats">
+        <span class="prov-stat"><i class="ti ti-star" aria-hidden="true"></i> 4.4</span>
+        <span class="prov-stat"><i class="ti ti-map-pin" aria-hidden="true"></i> 5.0 km</span>
+        <span class="prov-stat"><i class="ti ti-briefcase" aria-hidden="true"></i> 64 jobs</span>
+      </div>
+      <div class="prov-price"><i class="ti ti-currency-rupee" style="font-size:13px" aria-hidden="true"></i> PKR 600 – 1,200 per session</div>
+      <div class="prov-footer">
+        <button class="book-btn" onclick="sendPrompt('Show me the Khadmat AI chat booking page design')">Book now</button>
+        <span class="view-link"><i class="ti ti-external-link" style="font-size:12px" aria-hidden="true"></i>View profile</span>
+      </div>
+    </div>
+  </div>
+</div>

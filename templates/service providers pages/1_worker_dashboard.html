@@ -1,0 +1,203 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.page{background:var(--color-background-primary)}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:11px 20px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.nav-left{display:flex;align-items:center;gap:10px}
+.logo-dot{width:26px;height:26px;background:#1D9E75;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:500}
+.nav-title{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.nav-badge{font-size:10px;background:#E1F5EE;color:#085041;padding:2px 8px;border-radius:10px;font-weight:500}
+.nav-right{display:flex;align-items:center;gap:8px}
+.ava{width:30px;height:30px;border-radius:50%;background:#E1F5EE;border:0.5px solid #9FE1CB;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#085041}
+.notif-btn{width:30px;height:30px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--color-text-secondary);font-size:15px;position:relative}
+.notif-dot{position:absolute;top:5px;right:5px;width:6px;height:6px;background:#E24B4A;border-radius:50%}
+.body{display:grid;grid-template-columns:200px 1fr;min-height:560px}
+.sidebar{border-right:0.5px solid var(--color-border-tertiary);padding:16px 0;background:var(--color-background-secondary)}
+.worker-profile{padding:0 14px 14px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:10px}
+.wp-ava{width:44px;height:44px;border-radius:50%;background:#E1F5EE;border:0.5px solid #9FE1CB;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:#085041;margin-bottom:8px}
+.wp-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.wp-cat{font-size:11px;color:var(--color-text-secondary);margin-bottom:6px}
+.avail-toggle{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--color-text-secondary)}
+.toggle-track{width:32px;height:18px;background:#1D9E75;border-radius:9px;cursor:pointer;position:relative;flex-shrink:0}
+.toggle-thumb{position:absolute;top:2px;right:2px;width:14px;height:14px;background:#fff;border-radius:50%}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 14px;font-size:13px;color:var(--color-text-secondary);cursor:pointer}
+.nav-item:hover{background:var(--color-background-primary);color:var(--color-text-primary)}
+.nav-item.active{background:var(--color-background-primary);color:#1D9E75;font-weight:500;border-right:2px solid #1D9E75}
+.nav-item i{font-size:16px}
+.nav-section{font-size:10px;color:var(--color-text-tertiary);padding:10px 14px 4px;letter-spacing:0.05em}
+.main{padding:20px;background:var(--color-background-primary)}
+.page-title{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.page-sub{font-size:12px;color:var(--color-text-secondary);margin-bottom:18px}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.stat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px}
+.stat-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:3px;display:flex;align-items:center;gap:4px}
+.stat-val{font-size:20px;font-weight:500;color:var(--color-text-primary)}
+.stat-sub{font-size:10px;color:var(--color-text-secondary);margin-top:2px}
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-title{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.see-all{font-size:12px;color:#1D9E75;cursor:pointer}
+.jobs-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.job-row{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px;display:flex;align-items:center;gap:12px}
+.job-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.job-info{flex:1}
+.job-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.job-meta{font-size:11px;color:var(--color-text-secondary);display:flex;gap:8px;margin-top:2px;flex-wrap:wrap}
+.job-meta span{display:flex;align-items:center;gap:3px}
+.job-price{font-size:13px;font-weight:500;color:var(--color-text-primary);white-space:nowrap}
+.status-pill{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;white-space:nowrap}
+.s-new{background:#FAEEDA;color:#633806}
+.s-confirm{background:#E1F5EE;color:#085041}
+.s-done{background:#EAF3DE;color:#27500A}
+.job-actions{display:flex;gap:6px;margin-top:8px}
+.ja-btn{font-size:11px;padding:4px 10px;border-radius:var(--border-radius-md);cursor:pointer;border:0.5px solid}
+.ja-accept{background:#1D9E75;color:#fff;border-color:#1D9E75}
+.ja-accept:hover{background:#0F6E56}
+.ja-decline{background:var(--color-background-primary);color:var(--color-text-secondary);border-color:var(--color-border-tertiary)}
+.ja-decline:hover{border-color:#E24B4A;color:#A32D2D}
+.new-request{border:1.5px solid #EF9F27;background:#FAEEDA}
+.profile-section{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:14px}
+.prof-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.prof-row:last-child{border-bottom:none}
+.prof-label{color:var(--color-text-secondary)}
+.prof-val{color:var(--color-text-primary);font-weight:500;display:flex;align-items:center;gap:5px}
+.edit-link{font-size:11px;color:#1D9E75;cursor:pointer}
+</style>
+
+<h2 class="sr-only">Khadmat AI worker dashboard showing availability, job requests, earnings and profile</h2>
+
+<div class="page">
+  <div class="nav">
+    <div class="nav-left">
+      <div class="logo-dot">K</div>
+      <span class="nav-title">Khadmat AI</span>
+      <span class="nav-badge">Provider</span>
+    </div>
+    <div class="nav-right">
+      <div class="notif-btn"><i class="ti ti-bell" aria-hidden="true"></i><div class="notif-dot"></div></div>
+      <div class="ava">AA</div>
+      <span style="font-size:13px;color:var(--color-text-secondary)">Ali</span>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="sidebar">
+      <div class="worker-profile">
+        <div class="wp-ava">AA</div>
+        <div class="wp-name">Ali AC Services</div>
+        <div class="wp-cat">AC Technician · G-13, Islamabad</div>
+        <div class="avail-toggle">
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+          <span style="color:#1D9E75;font-weight:500">Available</span>
+        </div>
+      </div>
+      <div class="nav-item active"><i class="ti ti-layout-dashboard" aria-hidden="true"></i>Dashboard</div>
+      <div class="nav-item"><i class="ti ti-calendar" aria-hidden="true"></i>My jobs</div>
+      <div class="nav-item"><i class="ti ti-clock" aria-hidden="true"></i>Schedule</div>
+      <div class="nav-item"><i class="ti ti-currency-rupee" aria-hidden="true"></i>Earnings</div>
+      <div class="nav-section">ACCOUNT</div>
+      <div class="nav-item"><i class="ti ti-user" aria-hidden="true"></i>Profile</div>
+      <div class="nav-item"><i class="ti ti-star" aria-hidden="true"></i>Reviews</div>
+      <div class="nav-item"><i class="ti ti-settings" aria-hidden="true"></i>Settings</div>
+    </div>
+
+    <div class="main">
+      <div class="page-title">Dashboard</div>
+      <div class="page-sub">Thursday, 21 May 2026</div>
+
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-label"><i class="ti ti-calendar-check" style="font-size:12px" aria-hidden="true"></i>Today's jobs</div>
+          <div class="stat-val">3</div>
+          <div class="stat-sub">1 pending · 2 confirmed</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label"><i class="ti ti-currency-rupee" style="font-size:12px" aria-hidden="true"></i>This month</div>
+          <div class="stat-val" style="color:#1D9E75">38,400</div>
+          <div class="stat-sub">PKR earned</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label"><i class="ti ti-star" style="font-size:12px" aria-hidden="true"></i>Rating</div>
+          <div class="stat-val">4.7</div>
+          <div class="stat-sub">from 212 reviews</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label"><i class="ti ti-check" style="font-size:12px" aria-hidden="true"></i>Completed</div>
+          <div class="stat-val">212</div>
+          <div class="stat-sub">total jobs</div>
+        </div>
+      </div>
+
+      <div class="section-hdr">
+        <span class="section-title">Incoming requests</span>
+        <span class="see-all">See all</span>
+      </div>
+
+      <div class="jobs-list">
+        <div class="job-row new-request">
+          <div class="job-icon" style="background:#FAEEDA"><i class="ti ti-air-conditioning" style="color:#854F0B" aria-hidden="true"></i></div>
+          <div class="job-info">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+              <span class="job-title">AC service request</span>
+              <span class="status-pill s-new">New</span>
+            </div>
+            <div class="job-meta">
+              <span><i class="ti ti-user" aria-hidden="true"></i>Ahmed Usman</span>
+              <span><i class="ti ti-map-pin" aria-hidden="true"></i>G-13/2</span>
+              <span><i class="ti ti-clock" aria-hidden="true"></i>Today 10:00 AM</span>
+            </div>
+            <div class="job-actions">
+              <button class="ja-btn ja-accept"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i> Accept</button>
+              <button class="ja-btn ja-decline">Decline</button>
+              <span style="font-size:11px;color:var(--color-text-secondary);margin-left:4px;align-self:center">PKR 1,200 est.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="job-row">
+          <div class="job-icon" style="background:#E1F5EE"><i class="ti ti-air-conditioning" style="color:#0F6E56" aria-hidden="true"></i></div>
+          <div class="job-info">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+              <span class="job-title">AC gas refill</span>
+              <span class="status-pill s-confirm">Confirmed</span>
+            </div>
+            <div class="job-meta">
+              <span><i class="ti ti-user" aria-hidden="true"></i>Sara Khan</span>
+              <span><i class="ti ti-map-pin" aria-hidden="true"></i>G-13/4</span>
+              <span><i class="ti ti-clock" aria-hidden="true"></i>Today 2:00 PM</span>
+            </div>
+          </div>
+          <div class="job-price">PKR 1,500</div>
+        </div>
+
+        <div class="job-row">
+          <div class="job-icon" style="background:#EAF3DE"><i class="ti ti-air-conditioning" style="color:#3B6D11" aria-hidden="true"></i></div>
+          <div class="job-info">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+              <span class="job-title">AC installation</span>
+              <span class="status-pill s-done">Completed</span>
+            </div>
+            <div class="job-meta">
+              <span><i class="ti ti-user" aria-hidden="true"></i>Bilal Ahmed</span>
+              <span><i class="ti ti-map-pin" aria-hidden="true"></i>F-10/1</span>
+              <span><i class="ti ti-clock" aria-hidden="true"></i>Yesterday 11:00 AM</span>
+            </div>
+          </div>
+          <div class="job-price" style="color:#1D9E75">PKR 2,200</div>
+        </div>
+      </div>
+
+      <div class="section-hdr">
+        <span class="section-title">My profile</span>
+        <span class="see-all edit-link">Edit profile</span>
+      </div>
+      <div class="profile-section">
+        <div class="prof-row"><span class="prof-label">Profession</span><span class="prof-val">AC Technician</span></div>
+        <div class="prof-row"><span class="prof-label">Experience</span><span class="prof-val">7 years</span></div>
+        <div class="prof-row"><span class="prof-label">Price range</span><span class="prof-val">PKR 800–1,500</span></div>
+        <div class="prof-row"><span class="prof-label">Service areas</span><span class="prof-val">G-13, G-10, F-10</span></div>
+        <div class="prof-row"><span class="prof-label">Phone</span><span class="prof-val">0300-1234567 <span class="edit-link">change</span></span></div>
+        <div class="prof-row"><span class="prof-label">Availability</span><span class="prof-val" style="color:#1D9E75"><i class="ti ti-circle-check" style="font-size:13px" aria-hidden="true"></i>Online now</span></div>
+      </div>
+    </div>
+  </div>
+</div>

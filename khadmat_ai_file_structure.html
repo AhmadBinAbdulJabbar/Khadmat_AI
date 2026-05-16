@@ -1,0 +1,198 @@
+
+<style>
+.tree{font-family:var(--font-mono);font-size:12px;line-height:1.75;color:var(--color-text-primary)}
+.folder{color:var(--color-text-primary);font-weight:500}
+.file{color:var(--color-text-secondary)}
+.comment{color:var(--color-text-tertiary);font-style:italic}
+.badge{display:inline-block;font-size:10px;font-weight:500;padding:1px 7px;border-radius:20px;margin-left:8px;vertical-align:middle;font-style:normal;font-family:var(--font-sans)}
+.b-fe{background:#E1F5EE;color:#085041}
+.b-be{background:#EEEDFE;color:#3C3489}
+.b-db{background:#FAEEDA;color:#633806}
+.b-cfg{background:#F1EFE8;color:#5F5E5A}
+.section{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 20px;margin-bottom:12px;background:var(--color-background-primary)}
+.section-title{font-size:11px;font-weight:500;letter-spacing:0.06em;color:var(--color-text-tertiary);margin-bottom:10px;display:flex;align-items:center;gap:6px;font-family:var(--font-sans)}
+.indent1{padding-left:20px}
+.indent2{padding-left:40px}
+.indent3{padding-left:60px}
+.indent4{padding-left:80px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+.root-line{font-size:13px;font-weight:500;margin-bottom:14px;padding:10px 16px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);font-family:var(--font-mono)}
+.divider{height:0.5px;background:var(--color-border-tertiary);margin:8px 0}
+</style>
+
+<div style="padding:4px 0 8px">
+  <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;font-family:var(--font-sans)">Khadmat AI — Project File Structure</div>
+  <div style="font-size:12px;color:var(--color-text-secondary);font-family:var(--font-sans)">Next.js 14 · FastAPI · Supabase · Google Antigravity</div>
+</div>
+
+<div class="root-line">📁 khadmat-ai/</div>
+
+<div class="grid">
+
+<div>
+<div class="section">
+<div class="section-title"><i class="ti ti-brand-nextjs" aria-hidden="true"></i> FRONTEND <span class="badge b-fe">Next.js 14</span></div>
+<div class="tree">
+<div class="folder">frontend/</div>
+<div class="indent1">
+  <div class="folder">app/</div>
+  <div class="indent2">
+    <div class="file">layout.tsx <span class="comment">— root layout, fonts</span></div>
+    <div class="file">page.tsx <span class="comment">— landing page</span></div>
+    <div class="folder">auth/</div>
+    <div class="indent3"><div class="file">page.tsx <span class="comment">— login / signup</span></div></div>
+    <div class="folder">book/</div>
+    <div class="indent3"><div class="file">page.tsx <span class="comment">— AI chat booking</span></div></div>
+    <div class="folder">booking/</div>
+    <div class="indent3">
+      <div class="file">[id]/page.tsx <span class="comment">— receipt</span></div>
+    </div>
+    <div class="folder">dashboard/</div>
+    <div class="indent3"><div class="file">page.tsx <span class="comment">— my bookings</span></div></div>
+    <div class="folder">providers/</div>
+    <div class="indent3"><div class="file">page.tsx <span class="comment">— browse providers</span></div></div>
+    <div class="folder">provider/</div>
+    <div class="indent3">
+      <div class="file">dashboard/page.tsx</div>
+      <div class="file">jobs/page.tsx</div>
+      <div class="file">schedule/page.tsx</div>
+      <div class="file">earnings/page.tsx</div>
+      <div class="file">profile/page.tsx</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="folder">components/</div>
+  <div class="indent2">
+    <div class="folder">chat/</div>
+    <div class="indent3">
+      <div class="file">ChatWindow.tsx</div>
+      <div class="file">MessageBubble.tsx</div>
+      <div class="file">ProviderCard.tsx</div>
+      <div class="file">TracePanel.tsx</div>
+    </div>
+    <div class="folder">booking/</div>
+    <div class="indent3">
+      <div class="file">BookingReceipt.tsx</div>
+      <div class="file">StateChangeBadge.tsx</div>
+    </div>
+    <div class="folder">provider/</div>
+    <div class="indent3">
+      <div class="file">JobCard.tsx</div>
+      <div class="file">EarningsChart.tsx</div>
+      <div class="file">WeekCalendar.tsx</div>
+      <div class="file">ReviewCard.tsx</div>
+    </div>
+    <div class="folder">ui/</div>
+    <div class="indent3">
+      <div class="file">Button.tsx</div>
+      <div class="file">StatusPill.tsx</div>
+      <div class="file">AvailabilityToggle.tsx</div>
+      <div class="file">Sidebar.tsx</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="folder">lib/</div>
+  <div class="indent2">
+    <div class="file">api.ts <span class="comment">— fetch wrappers</span></div>
+    <div class="file">supabase.ts <span class="comment">— client init</span></div>
+    <div class="file">utils.ts <span class="comment">— helpers, formatters</span></div>
+    <div class="file">types.ts <span class="comment">— shared TypeScript types</span></div>
+  </div>
+  <div class="divider"></div>
+  <div class="folder">public/</div>
+  <div class="indent2">
+    <div class="file">logo.svg</div>
+    <div class="file">favicon.ico</div>
+  </div>
+  <div class="divider"></div>
+  <div class="file">.env.local</div>
+  <div class="file">next.config.js</div>
+  <div class="file">tailwind.config.js</div>
+  <div class="file">tsconfig.json</div>
+  <div class="file">package.json</div>
+</div>
+</div>
+</div>
+
+<div>
+<div class="section">
+<div class="section-title"><i class="ti ti-brand-python" aria-hidden="true"></i> BACKEND <span class="badge b-be">FastAPI</span></div>
+<div class="tree">
+<div class="folder">backend/</div>
+<div class="indent1">
+  <div class="file">main.py <span class="comment">— app entry, CORS, routes</span></div>
+  <div class="divider"></div>
+  <div class="folder">agents/</div>
+  <div class="indent2">
+    <div class="file">intent_agent.py <span class="comment">— NLU parser</span></div>
+    <div class="file">discovery_agent.py <span class="comment">— provider search</span></div>
+    <div class="file">decision_agent.py <span class="comment">— ranking logic</span></div>
+    <div class="file">booking_agent.py <span class="comment">— DB writer</span></div>
+    <div class="file">followup_agent.py <span class="comment">— reminders</span></div>
+    <div class="file">orchestrator.py <span class="comment">— Antigravity chain</span></div>
+  </div>
+  <div class="divider"></div>
+  <div class="folder">api/</div>
+  <div class="indent2">
+    <div class="file">chat.py <span class="comment">— POST /api/chat</span></div>
+    <div class="file">providers.py <span class="comment">— GET /api/providers/search</span></div>
+    <div class="file">bookings.py <span class="comment">— POST /api/bookings</span></div>
+    <div class="file">reminders.py <span class="comment">— POST /api/reminders</span></div>
+    <div class="file">trace.py <span class="comment">— GET /api/trace/:id</span></div>
+  </div>
+  <div class="divider"></div>
+  <div class="folder">db/</div>
+  <div class="indent2">
+    <div class="file">schema.sql <span class="comment">— all table defs</span></div>
+    <div class="file">seed.sql <span class="comment">— 15 mock providers</span></div>
+    <div class="file">client.py <span class="comment">— Supabase client</span></div>
+    <div class="file">queries.py <span class="comment">— reusable DB fns</span></div>
+  </div>
+  <div class="divider"></div>
+  <div class="folder">utils/</div>
+  <div class="indent2">
+    <div class="file">distance.py <span class="comment">— haversine formula</span></div>
+    <div class="file">ranking.py <span class="comment">— score = dist+rating+avail</span></div>
+    <div class="file">ref_gen.py <span class="comment">— BK-{date}-{id} generator</span></div>
+    <div class="file">language.py <span class="comment">— Urdu/Roman detect</span></div>
+  </div>
+  <div class="divider"></div>
+  <div class="folder">models/</div>
+  <div class="indent2">
+    <div class="file">schemas.py <span class="comment">— Pydantic models</span></div>
+  </div>
+  <div class="divider"></div>
+  <div class="file">.env</div>
+  <div class="file">requirements.txt</div>
+  <div class="file">Procfile <span class="comment">— Railway deploy</span></div>
+</div>
+</div>
+
+<div class="section">
+<div class="section-title"><i class="ti ti-database" aria-hidden="true"></i> DATABASE SCHEMA <span class="badge b-db">Supabase</span></div>
+<div class="tree">
+<div class="folder">Tables</div>
+<div class="indent1">
+  <div class="file">providers <span class="comment">— id, name, category, area, lat/lng, rating, is_available</span></div>
+  <div class="file">bookings <span class="comment">— id, ref, provider_id, user_id, status, scheduled_at</span></div>
+  <div class="file">reminders <span class="comment">— id, booking_id, remind_at, sent</span></div>
+  <div class="file">agent_traces <span class="comment">— session_id, agent, status, detail, tool, ts</span></div>
+  <div class="file">users <span class="comment">— id, name, phone, email, city, role</span></div>
+</div>
+</div>
+</div>
+
+<div class="section">
+<div class="section-title"><i class="ti ti-settings" aria-hidden="true"></i> ROOT CONFIG <span class="badge b-cfg">DevOps</span></div>
+<div class="tree">
+<div class="file">README.md</div>
+<div class="file">.gitignore</div>
+<div class="file">vercel.json <span class="comment">— frontend deploy</span></div>
+<div class="file">railway.json <span class="comment">— backend deploy</span></div>
+<div class="file">docker-compose.yml <span class="comment">— local dev</span></div>
+</div>
+</div>
+
+</div>
+</div>

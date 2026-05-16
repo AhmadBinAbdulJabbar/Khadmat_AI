@@ -1,0 +1,122 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.shell{display:grid;grid-template-columns:190px 1fr;min-height:600px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.sb{border-right:0.5px solid var(--color-border-tertiary);background:#1a1a1a;display:flex;flex-direction:column}
+.sb-profile{padding:16px 14px;border-bottom:0.5px solid #333}
+.sb-ava{width:36px;height:36px;border-radius:50%;background:#1D9E75;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#fff;margin-bottom:8px}
+.sb-name{font-size:13px;font-weight:500;color:#fff}
+.sb-cat{font-size:11px;color:#888;margin-bottom:6px}
+.avail-row{display:flex;align-items:center;gap:6px}
+.tog{width:28px;height:16px;background:#1D9E75;border-radius:8px;position:relative;cursor:pointer;flex-shrink:0}
+.tog-thumb{position:absolute;top:2px;right:2px;width:12px;height:12px;background:#fff;border-radius:50%}
+.avail-text{font-size:11px;color:#1D9E75;font-weight:500}
+.nav-item{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:13px;color:#888;cursor:pointer}
+.nav-item:hover{color:#fff;background:rgba(255,255,255,0.05)}
+.nav-item.active{color:#1D9E75;font-weight:500;background:rgba(29,158,117,0.1)}
+.nav-item i{font-size:16px}
+.nav-section{font-size:10px;color:#555;padding:12px 14px 4px;letter-spacing:0.05em}
+.main{padding:20px;background:var(--color-background-primary);overflow:auto}
+.pt{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.ps{font-size:12px;color:var(--color-text-secondary);margin-bottom:16px}
+.earn-hero{background:#E1F5EE;border:0.5px solid #9FE1CB;border-radius:var(--border-radius-lg);padding:18px 20px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.earn-label{font-size:12px;color:#0F6E56;margin-bottom:4px}
+.earn-val{font-size:28px;font-weight:500;color:#085041}
+.earn-sub{font-size:11px;color:#0F6E56;margin-top:3px}
+.withdraw-btn{background:#1D9E75;color:#fff;border:none;padding:9px 18px;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;cursor:pointer}
+.withdraw-btn:hover{background:#0F6E56}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px}
+.stat-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:3px}
+.stat-val{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.stat-sub{font-size:10px;color:var(--color-text-secondary);margin-top:2px}
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.sh-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.period-tabs{display:flex;gap:0;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden}
+.ptab{padding:4px 12px;font-size:11px;cursor:pointer;color:var(--color-text-secondary);background:var(--color-background-secondary)}
+.ptab.on{background:var(--color-background-primary);color:var(--color-text-primary);font-weight:500}
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:100px;padding:0 0 4px;margin-bottom:4px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.bar-fill{width:100%;border-radius:3px 3px 0 0;background:#E1F5EE;border-top:2px solid #1D9E75;transition:height .3s}
+.bar-fill.this{background:#1D9E75;border-top:2px solid #0F6E56}
+.bar-month{font-size:9px;color:var(--color-text-tertiary)}
+.bar-val{font-size:9px;color:var(--color-text-secondary)}
+.x-labels{display:flex;gap:6px;margin-bottom:14px}
+.x-lbl{flex:1;text-align:center;font-size:9px;color:var(--color-text-tertiary)}
+.txn-list{display:flex;flex-direction:column;gap:0;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.txn-hdr{display:grid;grid-template-columns:1fr 1fr 80px 70px;gap:0;padding:8px 14px;background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary)}
+.txn-hdr span{font-size:11px;color:var(--color-text-secondary);font-weight:500}
+.txn-row{display:grid;grid-template-columns:1fr 1fr 80px 70px;padding:10px 14px;border-bottom:0.5px solid var(--color-border-tertiary);align-items:center}
+.txn-row:last-child{border-bottom:none}
+.txn-row:hover{background:var(--color-background-secondary)}
+.txn-service{font-size:12px;color:var(--color-text-primary);font-weight:500}
+.txn-customer{font-size:11px;color:var(--color-text-secondary)}
+.txn-date{font-size:11px;color:var(--color-text-secondary)}
+.txn-amt{font-size:13px;font-weight:500;color:#1D9E75;text-align:right}
+.txn-status{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500}
+.ts-paid{background:#E1F5EE;color:#085041}
+.ts-pend{background:#FAEEDA;color:#633806}
+</style>
+<h2 class="sr-only">Provider earnings page with balance, bar chart and transaction history</h2>
+<div class="shell">
+<div class="sb">
+  <div class="sb-profile">
+    <div class="sb-ava">AA</div>
+    <div class="sb-name">Ali AC Services</div>
+    <div class="sb-cat">AC Technician · G-13</div>
+    <div class="avail-row"><div class="tog"><div class="tog-thumb"></div></div><span class="avail-text">Available</span></div>
+  </div>
+  <div class="nav-item"><i class="ti ti-layout-dashboard" aria-hidden="true"></i>Dashboard</div>
+  <div class="nav-item"><i class="ti ti-calendar" aria-hidden="true"></i>My jobs</div>
+  <div class="nav-item"><i class="ti ti-clock" aria-hidden="true"></i>Schedule</div>
+  <div class="nav-item active"><i class="ti ti-currency-rupee" aria-hidden="true"></i>Earnings</div>
+  <div class="nav-section">ACCOUNT</div>
+  <div class="nav-item"><i class="ti ti-user" aria-hidden="true"></i>Profile</div>
+  <div class="nav-item"><i class="ti ti-star" aria-hidden="true"></i>Reviews</div>
+  <div class="nav-item"><i class="ti ti-settings" aria-hidden="true"></i>Settings</div>
+</div>
+<div class="main">
+  <div class="pt">Earnings</div>
+  <div class="ps">Track your income and payouts</div>
+  <div class="earn-hero">
+    <div>
+      <div class="earn-label">Available balance</div>
+      <div class="earn-val">PKR 12,800</div>
+      <div class="earn-sub">Last payout: PKR 25,600 on 15 May 2026</div>
+    </div>
+    <button class="withdraw-btn"><i class="ti ti-arrow-up" style="margin-right:5px" aria-hidden="true"></i>Withdraw</button>
+  </div>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-label">This month</div><div class="stat-val" style="color:#1D9E75">38,400</div><div class="stat-sub">PKR · 32 jobs</div></div>
+    <div class="stat"><div class="stat-label">Last month</div><div class="stat-val">31,200</div><div class="stat-sub">PKR · 27 jobs</div></div>
+    <div class="stat"><div class="stat-label">This year</div><div class="stat-val">2,14,000</div><div class="stat-sub">PKR · 212 jobs</div></div>
+  </div>
+  <div class="section-hdr" style="margin-bottom:8px">
+    <span class="sh-title">Monthly earnings</span>
+    <div class="period-tabs"><div class="ptab on">6 months</div><div class="ptab">1 year</div></div>
+  </div>
+  <div class="bar-chart">
+    <div class="bar-col"><span class="bar-val">22k</span><div class="bar-fill" style="height:58%"></div></div>
+    <div class="bar-col"><span class="bar-val">18k</span><div class="bar-fill" style="height:47%"></div></div>
+    <div class="bar-col"><span class="bar-val">28k</span><div class="bar-fill" style="height:73%"></div></div>
+    <div class="bar-col"><span class="bar-val">31k</span><div class="bar-fill" style="height:81%"></div></div>
+    <div class="bar-col"><span class="bar-val">31k</span><div class="bar-fill" style="height:81%"></div></div>
+    <div class="bar-col"><span class="bar-val">38k</span><div class="bar-fill this" style="height:100%"></div></div>
+  </div>
+  <div class="x-labels">
+    <div class="x-lbl">Dec</div><div class="x-lbl">Jan</div><div class="x-lbl">Feb</div><div class="x-lbl">Mar</div><div class="x-lbl">Apr</div><div class="x-lbl">May</div>
+  </div>
+  <div class="section-hdr">
+    <span class="sh-title">Transaction history</span>
+    <span style="font-size:12px;color:#1D9E75;cursor:pointer">Download PDF</span>
+  </div>
+  <div class="txn-list">
+    <div class="txn-hdr"><span>Service</span><span>Customer</span><span>Date</span><span style="text-align:right">Amount</span></div>
+    <div class="txn-row"><div><div class="txn-service">AC filter clean</div><span class="txn-status ts-pend">Pending</span></div><div class="txn-customer">Ahmed Usman</div><div class="txn-date">21 May</div><div class="txn-amt">PKR 1,200</div></div>
+    <div class="txn-row"><div><div class="txn-service">AC gas refill</div><span class="txn-status ts-paid">Paid</span></div><div class="txn-customer">Sara Khan</div><div class="txn-date">20 May</div><div class="txn-amt">PKR 1,500</div></div>
+    <div class="txn-row"><div><div class="txn-service">AC installation</div><span class="txn-status ts-paid">Paid</span></div><div class="txn-customer">Bilal Ahmed</div><div class="txn-date">19 May</div><div class="txn-amt">PKR 2,200</div></div>
+    <div class="txn-row"><div><div class="txn-service">AC repair</div><span class="txn-status ts-paid">Paid</span></div><div class="txn-customer">Omar Siddiqui</div><div class="txn-date">17 May</div><div class="txn-amt">PKR 900</div></div>
+    <div class="txn-row"><div><div class="txn-service">Filter replace</div><span class="txn-status ts-paid">Paid</span></div><div class="txn-customer">Zara Hassan</div><div class="txn-date">16 May</div><div class="txn-amt">PKR 800</div></div>
+  </div>
+</div>
+</div>

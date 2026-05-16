@@ -1,0 +1,219 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.auth-wrap{display:grid;grid-template-columns:1fr 1fr;min-height:580px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.auth-left{background:#0F6E56;padding:32px 28px;display:flex;flex-direction:column;justify-content:space-between}
+.auth-logo{display:flex;align-items:center;gap:8px}
+.auth-logo-dot{width:30px;height:30px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#0F6E56;font-size:14px;font-weight:500}
+.auth-logo-name{font-size:15px;font-weight:500;color:#fff}
+.auth-hero-text{flex:1;display:flex;flex-direction:column;justify-content:center;padding:24px 0}
+.auth-hero-text h2{font-size:22px;font-weight:500;color:#fff;line-height:1.3;margin-bottom:10px}
+.auth-hero-text p{font-size:13px;color:#9FE1CB;line-height:1.6}
+.auth-roles-preview{display:flex;flex-direction:column;gap:8px}
+.role-preview{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.1);border-radius:var(--border-radius-md);padding:10px 12px}
+.role-preview i{font-size:18px;color:#9FE1CB}
+.role-preview-text{font-size:12px;color:#E1F5EE;font-weight:500}
+.role-preview-sub{font-size:11px;color:#9FE1CB}
+.auth-right{background:var(--color-background-primary);padding:28px 28px;display:flex;flex-direction:column}
+.tab-row{display:flex;gap:0;margin-bottom:22px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden}
+.tab{flex:1;padding:8px;text-align:center;font-size:13px;cursor:pointer;color:var(--color-text-secondary);background:var(--color-background-secondary)}
+.tab.active{background:var(--color-background-primary);color:var(--color-text-primary);font-weight:500}
+.tab:hover:not(.active){background:var(--color-background-primary)}
+.form-title{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.form-sub{font-size:12px;color:var(--color-text-secondary);margin-bottom:18px}
+.role-selector{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.role-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;cursor:pointer;background:var(--color-background-primary)}
+.role-card:hover{border-color:#1D9E75}
+.role-card.selected{border:1.5px solid #1D9E75;background:#E1F5EE}
+.role-card-icon{font-size:20px;color:var(--color-text-secondary);margin-bottom:5px}
+.role-card.selected .role-card-icon{color:#0F6E56}
+.role-card-label{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.role-card-sub{font-size:11px;color:var(--color-text-secondary);line-height:1.4}
+.form-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:4px;display:block}
+.form-group{margin-bottom:12px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.inp{width:100%;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:8px 11px;font-size:13px;color:var(--color-text-primary);outline:none}
+.inp:focus{border-color:#1D9E75;box-shadow:0 0 0 2px #E1F5EE}
+.inp::placeholder{color:var(--color-text-tertiary)}
+select.inp{cursor:pointer}
+.worker-fields{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px;margin-bottom:12px}
+.worker-fields-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.profession-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:8px}
+.prof-chip{border:0.5px solid var(--color-border-tertiary);border-radius:20px;padding:4px 8px;font-size:11px;cursor:pointer;color:var(--color-text-secondary);background:var(--color-background-primary);text-align:center}
+.prof-chip:hover{border-color:#1D9E75;color:#0F6E56}
+.prof-chip.sel{background:#E1F5EE;border-color:#5DCAA5;color:#085041;font-weight:500}
+.submit-btn{width:100%;background:#1D9E75;color:#fff;border:none;padding:10px;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;cursor:pointer;margin-top:4px}
+.submit-btn:hover{background:#0F6E56}
+.divider{display:flex;align-items:center;gap:8px;margin:12px 0}
+.divider-line{flex:1;height:0.5px;background:var(--color-border-tertiary)}
+.divider-text{font-size:11px;color:var(--color-text-tertiary)}
+.google-btn{width:100%;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:8px;font-size:13px;cursor:pointer;color:var(--color-text-primary);display:flex;align-items:center;justify-content:center;gap:7px}
+.google-btn:hover{background:var(--color-background-secondary)}
+.footer-link{text-align:center;font-size:12px;color:var(--color-text-secondary);margin-top:12px}
+.footer-link a{color:#1D9E75;cursor:pointer;text-decoration:none}
+</style>
+
+<h2 class="sr-only">Khadmat AI login and signup page with role selection for customers and workers</h2>
+
+<div class="auth-wrap">
+  <div class="auth-left">
+    <div class="auth-logo">
+      <div class="auth-logo-dot">K</div>
+      <span class="auth-logo-name">Khadmat AI</span>
+    </div>
+    <div class="auth-hero-text">
+      <h2>Pakistan's smartest home services platform</h2>
+      <p>Whether you need a service or provide one — Khadmat AI connects you instantly.</p>
+    </div>
+    <div class="auth-roles-preview">
+      <div class="role-preview">
+        <i class="ti ti-home" aria-hidden="true"></i>
+        <div>
+          <div class="role-preview-text">Customer</div>
+          <div class="role-preview-sub">Book any home service in your language</div>
+        </div>
+      </div>
+      <div class="role-preview">
+        <i class="ti ti-tool" aria-hidden="true"></i>
+        <div>
+          <div class="role-preview-text">Service provider</div>
+          <div class="role-preview-sub">Get discovered and grow your bookings</div>
+        </div>
+      </div>
+      <div class="role-preview">
+        <i class="ti ti-shield-check" aria-hidden="true"></i>
+        <div>
+          <div class="role-preview-text">Admin</div>
+          <div class="role-preview-sub">Manage platform, users and analytics</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-right" id="auth-right">
+    <div class="tab-row">
+      <div class="tab active" id="tab-login" onclick="showTab('login')">Sign in</div>
+      <div class="tab" id="tab-signup" onclick="showTab('signup')">Create account</div>
+    </div>
+
+    <div id="login-form">
+      <div class="form-title">Welcome back</div>
+      <div class="form-sub">Sign in to your Khadmat AI account</div>
+      <div class="form-group">
+        <label class="form-label">Email or phone</label>
+        <input class="inp" placeholder="you@example.com or 0300-0000000" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div style="position:relative">
+          <input class="inp" type="password" placeholder="Enter your password" style="padding-right:36px" />
+          <i class="ti ti-eye" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--color-text-tertiary);cursor:pointer" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:14px">
+        <a style="font-size:12px;color:#1D9E75;cursor:pointer">Forgot password?</a>
+      </div>
+      <button class="submit-btn">Sign in</button>
+      <div class="divider"><div class="divider-line"></div><span class="divider-text">or</span><div class="divider-line"></div></div>
+      <button class="google-btn">
+        <i class="ti ti-brand-google" style="font-size:16px;color:#E24B4A" aria-hidden="true"></i>
+        Continue with Google
+      </button>
+      <div class="footer-link">Don't have an account? <a onclick="showTab('signup')">Create one</a></div>
+    </div>
+
+    <div id="signup-form" style="display:none">
+      <div class="form-title">Create your account</div>
+      <div class="form-sub">Choose your role to get started</div>
+      <div class="role-selector" id="role-selector">
+        <div class="role-card selected" id="role-customer" onclick="selectRole('customer')">
+          <div class="role-card-icon"><i class="ti ti-home" aria-hidden="true"></i></div>
+          <div class="role-card-label">Customer</div>
+          <div class="role-card-sub">I need home services</div>
+        </div>
+        <div class="role-card" id="role-worker" onclick="selectRole('worker')">
+          <div class="role-card-icon"><i class="ti ti-tool" aria-hidden="true"></i></div>
+          <div class="role-card-label">Service provider</div>
+          <div class="role-card-sub">I offer services</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div>
+          <label class="form-label">First name</label>
+          <input class="inp" placeholder="Ali" />
+        </div>
+        <div>
+          <label class="form-label">Last name</label>
+          <input class="inp" placeholder="Hassan" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone number</label>
+        <input class="inp" placeholder="0300-0000000" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="inp" placeholder="you@example.com" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">City</label>
+        <select class="inp">
+          <option>Karachi</option>
+          <option>Lahore</option>
+          <option selected>Islamabad</option>
+        </select>
+      </div>
+      <div id="worker-extra" style="display:none">
+        <div class="worker-fields">
+          <div class="worker-fields-label">
+            <i class="ti ti-briefcase" style="font-size:13px" aria-hidden="true"></i>
+            Your profession (select all that apply)
+          </div>
+          <div class="profession-grid">
+            <div class="prof-chip sel" onclick="toggleProf(this)">AC Technician</div>
+            <div class="prof-chip" onclick="toggleProf(this)">Plumber</div>
+            <div class="prof-chip" onclick="toggleProf(this)">Electrician</div>
+            <div class="prof-chip" onclick="toggleProf(this)">Tutor</div>
+            <div class="prof-chip" onclick="toggleProf(this)">Cleaner</div>
+            <div class="prof-chip" onclick="toggleProf(this)">Carpenter</div>
+            <div class="prof-chip" onclick="toggleProf(this)">Painter</div>
+            <div class="prof-chip" onclick="toggleProf(this)">Security</div>
+            <div class="prof-chip" onclick="toggleProf(this)">Other</div>
+          </div>
+          <div class="form-row" style="margin-bottom:0">
+            <div>
+              <label class="form-label">Experience (years)</label>
+              <select class="inp"><option>1–2 years</option><option selected>3–5 years</option><option>5–10 years</option><option>10+ years</option></select>
+            </div>
+            <div>
+              <label class="form-label">Price range (PKR/visit)</label>
+              <select class="inp"><option>Under 500</option><option selected>500–1000</option><option>1000–2000</option><option>2000+</option></select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="inp" type="password" placeholder="Min. 8 characters" />
+      </div>
+      <button class="submit-btn" id="signup-btn">Create account</button>
+      <div class="footer-link">Already have an account? <a onclick="showTab('login')">Sign in</a></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showTab(t){
+  document.getElementById('tab-login').className='tab'+(t==='login'?' active':'');
+  document.getElementById('tab-signup').className='tab'+(t==='signup'?' active':'');
+  document.getElementById('login-form').style.display=t==='login'?'':'none';
+  document.getElementById('signup-form').style.display=t==='signup'?'':'none';
+}
+function selectRole(r){
+  document.getElementById('role-customer').className='role-card'+(r==='customer'?' selected':'');
+  document.getElementById('role-worker').className='role-card'+(r==='worker'?' selected':'');
+  document.getElementById('worker-extra').style.display=r==='worker'?'':'none';
+  document.getElementById('signup-btn').textContent=r==='worker'?'Join as provider':'Create account';
+}
+function toggleProf(el){el.classList.toggle('sel')}
+</script>

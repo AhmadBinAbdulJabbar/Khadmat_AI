@@ -1,0 +1,166 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.shell{display:grid;grid-template-columns:190px 1fr;min-height:600px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
+.sb{border-right:0.5px solid var(--color-border-tertiary);background:#1a1a1a;display:flex;flex-direction:column}
+.sb-profile{padding:16px 14px;border-bottom:0.5px solid #333}
+.sb-ava{width:36px;height:36px;border-radius:50%;background:#1D9E75;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#fff;margin-bottom:8px}
+.sb-name{font-size:13px;font-weight:500;color:#fff}
+.sb-cat{font-size:11px;color:#888;margin-bottom:6px}
+.avail-row{display:flex;align-items:center;gap:6px}
+.tog{width:28px;height:16px;background:#1D9E75;border-radius:8px;position:relative;cursor:pointer;flex-shrink:0}
+.tog-thumb{position:absolute;top:2px;right:2px;width:12px;height:12px;background:#fff;border-radius:50%}
+.avail-text{font-size:11px;color:#1D9E75;font-weight:500}
+.nav-item{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:13px;color:#888;cursor:pointer}
+.nav-item:hover{color:#fff;background:rgba(255,255,255,0.05)}
+.nav-item.active{color:#1D9E75;font-weight:500;background:rgba(29,158,117,0.1)}
+.nav-item i{font-size:16px}
+.nav-section{font-size:10px;color:#555;padding:12px 14px 4px;letter-spacing:0.05em}
+.badge-c{margin-left:auto;background:#E24B4A;color:#fff;font-size:10px;padding:1px 6px;border-radius:8px}
+.main{padding:20px;background:var(--color-background-primary)}
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.pt{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.ps{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.filter-row{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.fb{border:0.5px solid var(--color-border-tertiary);border-radius:20px;padding:5px 12px;font-size:12px;cursor:pointer;color:var(--color-text-secondary);background:var(--color-background-primary)}
+.fb:hover{border-color:#1D9E75;color:#1D9E75}
+.fb.on{background:#E1F5EE;border-color:#1D9E75;color:#085041;font-weight:500}
+.search-box{margin-left:auto;display:flex;align-items:center;gap:6px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:5px 10px}
+.search-box input{background:none;border:none;outline:none;font-size:12px;color:var(--color-text-primary);width:110px}
+.search-box input::placeholder{color:var(--color-text-tertiary)}
+.job-list{display:flex;flex-direction:column;gap:8px}
+.job-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px}
+.job-card.new-req{border:1.5px solid #EF9F27;background:#FAEEDA}
+.jc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
+.jc-left{display:flex;align-items:center;gap:10px}
+.j-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.j-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.j-meta{display:flex;gap:8px;font-size:11px;color:var(--color-text-secondary);margin-top:3px;flex-wrap:wrap}
+.j-meta span{display:flex;align-items:center;gap:3px}
+.pill{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
+.p-new{background:#FAEEDA;color:#633806}
+.p-conf{background:#E1F5EE;color:#085041}
+.p-done{background:#EAF3DE;color:#27500A}
+.p-canc{background:#FCEBEB;color:#791F1F}
+.jc-right{text-align:right;flex-shrink:0}
+.j-price{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.j-date{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.jc-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:0.5px solid var(--color-border-tertiary);margin-top:8px}
+.j-customer{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--color-text-secondary)}
+.j-ava{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;flex-shrink:0}
+.jc-actions{display:flex;gap:6px}
+.ja{font-size:11px;padding:4px 10px;border-radius:var(--border-radius-md);cursor:pointer;border:0.5px solid;font-weight:500}
+.ja-a{background:#1D9E75;color:#fff;border-color:#1D9E75}
+.ja-a:hover{background:#0F6E56}
+.ja-d{background:var(--color-background-primary);color:var(--color-text-secondary);border-color:var(--color-border-tertiary)}
+.ja-d:hover{border-color:#E24B4A;color:#A32D2D}
+.ja-view{background:var(--color-background-secondary);color:var(--color-text-secondary);border-color:var(--color-border-tertiary)}
+.ja-rate{background:#EEEDFE;color:#3C3489;border-color:#CECBF6}
+.summary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.sum-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center}
+.sum-val{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.sum-label{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+</style>
+<h2 class="sr-only">Provider My Jobs page showing all job requests with filters</h2>
+<div class="shell">
+<div class="sb">
+  <div class="sb-profile">
+    <div class="sb-ava">AA</div>
+    <div class="sb-name">Ali AC Services</div>
+    <div class="sb-cat">AC Technician · G-13</div>
+    <div class="avail-row"><div class="tog"><div class="tog-thumb"></div></div><span class="avail-text">Available</span></div>
+  </div>
+  <div class="nav-item" onclick=""><i class="ti ti-layout-dashboard" aria-hidden="true"></i>Dashboard</div>
+  <div class="nav-item active"><i class="ti ti-calendar" aria-hidden="true"></i>My jobs<span class="badge-c">4</span></div>
+  <div class="nav-item"><i class="ti ti-clock" aria-hidden="true"></i>Schedule</div>
+  <div class="nav-item"><i class="ti ti-currency-rupee" aria-hidden="true"></i>Earnings</div>
+  <div class="nav-section">ACCOUNT</div>
+  <div class="nav-item"><i class="ti ti-user" aria-hidden="true"></i>Profile</div>
+  <div class="nav-item"><i class="ti ti-star" aria-hidden="true"></i>Reviews</div>
+  <div class="nav-item"><i class="ti ti-settings" aria-hidden="true"></i>Settings</div>
+</div>
+<div class="main">
+  <div class="ph">
+    <div><div class="pt">My jobs</div><div class="ps">All service requests assigned to you</div></div>
+  </div>
+  <div class="summary-row">
+    <div class="sum-card"><div class="sum-val" style="color:#EF9F27">2</div><div class="sum-label">New requests</div></div>
+    <div class="sum-card"><div class="sum-val" style="color:#1D9E75">3</div><div class="sum-label">Confirmed today</div></div>
+    <div class="sum-card"><div class="sum-val">212</div><div class="sum-label">Total completed</div></div>
+  </div>
+  <div class="filter-row">
+    <div class="fb on">All</div>
+    <div class="fb">New</div>
+    <div class="fb">Confirmed</div>
+    <div class="fb">Completed</div>
+    <div class="fb">Cancelled</div>
+    <div class="search-box"><i class="ti ti-search" style="font-size:13px;color:var(--color-text-tertiary)" aria-hidden="true"></i><input placeholder="Search by customer..."/></div>
+  </div>
+  <div class="job-list">
+    <div class="job-card new-req">
+      <div class="jc-top">
+        <div class="jc-left">
+          <div class="j-icon" style="background:#FAEEDA"><i class="ti ti-air-conditioning" style="color:#854F0B" aria-hidden="true"></i></div>
+          <div>
+            <div style="display:flex;align-items:center;gap:6px"><span class="j-title">AC service request</span><span class="pill p-new">New</span></div>
+            <div class="j-meta"><span><i class="ti ti-map-pin" aria-hidden="true"></i>G-13/2, Islamabad</span><span><i class="ti ti-clock" aria-hidden="true"></i>Today 10:00 AM</span></div>
+          </div>
+        </div>
+        <div class="jc-right"><div class="j-price">PKR 1,200</div><div class="j-date">Est. price</div></div>
+      </div>
+      <div class="jc-footer">
+        <div class="j-customer"><div class="j-ava" style="background:#EEEDFE;color:#3C3489">AU</div>Ahmed Usman · 0300-xxx-xxxx</div>
+        <div class="jc-actions"><button class="ja ja-a"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i> Accept</button><button class="ja ja-d">Decline</button></div>
+      </div>
+    </div>
+    <div class="job-card new-req">
+      <div class="jc-top">
+        <div class="jc-left">
+          <div class="j-icon" style="background:#FAEEDA"><i class="ti ti-air-conditioning" style="color:#854F0B" aria-hidden="true"></i></div>
+          <div>
+            <div style="display:flex;align-items:center;gap:6px"><span class="j-title">AC gas refill</span><span class="pill p-new">New</span></div>
+            <div class="j-meta"><span><i class="ti ti-map-pin" aria-hidden="true"></i>F-8/3, Islamabad</span><span><i class="ti ti-clock" aria-hidden="true"></i>Tomorrow 9:00 AM</span></div>
+          </div>
+        </div>
+        <div class="jc-right"><div class="j-price">PKR 1,500</div><div class="j-date">Est. price</div></div>
+      </div>
+      <div class="jc-footer">
+        <div class="j-customer"><div class="j-ava" style="background:#E1F5EE;color:#085041">ZH</div>Zara Hassan · 0301-xxx-xxxx</div>
+        <div class="jc-actions"><button class="ja ja-a"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i> Accept</button><button class="ja ja-d">Decline</button></div>
+      </div>
+    </div>
+    <div class="job-card">
+      <div class="jc-top">
+        <div class="jc-left">
+          <div class="j-icon" style="background:#E1F5EE"><i class="ti ti-air-conditioning" style="color:#0F6E56" aria-hidden="true"></i></div>
+          <div>
+            <div style="display:flex;align-items:center;gap:6px"><span class="j-title">AC service — filter clean</span><span class="pill p-conf">Confirmed</span></div>
+            <div class="j-meta"><span><i class="ti ti-map-pin" aria-hidden="true"></i>G-13/4, Islamabad</span><span><i class="ti ti-clock" aria-hidden="true"></i>Today 2:00 PM</span></div>
+          </div>
+        </div>
+        <div class="jc-right"><div class="j-price">PKR 1,500</div><div class="j-date">Confirmed</div></div>
+      </div>
+      <div class="jc-footer">
+        <div class="j-customer"><div class="j-ava" style="background:#FAEEDA;color:#633806">SK</div>Sara Khan · 0302-xxx-xxxx</div>
+        <div class="jc-actions"><button class="ja ja-view">View details</button></div>
+      </div>
+    </div>
+    <div class="job-card">
+      <div class="jc-top">
+        <div class="jc-left">
+          <div class="j-icon" style="background:#EAF3DE"><i class="ti ti-air-conditioning" style="color:#3B6D11" aria-hidden="true"></i></div>
+          <div>
+            <div style="display:flex;align-items:center;gap:6px"><span class="j-title">AC installation (split unit)</span><span class="pill p-done">Completed</span></div>
+            <div class="j-meta"><span><i class="ti ti-map-pin" aria-hidden="true"></i>F-10/1, Islamabad</span><span><i class="ti ti-clock" aria-hidden="true"></i>Yesterday 11:00 AM</span></div>
+          </div>
+        </div>
+        <div class="jc-right"><div class="j-price" style="color:#1D9E75">PKR 2,200</div><div class="j-date">Paid</div></div>
+      </div>
+      <div class="jc-footer">
+        <div class="j-customer"><div class="j-ava" style="background:#E6F1FB;color:#185FA5">BA</div>Bilal Ahmed · completed</div>
+        <div class="jc-actions"><button class="ja ja-view">View</button><button class="ja ja-rate">Request review</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

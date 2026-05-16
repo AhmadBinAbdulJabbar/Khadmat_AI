@@ -1,0 +1,265 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.page{background:var(--color-background-primary)}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:11px 20px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.nav-logo{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.logo-dot{width:26px;height:26px;background:#1D9E75;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:500}
+.nav-user{display:flex;align-items:center;gap:8px}
+.ava-sm{width:28px;height:28px;border-radius:50%;background:#EEEDFE;border:0.5px solid #CECBF6;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#3C3489}
+.nav-name{font-size:13px;color:var(--color-text-secondary)}
+.body{display:grid;grid-template-columns:1fr 300px;gap:0}
+.form-col{padding:20px;border-right:0.5px solid var(--color-border-tertiary)}
+.sidebar{padding:20px;background:var(--color-background-secondary)}
+.step-bar{display:flex;align-items:center;gap:0;margin-bottom:22px}
+.step{display:flex;align-items:center;gap:6px;flex:1}
+.step-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;border:0.5px solid}
+.step-num.done{background:#1D9E75;border-color:#1D9E75;color:#fff}
+.step-num.active{background:#E1F5EE;border-color:#1D9E75;color:#0F6E56}
+.step-num.wait{background:var(--color-background-secondary);border-color:var(--color-border-tertiary);color:var(--color-text-tertiary)}
+.step-label{font-size:11px;color:var(--color-text-secondary);white-space:nowrap}
+.step-label.active{color:#0F6E56;font-weight:500}
+.step-line{flex:1;height:0.5px;background:var(--color-border-tertiary);margin:0 6px}
+.section-title{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
+.svc-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 8px;text-align:center;cursor:pointer;background:var(--color-background-primary)}
+.svc-card:hover{border-color:#1D9E75}
+.svc-card.sel{border:1.5px solid #1D9E75;background:#E1F5EE}
+.svc-card i{font-size:20px;color:var(--color-text-secondary);display:block;margin-bottom:5px}
+.svc-card.sel i{color:#0F6E56}
+.svc-card span{font-size:11px;color:var(--color-text-primary)}
+.divider{height:0.5px;background:var(--color-border-tertiary);margin:18px 0}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.form-group{margin-bottom:12px}
+.flabel{font-size:12px;color:var(--color-text-secondary);margin-bottom:4px;display:block}
+.inp{width:100%;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:8px 11px;font-size:13px;color:var(--color-text-primary);outline:none}
+.inp:focus{border-color:#1D9E75;box-shadow:0 0 0 2px #E1F5EE}
+.inp::placeholder{color:var(--color-text-tertiary)}
+select.inp{cursor:pointer}
+.time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}
+.time-slot{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:6px 4px;text-align:center;font-size:11px;cursor:pointer;color:var(--color-text-secondary);background:var(--color-background-primary)}
+.time-slot:hover{border-color:#1D9E75;color:#0F6E56}
+.time-slot.sel{background:#E1F5EE;border-color:#1D9E75;color:#0F6E56;font-weight:500}
+.time-slot.busy{background:var(--color-background-secondary);color:var(--color-text-tertiary);cursor:not-allowed;text-decoration:line-through}
+.provider-list{display:flex;flex-direction:column;gap:7px;margin-top:6px}
+.p-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);cursor:pointer;background:var(--color-background-primary)}
+.p-row:hover{border-color:#1D9E75}
+.p-row.sel{border:1.5px solid #1D9E75;background:#E1F5EE}
+.p-ava{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
+.p-info{flex:1}
+.p-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.p-meta{font-size:11px;color:var(--color-text-secondary);display:flex;gap:8px;margin-top:1px}
+.p-price{font-size:12px;color:var(--color-text-secondary);white-space:nowrap}
+.radio-dot{width:16px;height:16px;border-radius:50%;border:0.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.radio-dot.sel{border-color:#1D9E75;background:#1D9E75}
+.radio-dot.sel::after{content:'';width:6px;height:6px;border-radius:50%;background:#fff;display:block}
+.notes-area{width:100%;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:9px 11px;font-size:13px;color:var(--color-text-primary);resize:none;outline:none;font-family:var(--font-sans);line-height:1.5}
+.notes-area:focus{border-color:#1D9E75;box-shadow:0 0 0 2px #E1F5EE}
+.notes-area::placeholder{color:var(--color-text-tertiary)}
+.sidebar-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;margin-bottom:12px}
+.sc-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.sc-row{display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.sc-row:last-child{border-bottom:none}
+.sc-label{color:var(--color-text-secondary)}
+.sc-val{color:var(--color-text-primary);font-weight:500;text-align:right}
+.sc-val.green{color:#1D9E75}
+.sc-val.muted{color:var(--color-text-tertiary)}
+.price-card{background:#E1F5EE;border:0.5px solid #9FE1CB;border-radius:var(--border-radius-lg);padding:14px;margin-bottom:12px}
+.price-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;color:#085041}
+.price-total{display:flex;justify-content:space-between;font-size:14px;font-weight:500;color:#085041;padding-top:8px;border-top:0.5px solid #9FE1CB;margin-top:4px}
+.submit-btn{width:100%;background:#1D9E75;color:#fff;border:none;padding:11px;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;cursor:pointer}
+.submit-btn:hover{background:#0F6E56}
+.ai-banner{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:14px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--color-text-secondary);cursor:pointer}
+.ai-banner:hover{border-color:#1D9E75;color:#0F6E56}
+</style>
+
+<h2 class="sr-only">Khadmat AI customer manual booking form — select service, location, date, provider, and confirm</h2>
+
+<div class="page">
+  <div class="nav">
+    <div class="nav-logo"><div class="logo-dot">K</div> Khadmat AI</div>
+    <div class="nav-user">
+      <div class="ava-sm">AU</div>
+      <span class="nav-name">Ahmed Usman</span>
+      <i class="ti ti-chevron-down" style="font-size:13px;color:var(--color-text-tertiary)" aria-hidden="true"></i>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="form-col">
+      <div class="step-bar">
+        <div class="step">
+          <div class="step-num done"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>
+          <span class="step-label">Service</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-num active">2</div>
+          <span class="step-label active">Details</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-num wait">3</div>
+          <span class="step-label">Provider</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-num wait">4</div>
+          <span class="step-label">Confirm</span>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <i class="ti ti-grid-3x3" style="font-size:15px;color:#1D9E75" aria-hidden="true"></i>
+        Choose a service
+      </div>
+      <div class="svc-grid">
+        <div class="svc-card sel" onclick="selSvc(this)"><i class="ti ti-air-conditioning" aria-hidden="true"></i><span>AC Technician</span></div>
+        <div class="svc-card" onclick="selSvc(this)"><i class="ti ti-droplet" aria-hidden="true"></i><span>Plumber</span></div>
+        <div class="svc-card" onclick="selSvc(this)"><i class="ti ti-plug" aria-hidden="true"></i><span>Electrician</span></div>
+        <div class="svc-card" onclick="selSvc(this)"><i class="ti ti-book" aria-hidden="true"></i><span>Tutor</span></div>
+        <div class="svc-card" onclick="selSvc(this)"><i class="ti ti-home" aria-hidden="true"></i><span>Cleaner</span></div>
+        <div class="svc-card" onclick="selSvc(this)"><i class="ti ti-tool" aria-hidden="true"></i><span>Carpenter</span></div>
+        <div class="svc-card" onclick="selSvc(this)"><i class="ti ti-brush" aria-hidden="true"></i><span>Painter</span></div>
+        <div class="svc-card" onclick="selSvc(this)"><i class="ti ti-shield" aria-hidden="true"></i><span>Security</span></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-title">
+        <i class="ti ti-map-pin" style="font-size:15px;color:#1D9E75" aria-hidden="true"></i>
+        Location
+      </div>
+      <div class="form-row">
+        <div>
+          <label class="flabel">City</label>
+          <select class="inp"><option>Islamabad</option><option>Karachi</option><option>Lahore</option></select>
+        </div>
+        <div>
+          <label class="flabel">Area / Sector</label>
+          <select class="inp"><option selected>G-13</option><option>G-10</option><option>F-8</option><option>F-10</option><option>DHA</option></select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="flabel">Street address (optional)</label>
+        <input class="inp" placeholder="House 12, Street 4, G-13/2" />
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-title">
+        <i class="ti ti-calendar" style="font-size:15px;color:#1D9E75" aria-hidden="true"></i>
+        Date &amp; time
+      </div>
+      <div class="form-row">
+        <div>
+          <label class="flabel">Date</label>
+          <input class="inp" type="date" value="2026-05-21" />
+        </div>
+        <div>
+          <label class="flabel">Preferred time</label>
+          <select class="inp"><option>Morning (8AM–12PM)</option><option selected>Morning (10AM)</option><option>Afternoon (12–4PM)</option><option>Evening (4–8PM)</option></select>
+        </div>
+      </div>
+      <label class="flabel">Pick a time slot</label>
+      <div class="time-grid">
+        <div class="time-slot busy">8:00 AM</div>
+        <div class="time-slot busy">9:00 AM</div>
+        <div class="time-slot sel">10:00 AM</div>
+        <div class="time-slot">11:00 AM</div>
+        <div class="time-slot">12:00 PM</div>
+        <div class="time-slot">1:00 PM</div>
+        <div class="time-slot busy">2:00 PM</div>
+        <div class="time-slot">3:00 PM</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-title">
+        <i class="ti ti-users" style="font-size:15px;color:#1D9E75" aria-hidden="true"></i>
+        Choose a provider
+      </div>
+      <div class="provider-list">
+        <div class="p-row sel" onclick="selP(this)">
+          <div class="p-ava" style="background:#E1F5EE;color:#085041">AA</div>
+          <div class="p-info">
+            <div class="p-name">Ali AC Services</div>
+            <div class="p-meta"><span><i class="ti ti-star" aria-hidden="true"></i> 4.7</span><span><i class="ti ti-map-pin" aria-hidden="true"></i> 2.1 km</span><span>212 jobs</span></div>
+          </div>
+          <div class="p-price">PKR 800–1500</div>
+          <div class="radio-dot sel"></div>
+        </div>
+        <div class="p-row" onclick="selP(this)">
+          <div class="p-ava" style="background:#E6F1FB;color:#185FA5">HC</div>
+          <div class="p-info">
+            <div class="p-name">Hassan Cooling Co.</div>
+            <div class="p-meta"><span><i class="ti ti-star" aria-hidden="true"></i> 4.3</span><span><i class="ti ti-map-pin" aria-hidden="true"></i> 3.4 km</span><span>98 jobs</span></div>
+          </div>
+          <div class="p-price">PKR 700–1200</div>
+          <div class="radio-dot"></div>
+        </div>
+        <div class="p-row" onclick="selP(this)">
+          <div class="p-ava" style="background:#FAEEDA;color:#633806">CB</div>
+          <div class="p-info">
+            <div class="p-name">Cool Breeze AC</div>
+            <div class="p-meta"><span><i class="ti ti-star" aria-hidden="true"></i> 4.1</span><span><i class="ti ti-map-pin" aria-hidden="true"></i> 4.8 km</span><span>54 jobs</span></div>
+          </div>
+          <div class="p-price">PKR 750–1400</div>
+          <div class="radio-dot"></div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-title">
+        <i class="ti ti-notes" style="font-size:15px;color:#1D9E75" aria-hidden="true"></i>
+        Additional notes
+      </div>
+      <textarea class="notes-area" rows="3" placeholder="Describe the issue — e.g. AC is not cooling, making noise, needs gas refill..."></textarea>
+    </div>
+
+    <div class="sidebar">
+      <div class="ai-banner" onclick="sendPrompt('Show me the Khadmat AI chat booking page design')">
+        <i class="ti ti-sparkles" style="font-size:16px;color:#1D9E75" aria-hidden="true"></i>
+        <div>
+          <div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Let AI book for you</div>
+          <div style="font-size:11px;color:var(--color-text-secondary)">Just describe in Urdu or English ↗</div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sc-title"><i class="ti ti-receipt" style="font-size:14px;color:var(--color-text-secondary)" aria-hidden="true"></i>Booking summary</div>
+        <div class="sc-row"><span class="sc-label">Service</span><span class="sc-val">AC Technician</span></div>
+        <div class="sc-row"><span class="sc-label">Provider</span><span class="sc-val">Ali AC Services</span></div>
+        <div class="sc-row"><span class="sc-label">Date</span><span class="sc-val">Thu 21 May</span></div>
+        <div class="sc-row"><span class="sc-label">Time</span><span class="sc-val">10:00 AM</span></div>
+        <div class="sc-row"><span class="sc-label">Location</span><span class="sc-val">G-13, Islamabad</span></div>
+        <div class="sc-row"><span class="sc-label">Rating</span><span class="sc-val green">⭐ 4.7</span></div>
+      </div>
+
+      <div class="price-card">
+        <div class="sc-title" style="color:#085041"><i class="ti ti-currency-rupee" style="font-size:14px" aria-hidden="true"></i>Price estimate</div>
+        <div class="price-row"><span>Service fee</span><span>PKR 800–1,500</span></div>
+        <div class="price-row"><span>Platform fee</span><span>PKR 50</span></div>
+        <div class="price-total"><span>Total estimate</span><span>PKR 850–1,550</span></div>
+      </div>
+
+      <button class="submit-btn">
+        <i class="ti ti-calendar-check" style="margin-right:6px" aria-hidden="true"></i>
+        Confirm booking
+      </button>
+      <div style="font-size:11px;color:var(--color-text-tertiary);text-align:center;margin-top:8px">
+        You can cancel up to 2 hours before the appointment
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function selSvc(el){document.querySelectorAll('.svc-card').forEach(c=>c.className='svc-card');el.className='svc-card sel'}
+function selP(el){
+  document.querySelectorAll('.p-row').forEach(r=>{r.className='p-row';r.querySelector('.radio-dot').className='radio-dot'});
+  el.className='p-row sel';el.querySelector('.radio-dot').className='radio-dot sel'
+}
+document.querySelectorAll('.time-slot:not(.busy)').forEach(s=>s.onclick=function(){document.querySelectorAll('.time-slot:not(.busy)').forEach(x=>x.classList.remove('sel'));this.classList.add('sel')})
+</script>

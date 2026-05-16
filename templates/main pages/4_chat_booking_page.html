@@ -1,0 +1,239 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.layout{display:grid;grid-template-columns:1fr 300px;min-height:600px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
+.chat-col{display:flex;flex-direction:column;border-right:0.5px solid var(--color-border-tertiary)}
+.chat-header{padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:10px}
+.chat-header-logo{width:28px;height:28px;background:#1D9E75;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:500;flex-shrink:0}
+.chat-header-title{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.chat-header-sub{font-size:12px;color:var(--color-text-secondary)}
+.online-dot{width:7px;height:7px;background:#1D9E75;border-radius:50%;margin-left:auto}
+.messages{flex:1;padding:16px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;min-height:380px}
+.msg-row{display:flex;gap:8px;align-items:flex-end}
+.msg-row.user{flex-direction:row-reverse}
+.avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
+.avatar.ai{background:#E1F5EE;color:#0F6E56;border:0.5px solid #9FE1CB}
+.avatar.user{background:#EEEDFE;color:#534AB7;border:0.5px solid #CECBF6}
+.bubble{max-width:85%;padding:10px 13px;border-radius:var(--border-radius-lg);font-size:13px;line-height:1.6;color:var(--color-text-primary)}
+.bubble.ai{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-bottom-left-radius:4px}
+.bubble.user{background:#1D9E75;color:#fff;border-bottom-right-radius:4px}
+.bubble-label{font-size:11px;color:var(--color-text-tertiary);margin-bottom:3px;padding:0 4px}
+.provider-cards{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.p-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;cursor:pointer}
+.p-card.best{border:1.5px solid #1D9E75}
+.p-card:hover{background:var(--color-background-secondary)}
+.p-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.p-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.p-badge{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500}
+.p-badge.top{background:#E1F5EE;color:#0F6E56}
+.p-badge.avail{background:#EAF3DE;color:#3B6D11}
+.p-meta{display:flex;gap:10px;font-size:11px;color:var(--color-text-secondary)}
+.p-meta span{display:flex;align-items:center;gap:3px}
+.chat-input-area{padding:12px 16px;border-top:0.5px solid var(--color-border-tertiary);display:flex;gap:8px;align-items:center}
+.chat-input{flex:1;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:20px;padding:8px 14px;font-size:13px;color:var(--color-text-primary);outline:none}
+.chat-input::placeholder{color:var(--color-text-tertiary)}
+.send-btn{width:34px;height:34px;background:#1D9E75;border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;font-size:16px}
+.send-btn:hover{background:#0F6E56}
+.trace-col{display:flex;flex-direction:column;background:var(--color-background-secondary)}
+.trace-header{padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
+.trace-header-title{font-size:13px;font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px}
+.trace-header-sub{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.trace-steps{padding:12px;display:flex;flex-direction:column;gap:8px}
+.trace-step{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px}
+.trace-step-head{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.trace-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.trace-dot.done{background:#1D9E75}
+.trace-dot.active{background:#EF9F27}
+.trace-dot.pending{background:var(--color-border-secondary)}
+.trace-agent{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.trace-status{font-size:10px;padding:1px 7px;border-radius:10px;margin-left:auto}
+.trace-status.done{background:#E1F5EE;color:#0F6E56}
+.trace-status.active{background:#FAEEDA;color:#854F0B}
+.trace-status.pending{background:var(--color-background-secondary);color:var(--color-text-tertiary)}
+.trace-detail{font-size:11px;color:var(--color-text-secondary);line-height:1.5}
+.trace-tool{font-size:10px;color:var(--color-text-tertiary);margin-top:4px;font-family:var(--font-mono)}
+.session-info{padding:12px;border-top:0.5px solid var(--color-border-tertiary);margin-top:auto}
+.session-row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px}
+.session-label{color:var(--color-text-tertiary)}
+.session-val{color:var(--color-text-secondary);font-family:var(--font-mono)}
+</style>
+
+<h2 class="sr-only">Khadmat AI chat and booking interface with agent trace panel</h2>
+
+<div style="padding:0 0 12px">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+    <a style="font-size:12px;color:var(--color-text-tertiary);cursor:pointer;display:flex;align-items:center;gap:4px">
+      <i class="ti ti-arrow-left" style="font-size:13px" aria-hidden="true"></i> Home
+    </a>
+    <span style="font-size:12px;color:var(--color-text-tertiary)">/</span>
+    <span style="font-size:12px;color:var(--color-text-secondary)">Book a service</span>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="chat-col">
+    <div class="chat-header">
+      <div class="chat-header-logo">K</div>
+      <div>
+        <div class="chat-header-title">Khadmat AI</div>
+        <div class="chat-header-sub">5 agents ready</div>
+      </div>
+      <div class="online-dot"></div>
+    </div>
+
+    <div class="messages">
+      <div class="msg-row">
+        <div class="avatar ai">K</div>
+        <div>
+          <div class="bubble-label">Khadmat AI</div>
+          <div class="bubble ai">Assalam alaikum! Aap kya service chahte hain? Urdu, Roman Urdu, ya English mein likh saktay hain.</div>
+        </div>
+      </div>
+
+      <div class="msg-row user">
+        <div class="avatar user">U</div>
+        <div>
+          <div class="bubble user">Mujhe kal subah G-13 mein AC technician chahiye</div>
+        </div>
+      </div>
+
+      <div class="msg-row">
+        <div class="avatar ai">K</div>
+        <div>
+          <div class="bubble-label">Khadmat AI</div>
+          <div class="bubble ai">
+            <div style="margin-bottom:8px">Samajh gaya! Main G-13 mein AC technicians dhundh raha hoon — kal subah ke liye. Yeh rahe best matches:</div>
+            <div class="provider-cards">
+              <div class="p-card best">
+                <div class="p-card-top">
+                  <span class="p-name">Ali AC Services</span>
+                  <span class="p-badge top">#1 best match</span>
+                </div>
+                <div class="p-meta">
+                  <span><i class="ti ti-map-pin" aria-hidden="true"></i> 2.1 km</span>
+                  <span><i class="ti ti-star" aria-hidden="true"></i> 4.7</span>
+                  <span><i class="ti ti-clock" aria-hidden="true"></i> 10:00 AM</span>
+                  <span>PKR 800–1500</span>
+                </div>
+              </div>
+              <div class="p-card">
+                <div class="p-card-top">
+                  <span class="p-name">Hassan Cooling Co.</span>
+                  <span class="p-badge avail">available</span>
+                </div>
+                <div class="p-meta">
+                  <span><i class="ti ti-map-pin" aria-hidden="true"></i> 3.4 km</span>
+                  <span><i class="ti ti-star" aria-hidden="true"></i> 4.3</span>
+                  <span><i class="ti ti-clock" aria-hidden="true"></i> 11:00 AM</span>
+                  <span>PKR 700–1200</span>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top:10px;font-size:12px;color:var(--color-text-secondary)">Ali AC Services ko book karun? Ya koi doosra option dekhna chahte hain?</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="msg-row user">
+        <div class="avatar user">U</div>
+        <div>
+          <div class="bubble user">Ali ko book karo</div>
+        </div>
+      </div>
+
+      <div class="msg-row">
+        <div class="avatar ai">K</div>
+        <div>
+          <div class="bubble-label">Khadmat AI</div>
+          <div class="bubble ai">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+              <i class="ti ti-circle-check" style="color:#1D9E75;font-size:16px" aria-hidden="true"></i>
+              <span style="font-weight:500;font-size:13px">Booking confirmed!</span>
+            </div>
+            <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px;font-size:12px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:var(--color-text-secondary)">Ref</span><span style="font-family:var(--font-mono)">BK-20250521-001</span></div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:var(--color-text-secondary)">Provider</span><span>Ali AC Services</span></div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:var(--color-text-secondary)">Time</span><span>Tomorrow 10:00 AM</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--color-text-secondary)">Reminder</span><span style="color:#1D9E75">Set for 9:00 AM</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+      <i class="ti ti-microphone" style="font-size:18px;color:var(--color-text-tertiary)" aria-hidden="true"></i>
+      <input class="chat-input" placeholder="Type in Urdu, Roman Urdu, or English..." />
+      <button class="send-btn" aria-label="Send"><i class="ti ti-arrow-up" aria-hidden="true"></i></button>
+    </div>
+  </div>
+
+  <div class="trace-col">
+    <div class="trace-header">
+      <div class="trace-header-title">
+        <i class="ti ti-activity" style="font-size:14px;color:#1D9E75" aria-hidden="true"></i>
+        Agent trace
+      </div>
+      <div class="trace-header-sub">Real-time Antigravity log</div>
+    </div>
+
+    <div class="trace-steps">
+      <div class="trace-step">
+        <div class="trace-step-head">
+          <div class="trace-dot done"></div>
+          <span class="trace-agent">Intent Agent</span>
+          <span class="trace-status done">done</span>
+        </div>
+        <div class="trace-detail">Extracted: AC Technician · G-13 · Tomorrow morning</div>
+        <div class="trace-tool">tool: parse_intent()</div>
+      </div>
+
+      <div class="trace-step">
+        <div class="trace-step-head">
+          <div class="trace-dot done"></div>
+          <span class="trace-agent">Discovery Agent</span>
+          <span class="trace-status done">done</span>
+        </div>
+        <div class="trace-detail">Found 3 providers in G-13, filtered 2 available</div>
+        <div class="trace-tool">tool: search_providers()</div>
+      </div>
+
+      <div class="trace-step">
+        <div class="trace-step-head">
+          <div class="trace-dot done"></div>
+          <span class="trace-agent">Decision Agent</span>
+          <span class="trace-status done">done</span>
+        </div>
+        <div class="trace-detail">Ali AC: score 91 · Hassan: score 74. Ali selected.</div>
+        <div class="trace-tool">tool: rank_providers()</div>
+      </div>
+
+      <div class="trace-step">
+        <div class="trace-step-head">
+          <div class="trace-dot done"></div>
+          <span class="trace-agent">Booking Agent</span>
+          <span class="trace-status done">done</span>
+        </div>
+        <div class="trace-detail">BK-20250521-001 written to Supabase</div>
+        <div class="trace-tool">tool: create_booking()</div>
+      </div>
+
+      <div class="trace-step">
+        <div class="trace-step-head">
+          <div class="trace-dot done"></div>
+          <span class="trace-agent">Follow-up Agent</span>
+          <span class="trace-status done">done</span>
+        </div>
+        <div class="trace-detail">Reminder scheduled for tomorrow 9:00 AM</div>
+        <div class="trace-tool">tool: schedule_reminder()</div>
+      </div>
+    </div>
+
+    <div class="session-info">
+      <div class="session-row"><span class="session-label">Session</span><span class="session-val">sess_a1b2c3</span></div>
+      <div class="session-row"><span class="session-label">Duration</span><span class="session-val">3.2s</span></div>
+      <div class="session-row"><span class="session-label">Model</span><span class="session-val">gemini-1.5-flash</span></div>
+      <div class="session-row"><span class="session-label">Status</span><span style="font-size:11px;color:#1D9E75;font-weight:500">All agents complete</span></div>
+    </div>
+  </div>
+</div>

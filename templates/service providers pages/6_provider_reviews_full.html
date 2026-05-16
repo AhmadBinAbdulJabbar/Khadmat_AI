@@ -1,0 +1,280 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.shell{display:grid;grid-template-columns:190px 1fr;min-height:640px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.sb{border-right:0.5px solid var(--color-border-tertiary);background:#1a1a1a;display:flex;flex-direction:column}
+.sb-top{padding:16px 14px;border-bottom:0.5px solid #333}
+.sb-ava{width:36px;height:36px;border-radius:50%;background:#1D9E75;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#fff;margin-bottom:8px}
+.sb-name{font-size:13px;font-weight:500;color:#fff}
+.sb-cat{font-size:11px;color:#888;margin-bottom:6px}
+.tog-row{display:flex;align-items:center;gap:6px}
+.tog{width:28px;height:16px;background:#1D9E75;border-radius:8px;position:relative;flex-shrink:0}
+.tog-thumb{position:absolute;top:2px;right:2px;width:12px;height:12px;background:#fff;border-radius:50%}
+.avail{font-size:11px;color:#1D9E75;font-weight:500}
+.ni{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:13px;color:#888;cursor:pointer}
+.ni:hover{color:#fff;background:rgba(255,255,255,0.05)}
+.ni.on{color:#1D9E75;font-weight:500;background:rgba(29,158,117,0.1)}
+.ni i{font-size:16px}
+.ns{font-size:10px;color:#555;padding:12px 14px 4px;letter-spacing:0.05em}
+.main{padding:20px;background:var(--color-background-primary);overflow:auto}
+.ph{margin-bottom:16px}
+.pt{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.ps{font-size:12px;color:var(--color-text-secondary)}
+.overview{display:grid;grid-template-columns:160px 1fr;gap:20px;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:18px 20px;margin-bottom:18px;align-items:center}
+.big-r{text-align:center}
+.big-num{font-size:42px;font-weight:500;color:var(--color-text-primary);line-height:1}
+.big-stars{font-size:18px;color:#EF9F27;letter-spacing:2px;margin:6px 0}
+.big-count{font-size:12px;color:var(--color-text-secondary)}
+.big-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:3px}
+.bars{display:flex;flex-direction:column;gap:7px}
+.bar-row{display:flex;align-items:center;gap:8px}
+.bar-lbl{width:24px;font-size:12px;color:var(--color-text-secondary);text-align:right;flex-shrink:0}
+.bar-star{font-size:11px;color:#EF9F27;flex-shrink:0}
+.bar-track{flex:1;height:8px;background:var(--color-background-primary);border-radius:4px;overflow:hidden;border:0.5px solid var(--color-border-tertiary)}
+.bar-fill{height:100%;border-radius:4px;background:#EF9F27}
+.bar-cnt{width:28px;font-size:11px;color:var(--color-text-secondary);text-align:right;flex-shrink:0}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;text-align:center}
+.metric-val{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.metric-label{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.filter-row{display:flex;align-items:center;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.fb{border:0.5px solid var(--color-border-tertiary);border-radius:20px;padding:5px 12px;font-size:12px;cursor:pointer;color:var(--color-text-secondary);background:var(--color-background-primary)}
+.fb:hover{border-color:#1D9E75;color:#1D9E75}
+.fb.on{background:#E1F5EE;border-color:#1D9E75;color:#085041;font-weight:500}
+.sort-row{margin-left:auto;display:flex;align-items:center;gap:4px;font-size:12px;color:var(--color-text-secondary)}
+.sort-sel{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:4px 8px;font-size:12px;color:var(--color-text-primary);outline:none;cursor:pointer}
+.reviews{display:flex;flex-direction:column;gap:10px}
+.rv{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px}
+.rv-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.rv-user{display:flex;align-items:center;gap:10px}
+.rv-ava{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
+.rv-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.rv-service{font-size:11px;color:var(--color-text-secondary);margin-top:1px;display:flex;align-items:center;gap:5px}
+.rv-right{text-align:right}
+.rv-stars{font-size:14px;color:#EF9F27;letter-spacing:1px}
+.rv-date{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.rv-body{font-size:13px;color:var(--color-text-secondary);line-height:1.65;margin-bottom:10px}
+.rv-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.rv-tag{font-size:11px;background:var(--color-background-secondary);color:var(--color-text-secondary);padding:2px 9px;border-radius:20px;border:0.5px solid var(--color-border-tertiary)}
+.rv-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:0.5px solid var(--color-border-tertiary)}
+.rv-helpful{font-size:11px;color:var(--color-text-secondary);display:flex;align-items:center;gap:5px}
+.reply-btn{font-size:11px;color:#1D9E75;cursor:pointer;display:flex;align-items:center;gap:4px;background:none;border:0.5px solid #9FE1CB;border-radius:var(--border-radius-md);padding:3px 10px}
+.reply-btn:hover{background:#E1F5EE}
+.reply-box{background:#E1F5EE;border:0.5px solid #9FE1CB;border-radius:var(--border-radius-md);padding:10px 12px;margin-top:8px;font-size:12px}
+.reply-label{font-size:11px;color:#0F6E56;font-weight:500;margin-bottom:4px;display:flex;align-items:center;gap:4px}
+.reply-text{font-size:12px;color:#085041;line-height:1.55}
+.no-reply{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.reply-inp{width:100%;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:7px 10px;font-size:12px;color:var(--color-text-primary);outline:none;resize:none;font-family:var(--font-sans)}
+.reply-inp:focus{border-color:#1D9E75}
+.send-reply{background:#1D9E75;color:#fff;border:none;padding:5px 12px;border-radius:var(--border-radius-md);font-size:11px;font-weight:500;cursor:pointer;align-self:flex-end}
+.send-reply:hover{background:#0F6E56}
+.highlighted{border:1.5px solid #EF9F27}
+</style>
+
+<h2 class="sr-only">Service provider reviews page with rating overview, filters, and reply functionality</h2>
+
+<div class="shell">
+  <div class="sb">
+    <div class="sb-top">
+      <div class="sb-ava">AA</div>
+      <div class="sb-name">Ali AC Services</div>
+      <div class="sb-cat">AC Technician · G-13</div>
+      <div class="tog-row"><div class="tog"><div class="tog-thumb"></div></div><span class="avail">Available</span></div>
+    </div>
+    <div class="ni"><i class="ti ti-layout-dashboard" aria-hidden="true"></i>Dashboard</div>
+    <div class="ni"><i class="ti ti-calendar" aria-hidden="true"></i>My jobs</div>
+    <div class="ni"><i class="ti ti-clock" aria-hidden="true"></i>Schedule</div>
+    <div class="ni"><i class="ti ti-currency-rupee" aria-hidden="true"></i>Earnings</div>
+    <div class="ns">ACCOUNT</div>
+    <div class="ni"><i class="ti ti-user" aria-hidden="true"></i>Profile</div>
+    <div class="ni on"><i class="ti ti-star" aria-hidden="true"></i>Reviews</div>
+    <div class="ni"><i class="ti ti-settings" aria-hidden="true"></i>Settings</div>
+  </div>
+
+  <div class="main">
+    <div class="ph">
+      <div class="pt">Reviews</div>
+      <div class="ps">What your customers say about your work</div>
+    </div>
+
+    <div class="overview">
+      <div class="big-r">
+        <div class="big-num">4.7</div>
+        <div class="big-stars">★★★★★</div>
+        <div class="big-count">212 total reviews</div>
+        <div class="big-sub">Top 5% of providers</div>
+      </div>
+      <div class="bars">
+        <div class="bar-row"><span class="bar-lbl">5</span><span class="bar-star">★</span><div class="bar-track"><div class="bar-fill" style="width:78%"></div></div><span class="bar-cnt">165</span></div>
+        <div class="bar-row"><span class="bar-lbl">4</span><span class="bar-star">★</span><div class="bar-track"><div class="bar-fill" style="width:14%"></div></div><span class="bar-cnt">30</span></div>
+        <div class="bar-row"><span class="bar-lbl">3</span><span class="bar-star">★</span><div class="bar-track"><div class="bar-fill" style="width:5%"></div></div><span class="bar-cnt">11</span></div>
+        <div class="bar-row"><span class="bar-lbl">2</span><span class="bar-star">★</span><div class="bar-track"><div class="bar-fill" style="width:2%"></div></div><span class="bar-cnt">4</span></div>
+        <div class="bar-row"><span class="bar-lbl">1</span><span class="bar-star">★</span><div class="bar-track"><div class="bar-fill" style="width:1%"></div></div><span class="bar-cnt">2</span></div>
+      </div>
+    </div>
+
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-val" style="color:#1D9E75">96%</div>
+        <div class="metric-label">Would recommend</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">4.9</div>
+        <div class="metric-label">Punctuality score</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">4.8</div>
+        <div class="metric-label">Value for money</div>
+      </div>
+    </div>
+
+    <div class="filter-row">
+      <div class="fb on" onclick="filterReviews(this)">All (212)</div>
+      <div class="fb" onclick="filterReviews(this)">5★ (165)</div>
+      <div class="fb" onclick="filterReviews(this)">4★ (30)</div>
+      <div class="fb" onclick="filterReviews(this)">3★ (11)</div>
+      <div class="fb" onclick="filterReviews(this)">Unanswered (8)</div>
+      <div class="sort-row">
+        Sort: <select class="sort-sel"><option>Newest first</option><option>Oldest first</option><option>Lowest rating</option></select>
+      </div>
+    </div>
+
+    <div class="reviews">
+
+      <div class="rv highlighted">
+        <div class="rv-top">
+          <div class="rv-user">
+            <div class="rv-ava" style="background:#EEEDFE;color:#3C3489">AU</div>
+            <div>
+              <div class="rv-name">Ahmed Usman</div>
+              <div class="rv-service">
+                <i class="ti ti-air-conditioning" style="font-size:12px" aria-hidden="true"></i>
+                AC filter clean · 21 May 2026
+              </div>
+            </div>
+          </div>
+          <div class="rv-right">
+            <div class="rv-stars">★★★★★</div>
+            <div class="rv-date">5.0 · 2 hours ago</div>
+          </div>
+        </div>
+        <div class="rv-body">Bahut acha kaam kiya! Bilkul waqt par aaya, kaam professionally kiya aur AC ekdum theek ho gaya. Highly recommend karunga Ali bhai ko. Dobara zaroor bulaun ga.</div>
+        <div class="rv-tags">
+          <span class="rv-tag">Punctual</span>
+          <span class="rv-tag">Professional</span>
+          <span class="rv-tag">Fair price</span>
+        </div>
+        <div class="rv-footer">
+          <span class="rv-helpful"><i class="ti ti-thumb-up" style="font-size:13px" aria-hidden="true"></i>12 found helpful</span>
+          <button class="reply-btn" onclick="toggleReply('r1')"><i class="ti ti-message-reply" style="font-size:12px" aria-hidden="true"></i>Reply</button>
+        </div>
+        <div id="r1" class="no-reply" style="display:none">
+          <textarea class="reply-inp" rows="2" placeholder="Write a thank you or address their feedback..."></textarea>
+          <button class="send-reply">Send reply</button>
+        </div>
+      </div>
+
+      <div class="rv">
+        <div class="rv-top">
+          <div class="rv-user">
+            <div class="rv-ava" style="background:#E1F5EE;color:#085041">SK</div>
+            <div>
+              <div class="rv-name">Sara Khan</div>
+              <div class="rv-service">
+                <i class="ti ti-air-conditioning" style="font-size:12px" aria-hidden="true"></i>
+                AC gas refill · 20 May 2026
+              </div>
+            </div>
+          </div>
+          <div class="rv-right">
+            <div class="rv-stars">★★★★★</div>
+            <div class="rv-date">5.0 · Yesterday</div>
+          </div>
+        </div>
+        <div class="rv-body">Very professional service. Came on time, explained the issue clearly before starting work. The price was exactly what was quoted. Will definitely book again!</div>
+        <div class="rv-tags">
+          <span class="rv-tag">On time</span>
+          <span class="rv-tag">Transparent pricing</span>
+        </div>
+        <div class="rv-footer">
+          <span class="rv-helpful"><i class="ti ti-thumb-up" style="font-size:13px" aria-hidden="true"></i>8 found helpful</span>
+          <button class="reply-btn" onclick="toggleReply('r2')"><i class="ti ti-message-reply" style="font-size:12px" aria-hidden="true"></i>Reply</button>
+        </div>
+        <div id="r2" class="reply-box" style="margin-top:8px">
+          <div class="reply-label"><i class="ti ti-corner-down-right" style="font-size:12px" aria-hidden="true"></i>Your reply</div>
+          <div class="reply-text">Shukria Sara ji! It was a pleasure serving you. Looking forward to helping again whenever needed.</div>
+        </div>
+      </div>
+
+      <div class="rv">
+        <div class="rv-top">
+          <div class="rv-user">
+            <div class="rv-ava" style="background:#FAEEDA;color:#633806">BA</div>
+            <div>
+              <div class="rv-name">Bilal Ahmed</div>
+              <div class="rv-service">
+                <i class="ti ti-air-conditioning" style="font-size:12px" aria-hidden="true"></i>
+                AC installation · 19 May 2026
+              </div>
+            </div>
+          </div>
+          <div class="rv-right">
+            <div class="rv-stars">★★★★<span style="color:var(--color-border-secondary)">★</span></div>
+            <div class="rv-date">4.0 · 2 days ago</div>
+          </div>
+        </div>
+        <div class="rv-body">Good work overall. Took a bit longer than expected for the installation but the end result was solid. No complaints about quality. Would recommend.</div>
+        <div class="rv-tags">
+          <span class="rv-tag">Quality work</span>
+          <span class="rv-tag">Slightly slow</span>
+        </div>
+        <div class="rv-footer">
+          <span class="rv-helpful"><i class="ti ti-thumb-up" style="font-size:13px" aria-hidden="true"></i>5 found helpful</span>
+          <button class="reply-btn" onclick="toggleReply('r3')"><i class="ti ti-message-reply" style="font-size:12px" aria-hidden="true"></i>Reply</button>
+        </div>
+        <div id="r3" class="no-reply" style="display:none">
+          <textarea class="reply-inp" rows="2" placeholder="Write a thank you or address their feedback..."></textarea>
+          <button class="send-reply">Send reply</button>
+        </div>
+      </div>
+
+      <div class="rv" style="border-color:#F09595">
+        <div class="rv-top">
+          <div class="rv-user">
+            <div class="rv-ava" style="background:#FCEBEB;color:#791F1F">OR</div>
+            <div>
+              <div class="rv-name">Omar Rehman</div>
+              <div class="rv-service">
+                <i class="ti ti-air-conditioning" style="font-size:12px" aria-hidden="true"></i>
+                AC service · 15 May 2026
+              </div>
+            </div>
+          </div>
+          <div class="rv-right">
+            <div class="rv-stars"><span style="color:#EF9F27">★★★</span><span style="color:var(--color-border-secondary)">★★</span></div>
+            <div class="rv-date">3.0 · 6 days ago</div>
+          </div>
+        </div>
+        <div class="rv-body">The work was okay but he arrived 45 minutes late without calling. The AC is working now but I expected better communication. Price was fine.</div>
+        <div class="rv-tags">
+          <span class="rv-tag">Late arrival</span>
+          <span class="rv-tag">Work done</span>
+        </div>
+        <div class="rv-footer">
+          <span class="rv-helpful"><i class="ti ti-thumb-up" style="font-size:13px" aria-hidden="true"></i>3 found helpful</span>
+          <button class="reply-btn" onclick="toggleReply('r4')"><i class="ti ti-message-reply" style="font-size:12px" aria-hidden="true"></i>Reply</button>
+        </div>
+        <div id="r4" class="no-reply" style="display:none">
+          <textarea class="reply-inp" rows="2" placeholder="Apologise and address the concern..."></textarea>
+          <button class="send-reply">Send reply</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function filterReviews(el){document.querySelectorAll('.fb').forEach(f=>f.classList.remove('on'));el.classList.add('on')}
+function toggleReply(id){var el=document.getElementById(id);el.style.display=el.style.display==='none'?'flex':'none';if(el.style.display==='flex')el.style.flexDirection='column'}
+</script>
