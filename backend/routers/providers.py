@@ -277,3 +277,66 @@ async def request_review(id: str):
 @router.get("/provider/notifications/count")
 async def get_notification_count(provider_id: str):
     return {"unread": 3}
+
+
+@router.get("/provider/schedule")
+async def get_provider_schedule(provider_id: str, week_start: str = None):
+    # Mock return matching task structure
+    return {
+        "week_start": week_start or "2026-05-19",
+        "days": {
+            "2026-05-19": [
+                {"time": "09:00", "service": "AC repair", "status": "completed", "customer": "Completed"}
+            ],
+            "2026-05-20": [
+                {"time": "14:00", "service": "Filter replace", "status": "confirmed", "customer": "Omar S."}
+            ],
+            "2026-05-21": [
+                {"time": "08:00", "service": "AC filter clean", "status": "confirmed", "customer": "Ahmed U."},
+                {"time": "10:00", "service": "Request", "status": "new", "customer": "Ahmed U."},
+                {"time": "14:00", "service": "Gas refill", "status": "confirmed", "customer": "Sara K."}
+            ],
+            "2026-05-22": [
+                {"time": "09:00", "service": "AC check", "status": "new", "customer": "Pending"},
+                {"time": "12:00", "service": "AC service", "status": "confirmed", "customer": "Sara K."}
+            ],
+            "2026-05-23": [
+                {"time": "10:00", "service": "AC install", "status": "confirmed", "customer": "Maryam K."},
+                {"time": "16:00", "service": "AC unit check", "status": "confirmed", "customer": "Bilal A."}
+            ]
+        }
+    }
+
+
+@router.get("/provider/settings/working-days")
+async def get_working_days(provider_id: str):
+    return {"working_days": ["Mon", "Tue", "Wed", "Thu", "Fri"]}
+
+
+class WorkingDaysUpdate(BaseModel):
+    working_days: list[str]
+
+@router.patch("/provider/settings/working-days")
+async def update_working_days(provider_id: str, req: WorkingDaysUpdate):
+    # In a real app, update DB here
+    return {"success": True, "working_days": req.working_days}
+
+
+class BlockScheduleRequest(BaseModel):
+    provider_id: str
+    date: str
+    time_start: str
+    time_end: str
+    reason: Optional[str] = None
+
+@router.post("/provider/schedule/block")
+async def block_schedule(req: BlockScheduleRequest):
+    # In a real app, insert into schedule_blocks table
+    return {"success": True, "message": "Time slot blocked successfully"}
+
+
+def check_schedule_conflicts(provider_id: str, date: str, time_start: str, duration_mins: int):
+    # Utility function to check if the provider is free at the given time
+    # In a real app, query DB for overlapping bookings and blocks
+    return {"available": True}
+
