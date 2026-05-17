@@ -533,4 +533,70 @@ async def mark_review_helpful(review_id: str):
     return {"success": True, "message": "Marked as helpful"}
 
 
+class ProviderAIChatRequest(BaseModel):
+    message: str
+    provider_id: str
 
+@router.post("/provider/ai-chat")
+async def provider_ai_chat(req: ProviderAIChatRequest):
+    text = req.message.lower()
+    
+    if "requests" in text or "nayi" in text:
+        return {
+            "success": True,
+            "type": "jobs",
+            "message": "Aaj aapke paas 2 nayi requests hain:",
+            "data": [
+                {
+                    "id": "req_1",
+                    "service": "AC service request",
+                    "customer": "Ahmed Usman",
+                    "location": "G-13/2",
+                    "distance": "2.1 km",
+                    "time": "Today 10:00 AM",
+                    "price": "PKR 1,200",
+                    "is_new": True
+                },
+                {
+                    "id": "req_2",
+                    "service": "AC gas refill",
+                    "customer": "Zara Hassan",
+                    "location": "F-8/3",
+                    "distance": "4.2 km",
+                    "time": "Tomorrow 9:00 AM",
+                    "price": "PKR 1,500",
+                    "is_new": True
+                }
+            ]
+        }
+    elif "kamai" in text or "earnings" in text:
+        return {
+            "success": True,
+            "type": "earnings",
+            "message": "Is hafte (19–25 May) ki kamai:",
+            "data": {
+                "total_earned": "PKR 8,400",
+                "jobs_done": 7,
+                "today_pending": "PKR 1,200",
+                "increase_percentage": "+18%"
+            }
+        }
+    elif "accept" in text:
+        return {
+            "success": True,
+            "type": "accepted",
+            "message": "Request accepted!",
+            "data": {
+                "customer": "Ahmed Usman",
+                "service": "AC service request",
+                "booking_id": "BK-20250521-001",
+                "time": "Today 10:00 AM",
+                "location": "G-13/2"
+            }
+        }
+    else:
+        return {
+            "success": True,
+            "type": "text",
+            "message": "Main samajh nahi paya. Kya aap tafseel se bta sakte hain?"
+        }

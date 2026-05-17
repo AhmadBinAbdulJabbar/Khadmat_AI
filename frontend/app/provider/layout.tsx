@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { 
   Bell, LayoutDashboard, Calendar, Clock, Banknote, 
-  User, Star, Settings, Menu, X, CheckCircle2 
+  User, Star, Settings, Menu, X, CheckCircle2, Sparkles
 } from "lucide-react";
 import RequireAuth from "@/components/RequireAuth";
 
@@ -114,6 +114,11 @@ export default function ProviderLayout({ children }: { children: React.ReactNode
                     </Link>
                   )
                 })}
+
+                <div className="text-[10px] text-[var(--text-tertiary)] px-3.5 pt-2.5 pb-1 tracking-wider mt-1">AI ASSISTANT</div>
+                <Link href="/provider/ai-chat" className={`flex items-center gap-2 px-3.5 py-2 text-[13px] no-underline transition-colors ${pathname === '/provider/ai-chat' ? 'bg-[rgba(29,158,117,0.1)] text-[#1D9E75] font-medium' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-primary)] hover:text-[var(--text-primary)]'}`}>
+                  <Sparkles size={16} /> AI assistant
+                </Link>
 
                 <div className="text-[10px] text-[var(--text-tertiary)] px-3.5 pt-2.5 pb-1 tracking-wider mt-1">ACCOUNT</div>
                 {accountItems.map((item) => {
