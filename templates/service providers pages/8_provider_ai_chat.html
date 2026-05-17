@@ -1,0 +1,242 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.shell{display:grid;grid-template-columns:190px 1fr;min-height:640px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.sb{border-right:0.5px solid var(--color-border-tertiary);background:#1a1a1a;display:flex;flex-direction:column}
+.sb-top{padding:16px 14px;border-bottom:0.5px solid #333}
+.sb-ava{width:36px;height:36px;border-radius:50%;background:#1D9E75;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#fff;margin-bottom:8px}
+.sb-name{font-size:13px;font-weight:500;color:#fff}
+.sb-cat{font-size:11px;color:#888;margin-bottom:6px}
+.tog-row{display:flex;align-items:center;gap:6px}
+.tog{width:28px;height:16px;background:#1D9E75;border-radius:8px;position:relative;flex-shrink:0}
+.tog-thumb{position:absolute;top:2px;right:2px;width:12px;height:12px;background:#fff;border-radius:50%}
+.avail{font-size:11px;color:#1D9E75;font-weight:500}
+.ni{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:13px;color:#888;cursor:pointer}
+.ni:hover{color:#fff;background:rgba(255,255,255,0.05)}
+.ni.on{color:#1D9E75;font-weight:500;background:rgba(29,158,117,0.1)}
+.ni i{font-size:16px}
+.ns{font-size:10px;color:#555;padding:12px 14px 4px;letter-spacing:0.05em}
+.bc{margin-left:auto;background:#E24B4A;color:#fff;font-size:10px;padding:1px 6px;border-radius:8px}
+.main{display:flex;flex-direction:column;background:var(--color-background-primary)}
+.ai-header{padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:space-between}
+.ai-title{display:flex;align-items:center;gap:8px}
+.ai-dot{width:28px;height:28px;background:#1D9E75;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px}
+.ai-name{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.ai-sub{font-size:11px;color:var(--color-text-secondary)}
+.online-pill{font-size:11px;background:#E1F5EE;color:#085041;padding:3px 10px;border-radius:20px;font-weight:500;display:flex;align-items:center;gap:4px}
+.shortcuts{display:flex;gap:6px;padding:10px 16px;border-bottom:0.5px solid var(--color-border-tertiary);flex-wrap:wrap;background:var(--color-background-secondary)}
+.sc-label{font-size:11px;color:var(--color-text-tertiary);align-self:center;white-space:nowrap}
+.sc{border:0.5px solid var(--color-border-tertiary);border-radius:20px;padding:4px 11px;font-size:11px;cursor:pointer;color:var(--color-text-secondary);background:var(--color-background-primary);white-space:nowrap}
+.sc:hover{border-color:#1D9E75;color:#0F6E56;background:#E1F5EE}
+.messages{flex:1;padding:16px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;min-height:360px}
+.msg-row{display:flex;gap:8px;align-items:flex-end}
+.msg-row.usr{flex-direction:row-reverse}
+.ava{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;border:0.5px solid}
+.ava.ai{background:#E1F5EE;color:#085041;border-color:#9FE1CB}
+.ava.usr{background:#1D9E75;color:#fff;border-color:#1D9E75}
+.bub{padding:9px 12px;border-radius:12px;font-size:13px;line-height:1.55;color:var(--color-text-primary);max-width:88%}
+.bub.ai{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-bottom-left-radius:3px}
+.bub.usr{background:#1D9E75;color:#fff;border-bottom-right-radius:3px}
+.bub-time{font-size:10px;color:var(--color-text-tertiary);margin-top:3px;padding:0 2px}
+.job-card-inline{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;margin-top:8px}
+.jci-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.jci-service{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.jci-meta{font-size:11px;color:var(--color-text-secondary);display:flex;gap:8px;flex-wrap:wrap}
+.jci-actions{display:flex;gap:6px;margin-top:8px}
+.ja-accept{background:#1D9E75;color:#fff;border:none;padding:5px 12px;border-radius:var(--border-radius-md);font-size:11px;font-weight:500;cursor:pointer}
+.ja-accept:hover{background:#0F6E56}
+.ja-view{background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary);padding:5px 12px;border-radius:var(--border-radius-md);font-size:11px;cursor:pointer}
+.pill-new{font-size:10px;background:#FAEEDA;color:#633806;padding:2px 7px;border-radius:10px;font-weight:500}
+.pill-conf{font-size:10px;background:#E1F5EE;color:#085041;padding:2px 7px;border-radius:10px;font-weight:500}
+.earn-summary{background:#E1F5EE;border:0.5px solid #9FE1CB;border-radius:var(--border-radius-md);padding:10px 12px;margin-top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.es-item{text-align:center}
+.es-val{font-size:14px;font-weight:500;color:#085041}
+.es-label{font-size:10px;color:#0F6E56;margin-top:1px}
+.input-area{padding:10px 14px;border-top:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:8px}
+.inp-wrap{flex:1;display:flex;align-items:center;gap:8px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:20px;padding:7px 12px}
+.inp-wrap input{background:none;border:none;outline:none;font-size:13px;color:var(--color-text-primary);flex:1;min-width:0}
+.inp-wrap input::placeholder{color:var(--color-text-tertiary)}
+.send-btn{width:32px;height:32px;background:#1D9E75;border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;flex-shrink:0}
+.send-btn:hover{background:#0F6E56}
+</style>
+<h2 class="sr-only">Provider AI assistant chat interface for managing jobs, checking earnings, and accepting requests via natural language</h2>
+<div class="shell">
+<div class="sb">
+  <div class="sb-top">
+    <div class="sb-ava">AA</div>
+    <div class="sb-name">Ali AC Services</div>
+    <div class="sb-cat">AC Technician · G-13</div>
+    <div class="tog-row"><div class="tog"><div class="tog-thumb"></div></div><span class="avail">Available</span></div>
+  </div>
+  <div class="ni"><i class="ti ti-layout-dashboard" aria-hidden="true"></i>Dashboard</div>
+  <div class="ni"><i class="ti ti-calendar" aria-hidden="true"></i>My jobs<span class="bc">2</span></div>
+  <div class="ni"><i class="ti ti-clock" aria-hidden="true"></i>Schedule</div>
+  <div class="ni"><i class="ti ti-currency-rupee" aria-hidden="true"></i>Earnings</div>
+  <div class="ns">AI ASSISTANT</div>
+  <div class="ni on"><i class="ti ti-sparkles" aria-hidden="true"></i>AI assistant</div>
+  <div class="ns">ACCOUNT</div>
+  <div class="ni"><i class="ti ti-user" aria-hidden="true"></i>Profile</div>
+  <div class="ni"><i class="ti ti-star" aria-hidden="true"></i>Reviews</div>
+  <div class="ni"><i class="ti ti-settings" aria-hidden="true"></i>Settings</div>
+</div>
+<div class="main">
+  <div class="ai-header">
+    <div class="ai-title">
+      <div class="ai-dot"><i class="ti ti-sparkles" style="font-size:14px" aria-hidden="true"></i></div>
+      <div>
+        <div class="ai-name">Khadmat AI Assistant</div>
+        <div class="ai-sub">Manage your jobs, earnings and schedule by chat</div>
+      </div>
+    </div>
+    <div class="online-pill"><span style="width:6px;height:6px;background:#1D9E75;border-radius:50%;display:inline-block"></span>Online</div>
+  </div>
+
+  <div class="shortcuts">
+    <span class="sc-label">Quick:</span>
+    <span class="sc" onclick="addMsg('Show me my new requests')">📋 New requests</span>
+    <span class="sc" onclick="addMsg('What are my earnings today?')">💰 Today earnings</span>
+    <span class="sc" onclick="addMsg('Show my schedule for tomorrow')">📅 Tomorrow schedule</span>
+    <span class="sc" onclick="addMsg('Go offline for 2 hours')">⏸ Go offline</span>
+    <span class="sc" onclick="addMsg('Accept all pending requests')">✅ Accept all</span>
+  </div>
+
+  <div class="messages" id="messages">
+    <div class="msg-row">
+      <div class="ava ai">K</div>
+      <div>
+        <div class="bub ai">Assalam alaikum Ali bhai! Main aapka Khadmat AI assistant hoon. Aap mujhse kuch bhi pooch saktay hain — new requests, earnings, schedule, ya koi bhi job ko accept/decline karna ho.</div>
+        <div class="bub-time">9:00 AM</div>
+      </div>
+    </div>
+
+    <div class="msg-row usr">
+      <div class="ava usr">AA</div>
+      <div>
+        <div class="bub usr">Aaj ki nayi requests dikhao</div>
+        <div class="bub-time" style="text-align:right">9:14 AM</div>
+      </div>
+    </div>
+
+    <div class="msg-row">
+      <div class="ava ai">K</div>
+      <div>
+        <div class="bub ai">
+          Aaj aapke paas <strong>2 nayi requests</strong> hain:
+          <div class="job-card-inline">
+            <div class="jci-top">
+              <span class="jci-service">AC service request</span>
+              <span class="pill-new">New</span>
+            </div>
+            <div class="jci-meta">
+              <span><i class="ti ti-user" style="font-size:12px" aria-hidden="true"></i> Ahmed Usman</span>
+              <span><i class="ti ti-map-pin" style="font-size:12px" aria-hidden="true"></i> G-13/2 · 2.1 km</span>
+              <span><i class="ti ti-clock" style="font-size:12px" aria-hidden="true"></i> Today 10:00 AM</span>
+              <span style="color:#1D9E75;font-weight:500">PKR 1,200</span>
+            </div>
+            <div class="jci-actions">
+              <button class="ja-accept">✓ Accept</button>
+              <button class="ja-view">View details</button>
+            </div>
+          </div>
+          <div class="job-card-inline" style="margin-top:6px">
+            <div class="jci-top">
+              <span class="jci-service">AC gas refill</span>
+              <span class="pill-new">New</span>
+            </div>
+            <div class="jci-meta">
+              <span><i class="ti ti-user" style="font-size:12px" aria-hidden="true"></i> Zara Hassan</span>
+              <span><i class="ti ti-map-pin" style="font-size:12px" aria-hidden="true"></i> F-8/3 · 4.2 km</span>
+              <span><i class="ti ti-clock" style="font-size:12px" aria-hidden="true"></i> Tomorrow 9:00 AM</span>
+              <span style="color:#1D9E75;font-weight:500">PKR 1,500</span>
+            </div>
+            <div class="jci-actions">
+              <button class="ja-accept">✓ Accept</button>
+              <button class="ja-view">View details</button>
+            </div>
+          </div>
+        </div>
+        <div class="bub-time">9:14 AM</div>
+      </div>
+    </div>
+
+    <div class="msg-row usr">
+      <div class="ava usr">AA</div>
+      <div>
+        <div class="bub usr">Ahmed wali accept karo</div>
+        <div class="bub-time" style="text-align:right">9:15 AM</div>
+      </div>
+    </div>
+
+    <div class="msg-row">
+      <div class="ava ai">K</div>
+      <div>
+        <div class="bub ai">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;color:#0F6E56">
+            <i class="ti ti-circle-check" style="font-size:16px" aria-hidden="true"></i>
+            <span style="font-weight:500">Request accepted!</span>
+          </div>
+          Ahmed Usman ki AC service request accept ho gayi. Booking confirm ho gaya:<br><br>
+          <span style="font-family:var(--font-mono);font-size:11px;color:var(--color-text-tertiary)">BK-20250521-001 · Today 10:00 AM · G-13/2</span>
+          <div style="margin-top:8px;font-size:12px;color:var(--color-text-secondary)">Customer ko notification ja raha hai. Kuch aur chahiye?</div>
+        </div>
+        <div class="bub-time">9:15 AM</div>
+      </div>
+    </div>
+
+    <div class="msg-row usr">
+      <div class="ava usr">AA</div>
+      <div>
+        <div class="bub usr">Is hafte ki total kamai batao</div>
+        <div class="bub-time" style="text-align:right">9:16 AM</div>
+      </div>
+    </div>
+
+    <div class="msg-row">
+      <div class="ava ai">K</div>
+      <div>
+        <div class="bub ai">
+          Is hafte (19–25 May) ki kamai:
+          <div class="earn-summary">
+            <div class="es-item"><div class="es-val">PKR 8,400</div><div class="es-label">Total earned</div></div>
+            <div class="es-item"><div class="es-val">7</div><div class="es-label">Jobs done</div></div>
+            <div class="es-item"><div class="es-val">PKR 1,200</div><div class="es-label">Today pending</div></div>
+          </div>
+          <div style="margin-top:8px;font-size:12px;color:var(--color-text-secondary)">Pichle hafte se <span style="color:#1D9E75;font-weight:500">+18% zyada</span> kamai! 🎉</div>
+        </div>
+        <div class="bub-time">9:16 AM</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-area">
+    <i class="ti ti-microphone" style="font-size:18px;color:var(--color-text-tertiary);cursor:pointer" aria-hidden="true"></i>
+    <div class="inp-wrap">
+      <input placeholder="Request accept karo, earnings pocho, schedule dekhao..." id="chat-inp" onkeydown="handleKey(event)"/>
+    </div>
+    <button class="send-btn" onclick="sendMsg()" aria-label="Send"><i class="ti ti-arrow-up" aria-hidden="true"></i></button>
+  </div>
+</div>
+</div>
+<script>
+function addMsg(text){document.getElementById('chat-inp').value=text;document.getElementById('chat-inp').focus()}
+function handleKey(e){if(e.key==='Enter')sendMsg()}
+function sendMsg(){
+  var inp=document.getElementById('chat-inp');
+  var text=inp.value.trim();
+  if(!text)return;
+  var msgs=document.getElementById('messages');
+  var row=document.createElement('div');
+  row.className='msg-row usr';
+  row.innerHTML='<div class="ava usr">AA</div><div><div class="bub usr">'+text+'</div><div class="bub-time" style="text-align:right">Now</div></div>';
+  msgs.appendChild(row);
+  inp.value='';
+  setTimeout(function(){
+    var r2=document.createElement('div');
+    r2.className='msg-row';
+    r2.innerHTML='<div class="ava ai">K</div><div><div class="bub ai">Processing aapki request... Please ek second ruko.</div></div>';
+    msgs.appendChild(r2);
+    msgs.scrollTop=msgs.scrollHeight;
+  },600);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+</script>

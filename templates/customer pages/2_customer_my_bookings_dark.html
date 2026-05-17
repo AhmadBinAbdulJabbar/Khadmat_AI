@@ -1,0 +1,236 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.app{background:#111;min-height:620px;display:grid;grid-template-rows:auto 1fr}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:11px 20px;background:#111;border-bottom:0.5px solid #2a2a2a}
+.nav-left{display:flex;align-items:center;gap:24px}
+.logo{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:#fff}
+.logo-dot{width:26px;height:26px;background:#1D9E75;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:500}
+.nl{font-size:13px;color:#888;cursor:pointer}.nl:hover{color:#fff}
+.nav-right{display:flex;align-items:center;gap:8px}
+.notif{width:30px;height:30px;border:0.5px solid #2a2a2a;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#888;font-size:15px;position:relative;background:#1a1a1a}
+.ndot{position:absolute;top:5px;right:5px;width:6px;height:6px;background:#E24B4A;border-radius:50%}
+.user-chip{display:flex;align-items:center;gap:7px;background:#1a1a1a;border:0.5px solid #2a2a2a;border-radius:20px;padding:4px 10px 4px 4px;cursor:pointer}
+.u-ava{width:24px;height:24px;border-radius:50%;background:#7F77DD;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff}
+.u-name{font-size:13px;color:#ccc;font-weight:500}
+.body{display:grid;grid-template-columns:210px 1fr}
+.sb{background:#151515;border-right:0.5px solid #2a2a2a;padding:16px 0}
+.sb-user{padding:0 14px 14px;border-bottom:0.5px solid #2a2a2a;margin-bottom:8px}
+.sb-ava{width:38px;height:38px;border-radius:50%;background:#7F77DD;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#fff;margin-bottom:6px}
+.sb-name{font-size:13px;font-weight:500;color:#fff}
+.sb-email{font-size:11px;color:#666}
+.sb-city{font-size:11px;color:#555;margin-top:2px;display:flex;align-items:center;gap:3px}
+.ni{display:flex;align-items:center;gap:8px;padding:8px 14px;font-size:13px;color:#666;cursor:pointer;border-right:2px solid transparent}
+.ni:hover{color:#ccc;background:#1e1e1e}
+.ni.on{color:#1D9E75;font-weight:500;background:#1a2e26;border-right-color:#1D9E75}
+.ni i{font-size:15px}
+.ns{font-size:10px;color:#444;padding:10px 14px 4px;letter-spacing:0.05em}
+.bc{margin-left:auto;background:#E24B4A;color:#fff;font-size:10px;padding:1px 6px;border-radius:8px}
+.ni.logout{color:#E24B4A}.ni.logout:hover{color:#f09595;background:#2a1a1a}
+.main{padding:20px;background:#111}
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.pt{font-size:16px;font-weight:500;color:#fff}
+.ps{font-size:12px;color:#666;margin-top:2px}
+.btn-g{background:#1D9E75;color:#fff;border:none;padding:8px 16px;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px}
+.btn-g:hover{background:#0F6E56}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.stat{background:#1a1a1a;border-radius:var(--border-radius-md);padding:12px;border:0.5px solid #2a2a2a}
+.sl{font-size:11px;color:#666;margin-bottom:3px}
+.sv{font-size:18px;font-weight:500;color:#fff}
+.ss{font-size:10px;color:#555;margin-top:2px}
+.filter-row{display:flex;align-items:center;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.fb{border:0.5px solid #2a2a2a;border-radius:20px;padding:5px 13px;font-size:12px;cursor:pointer;color:#888;background:#1a1a1a}
+.fb:hover{border-color:#1D9E75;color:#1D9E75}
+.fb.on{background:#1a2e26;border-color:#1D9E75;color:#1D9E75;font-weight:500}
+.search-box{margin-left:auto;display:flex;align-items:center;gap:6px;background:#1a1a1a;border:0.5px solid #2a2a2a;border-radius:var(--border-radius-md);padding:5px 10px}
+.search-box input{background:none;border:none;outline:none;font-size:12px;color:#ccc;width:120px}
+.search-box input::placeholder{color:#555}
+.bk-list{display:flex;flex-direction:column;gap:8px}
+.bk-card{background:#1a1a1a;border:0.5px solid #2a2a2a;border-radius:var(--border-radius-lg);padding:14px 16px;cursor:pointer}
+.bk-card:hover{border-color:#333}
+.bk-card.upcoming{border:1.5px solid #1D9E75;background:#0d1f18}
+.bk-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
+.bk-left{display:flex;align-items:center;gap:10px}
+.bk-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.bk-service{font-size:13px;font-weight:500;color:#fff}
+.bk-prov{font-size:11px;color:#888;margin-top:2px}
+.bk-right{text-align:right}
+.bk-price{font-size:14px;font-weight:500;color:#fff}
+.bk-status{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;margin-top:3px;display:inline-block}
+.s-conf{background:#0d2e1e;color:#1D9E75;border:0.5px solid #1D9E75}
+.s-done{background:#1a2a0d;color:#639922;border:0.5px solid #3B6D11}
+.s-canc{background:#2a0d0d;color:#E24B4A;border:0.5px solid #791F1F}
+.s-pend{background:#2a1e0d;color:#EF9F27;border:0.5px solid #854F0B}
+.bk-meta{display:flex;gap:12px;font-size:11px;color:#666;flex-wrap:wrap}
+.bk-meta span{display:flex;align-items:center;gap:3px}
+.bk-ref{font-size:10px;color:#444;font-family:var(--font-mono);margin-top:6px}
+.bk-actions{display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:0.5px solid #222}
+.ba{font-size:11px;padding:4px 10px;border-radius:var(--border-radius-md);cursor:pointer;border:0.5px solid}
+.ba-view{background:#1a2e26;color:#1D9E75;border-color:#1D9E75}
+.ba-view:hover{background:#1D9E75;color:#fff}
+.ba-pay{background:#1a2e26;color:#1D9E75;border-color:#1D9E75}
+.ba-pay:hover{background:#1D9E75;color:#fff}
+.ba-cancel{background:transparent;color:#888;border-color:#333}
+.ba-cancel:hover{color:#E24B4A;border-color:#791F1F}
+.ba-rebook{background:#1a2420;color:#888;border-color:#333}
+.ba-rebook:hover{color:#1D9E75;border-color:#1D9E75}
+.ba-review{background:#2a2010;color:#EF9F27;border-color:#854F0B}
+.ba-review:hover{background:#854F0B;color:#fff}
+.upcoming-tag{font-size:10px;background:#1D9E75;color:#fff;padding:2px 8px;border-radius:10px;font-weight:500;margin-left:6px}
+.pag{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:14px;border-top:0.5px solid #222}
+.pag-info{font-size:12px;color:#555}
+.pag-btns{display:flex;gap:4px}
+.pb{width:28px;height:28px;border:0.5px solid #2a2a2a;border-radius:var(--border-radius-md);background:#1a1a1a;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#666}
+.pb.on{background:#1a2e26;border-color:#1D9E75;color:#1D9E75;font-weight:500}
+.pb:hover{border-color:#333;color:#ccc}
+</style>
+<h2 class="sr-only">Customer my bookings page with dark theme matching the app screenshot</h2>
+<div class="app">
+  <div class="nav">
+    <div class="nav-left">
+      <div class="logo"><div class="logo-dot">K</div>Khadmat AI</div>
+      <span class="nl">How it works</span>
+      <span class="nl">Services</span>
+      <span class="nl">Providers</span>
+    </div>
+    <div class="nav-right">
+      <div class="notif"><i class="ti ti-bell" aria-hidden="true"></i><div class="ndot"></div></div>
+      <div class="user-chip"><div class="u-ava">MU</div><span class="u-name">Muhammad Umair</span><i class="ti ti-chevron-down" style="font-size:13px;color:#555" aria-hidden="true"></i></div>
+    </div>
+  </div>
+  <div class="body">
+    <div class="sb">
+      <div class="sb-user">
+        <div class="sb-ava">MU</div>
+        <div class="sb-name">Muhammad Umair</div>
+        <div class="sb-email">umairbwp202@gmail.com</div>
+        <div class="sb-city"><i class="ti ti-map-pin" style="font-size:11px" aria-hidden="true"></i>Islamabad, Pakistan</div>
+      </div>
+      <div class="ni"><i class="ti ti-layout-dashboard" aria-hidden="true"></i>Dashboard</div>
+      <div class="ni on"><i class="ti ti-calendar" aria-hidden="true"></i>My bookings<span class="bc">1</span></div>
+      <div class="ni"><i class="ti ti-message-circle" aria-hidden="true"></i>AI booking</div>
+      <div class="ni"><i class="ti ti-users" aria-hidden="true"></i>Browse providers</div>
+      <div class="ni"><i class="ti ti-receipt" aria-hidden="true"></i>Billing &amp; payments</div>
+      <div class="ns">ACCOUNT</div>
+      <div class="ni"><i class="ti ti-user" aria-hidden="true"></i>Profile</div>
+      <div class="ni"><i class="ti ti-star" aria-hidden="true"></i>My reviews</div>
+      <div class="ni"><i class="ti ti-settings" aria-hidden="true"></i>Settings</div>
+      <div style="height:0.5px;background:#222;margin:8px 14px"></div>
+      <div class="ni logout"><i class="ti ti-logout" aria-hidden="true"></i>Logout</div>
+    </div>
+    <div class="main">
+      <div class="ph">
+        <div><div class="pt">My bookings</div><div class="ps">All your service requests in one place</div></div>
+        <button class="btn-g" onclick="sendPrompt('Show me the Khadmat AI chat booking page design')"><i class="ti ti-plus" aria-hidden="true"></i>New booking</button>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="sl">Total bookings</div><div class="sv">12</div><div class="ss">All time</div></div>
+        <div class="stat"><div class="sl">Confirmed</div><div class="sv" style="color:#1D9E75">1</div><div class="ss">Upcoming</div></div>
+        <div class="stat"><div class="sl">Completed</div><div class="sv" style="color:#639922">9</div><div class="ss">Finished</div></div>
+        <div class="stat"><div class="sl">Cancelled</div><div class="sv" style="color:#E24B4A">2</div><div class="ss">Refundable</div></div>
+      </div>
+      <div class="filter-row">
+        <div class="fb on" onclick="setF(this)">All (12)</div>
+        <div class="fb" onclick="setF(this)">Confirmed</div>
+        <div class="fb" onclick="setF(this)">Completed</div>
+        <div class="fb" onclick="setF(this)">Cancelled</div>
+        <div class="fb" onclick="setF(this)">Pending payment</div>
+        <div class="search-box"><i class="ti ti-search" style="font-size:13px;color:#555" aria-hidden="true"></i><input placeholder="Search bookings..."/></div>
+      </div>
+      <div class="bk-list">
+        <div class="bk-card upcoming">
+          <div class="bk-top">
+            <div class="bk-left">
+              <div class="bk-icon" style="background:#0d2e1e"><i class="ti ti-air-conditioning" style="color:#1D9E75" aria-hidden="true"></i></div>
+              <div>
+                <div style="display:flex;align-items:center"><span class="bk-service">AC Technician</span><span class="upcoming-tag">Today</span></div>
+                <div class="bk-prov">Ali AC Services · G-13, Islamabad</div>
+              </div>
+            </div>
+            <div class="bk-right"><div class="bk-price">PKR 1,200</div><span class="bk-status s-conf">Confirmed</span></div>
+          </div>
+          <div class="bk-meta">
+            <span><i class="ti ti-calendar" aria-hidden="true"></i>Thu 21 May 2026</span>
+            <span><i class="ti ti-clock" aria-hidden="true"></i>10:00 AM</span>
+            <span><i class="ti ti-map-pin" aria-hidden="true"></i>G-13/2, Islamabad</span>
+            <span><i class="ti ti-star" style="color:#EF9F27" aria-hidden="true"></i>4.7 provider</span>
+          </div>
+          <div class="bk-ref">BK-20250521-001</div>
+          <div class="bk-actions">
+            <button class="ba ba-view"><i class="ti ti-eye" style="font-size:11px" aria-hidden="true"></i>View details</button>
+            <button class="ba ba-pay"><i class="ti ti-credit-card" style="font-size:11px" aria-hidden="true"></i>Pay PKR 1,200</button>
+            <button class="ba ba-cancel" style="margin-left:auto">Cancel</button>
+          </div>
+        </div>
+        <div class="bk-card">
+          <div class="bk-top">
+            <div class="bk-left">
+              <div class="bk-icon" style="background:#1a1e2e"><i class="ti ti-plug" style="color:#7F77DD" aria-hidden="true"></i></div>
+              <div><div class="bk-service">Electrician</div><div class="bk-prov">Rehman Electricals · G-13, Islamabad</div></div>
+            </div>
+            <div class="bk-right"><div class="bk-price" style="color:#639922">PKR 900</div><span class="bk-status s-done">Completed</span></div>
+          </div>
+          <div class="bk-meta">
+            <span><i class="ti ti-calendar" aria-hidden="true"></i>Mon 12 May</span>
+            <span><i class="ti ti-clock" aria-hidden="true"></i>2:00 PM</span>
+            <span><i class="ti ti-check" style="color:#1D9E75" aria-hidden="true"></i>Paid</span>
+          </div>
+          <div class="bk-ref">BK-20250512-008</div>
+          <div class="bk-actions">
+            <button class="ba ba-view">View</button>
+            <button class="ba ba-review"><i class="ti ti-star" style="font-size:11px" aria-hidden="true"></i>Leave review</button>
+            <button class="ba ba-rebook" style="margin-left:auto"><i class="ti ti-refresh" style="font-size:11px" aria-hidden="true"></i>Rebook</button>
+          </div>
+        </div>
+        <div class="bk-card">
+          <div class="bk-top">
+            <div class="bk-left">
+              <div class="bk-icon" style="background:#1e1a0d"><i class="ti ti-droplet" style="color:#EF9F27" aria-hidden="true"></i></div>
+              <div><div class="bk-service">Plumber</div><div class="bk-prov">Master Plumbers Pk · DHA, Karachi</div></div>
+            </div>
+            <div class="bk-right"><div class="bk-price" style="color:#639922">PKR 650</div><span class="bk-status s-done">Completed</span></div>
+          </div>
+          <div class="bk-meta">
+            <span><i class="ti ti-calendar" aria-hidden="true"></i>Fri 9 May</span>
+            <span><i class="ti ti-clock" aria-hidden="true"></i>9:00 AM</span>
+            <span><i class="ti ti-check" style="color:#1D9E75" aria-hidden="true"></i>Paid</span>
+          </div>
+          <div class="bk-ref">BK-20250509-005</div>
+          <div class="bk-actions">
+            <button class="ba ba-view">View</button>
+            <button class="ba ba-review"><i class="ti ti-star" style="font-size:11px" aria-hidden="true"></i>Leave review</button>
+            <button class="ba ba-rebook" style="margin-left:auto">Rebook</button>
+          </div>
+        </div>
+        <div class="bk-card">
+          <div class="bk-top">
+            <div class="bk-left">
+              <div class="bk-icon" style="background:#2a1515"><i class="ti ti-home" style="color:#E24B4A" aria-hidden="true"></i></div>
+              <div><div class="bk-service">Cleaner</div><div class="bk-prov">HomeClean Pro · DHA, Lahore</div></div>
+            </div>
+            <div class="bk-right"><div class="bk-price">PKR 600–1,200</div><span class="bk-status s-canc">Cancelled</span></div>
+          </div>
+          <div class="bk-meta">
+            <span><i class="ti ti-calendar" aria-hidden="true"></i>Tue 6 May</span>
+            <span><i class="ti ti-clock" aria-hidden="true"></i>9:00 AM</span>
+            <span><i class="ti ti-x" style="color:#E24B4A" aria-hidden="true"></i>Refund pending</span>
+          </div>
+          <div class="bk-ref">BK-20250506-003</div>
+          <div class="bk-actions">
+            <button class="ba ba-view">View</button>
+            <button class="ba ba-rebook" style="margin-left:auto">Rebook</button>
+          </div>
+        </div>
+      </div>
+      <div class="pag">
+        <span class="pag-info">Showing 4 of 12 bookings</span>
+        <div class="pag-btns">
+          <div class="pb"><i class="ti ti-arrow-left" style="font-size:12px" aria-hidden="true"></i></div>
+          <div class="pb on">1</div><div class="pb">2</div><div class="pb">3</div>
+          <div class="pb"><i class="ti ti-arrow-right" style="font-size:12px" aria-hidden="true"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>function setF(el){document.querySelectorAll('.fb').forEach(f=>f.classList.remove('on'));el.classList.add('on')}</script>

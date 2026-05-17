@@ -340,3 +340,62 @@ def check_schedule_conflicts(provider_id: str, date: str, time_start: str, durat
     # In a real app, query DB for overlapping bookings and blocks
     return {"available": True}
 
+
+@router.get("/provider/earnings/summary")
+async def provider_earnings_summary(provider_id: str):
+    return {
+        "available_balance": 12800,
+        "last_payout": { "amount": 25600, "date": "2026-05-15" },
+        "this_month": { "total": 38400, "jobs": 32 },
+        "last_month": { "total": 31200, "jobs": 27 },
+        "this_year": { "total": 214000, "jobs": 212 }
+    }
+
+
+@router.get("/provider/earnings/chart")
+async def provider_earnings_chart(provider_id: str, months: int = 6):
+    return {
+        "chart": [
+            { "month": "Dec", "total": 22000 },
+            { "month": "Jan", "total": 18000 },
+            { "month": "Feb", "total": 28000 },
+            { "month": "Mar", "total": 31000 },
+            { "month": "Apr", "total": 31000 },
+            { "month": "May", "total": 38400 }
+        ][:months]
+    }
+
+
+@router.get("/provider/earnings/transactions")
+async def provider_earnings_transactions(provider_id: str, page: int = 1, limit: int = 5):
+    return {
+        "transactions": [
+            {"id": "txn_1", "service": "AC filter clean", "customer_name": "Ahmed Usman", "date": "2026-05-21", "amount": 1200, "status": "pending"},
+            {"id": "txn_2", "service": "AC gas refill", "customer_name": "Sara Khan", "date": "2026-05-20", "amount": 1500, "status": "paid"},
+            {"id": "txn_3", "service": "AC installation", "customer_name": "Bilal Ahmed", "date": "2026-05-19", "amount": 2200, "status": "paid"},
+            {"id": "txn_4", "service": "AC repair", "customer_name": "Omar Siddiqui", "date": "2026-05-17", "amount": 900, "status": "paid"},
+            {"id": "txn_5", "service": "Filter replace", "customer_name": "Zara Hassan", "date": "2026-05-16", "amount": 800, "status": "paid"}
+        ],
+        "total": 32,
+        "page": page
+    }
+
+
+class WithdrawRequest(BaseModel):
+    provider_id: str
+    amount: float
+    bank_account_id: Optional[str] = None
+
+@router.post("/provider/earnings/withdraw")
+async def provider_earnings_withdraw(req: WithdrawRequest):
+    return {"success": True, "message": f"Withdrawal of PKR {req.amount} requested successfully."}
+
+
+from fastapi.responses import Response
+
+@router.get("/provider/earnings/report")
+async def provider_earnings_report(provider_id: str, format: str = "pdf"):
+    # Mock PDF generation
+    return Response(content=b"%PDF-1.4 mock pdf content", media_type="application/pdf", headers={"Content-Disposition": "attachment; filename=transactions_report.pdf"})
+
+

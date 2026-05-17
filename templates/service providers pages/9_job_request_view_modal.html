@@ -1,0 +1,196 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.faux-bg{background:rgba(0,0,0,0.45);display:flex;align-items:flex-start;justify-content:center;padding:20px;min-height:680px}
+.modal{background:var(--color-background-primary);border-radius:var(--border-radius-lg);width:100%;max-width:540px;overflow:hidden;border:0.5px solid var(--color-border-tertiary)}
+.mh{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.mh-left{display:flex;align-items:center;gap:10px}
+.mh-icon{width:36px;height:36px;border-radius:8px;background:#FAEEDA;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.mh-title{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.mh-sub{font-size:12px;color:var(--color-text-secondary);margin-top:1px}
+.close-btn{width:30px;height:30px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--color-text-secondary);font-size:16px}
+.close-btn:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+.new-tag{font-size:11px;background:#FAEEDA;color:#633806;padding:3px 10px;border-radius:20px;font-weight:500;margin-left:8px}
+.mbody{padding:18px}
+.tabs{display:flex;gap:0;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:16px}
+.tab{padding:9px 16px;font-size:13px;cursor:pointer;color:var(--color-text-secondary);border-bottom:2px solid transparent}
+.tab.on{color:#1D9E75;border-bottom-color:#1D9E75;font-weight:500}
+.tc{display:none}
+.tc.on{display:block}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.info-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px}
+.ic-label{font-size:11px;color:var(--color-text-tertiary);margin-bottom:3px;display:flex;align-items:center;gap:4px}
+.ic-val{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.customer-card{display:flex;align-items:center;gap:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:12px 14px;margin-bottom:14px}
+.c-ava{width:38px;height:38px;border-radius:50%;background:#EEEDFE;border:0.5px solid #CECBF6;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#3C3489;flex-shrink:0}
+.c-info{flex:1}
+.c-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.c-meta{font-size:11px;color:var(--color-text-secondary);margin-top:2px;display:flex;gap:8px}
+.c-actions{display:flex;gap:6px}
+.call-btn{background:#E1F5EE;color:#085041;border:0.5px solid #9FE1CB;border-radius:var(--border-radius-md);padding:6px 12px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px}
+.call-btn:hover{background:#1D9E75;color:#fff;border-color:#1D9E75}
+.map-placeholder{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);height:100px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;position:relative;overflow:hidden}
+.map-grid{position:absolute;inset:0;display:grid;grid-template-columns:repeat(8,1fr);opacity:0.15}
+.map-line{border-right:0.5px solid var(--color-text-secondary)}
+.map-pin{position:absolute;top:50%;left:50%;transform:translate(-50%,-100%);color:#E24B4A;font-size:24px}
+.map-label{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:11px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:3px 10px;color:var(--color-text-secondary);white-space:nowrap}
+.notes-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+.notes-label{font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px;display:flex;align-items:center;gap:4px}
+.price-row{display:flex;align-items:center;justify-content:space-between;background:#E1F5EE;border:0.5px solid #9FE1CB;border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:16px}
+.pr-label{font-size:13px;color:#085041}
+.pr-val{font-size:16px;font-weight:500;color:#085041}
+.pr-sub{font-size:11px;color:#0F6E56}
+.mfooter{display:flex;gap:8px;padding:14px 18px;border-top:0.5px solid var(--color-border-tertiary)}
+.btn-accept{flex:1;background:#1D9E75;color:#fff;border:none;padding:11px;border-radius:var(--border-radius-md);font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-accept:hover{background:#0F6E56}
+.btn-decline{flex:1;background:var(--color-background-primary);color:#A32D2D;border:0.5px solid #F09595;padding:11px;border-radius:var(--border-radius-md);font-size:14px;cursor:pointer}
+.btn-decline:hover{background:#FCEBEB}
+.history-list{display:flex;flex-direction:column;gap:8px}
+.h-row{display:flex;align-items:flex-start;gap:10px;padding:10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md)}
+.h-dot{width:8px;height:8px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.h-info{flex:1}
+.h-title{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.h-sub{font-size:11px;color:var(--color-text-secondary);margin-top:1px}
+.h-time{font-size:11px;color:var(--color-text-tertiary)}
+.timer{display:flex;align-items:center;gap:6px;font-size:12px;color:#854F0B;background:#FAEEDA;border-radius:var(--border-radius-md);padding:6px 12px;margin-bottom:14px}
+</style>
+<h2 class="sr-only">Job request detail modal showing customer info, location, price estimate, and accept/decline actions</h2>
+<div class="faux-bg">
+<div class="modal">
+  <div class="mh">
+    <div class="mh-left">
+      <div class="mh-icon"><i class="ti ti-air-conditioning" style="color:#854F0B" aria-hidden="true"></i></div>
+      <div>
+        <div style="display:flex;align-items:center;gap:0">
+          <span class="mh-title">AC service request</span>
+          <span class="new-tag">New</span>
+        </div>
+        <div class="mh-sub">Request ID: REQ-20250521-047</div>
+      </div>
+    </div>
+    <div class="close-btn"><i class="ti ti-x" aria-hidden="true"></i></div>
+  </div>
+
+  <div class="mbody">
+    <div class="timer">
+      <i class="ti ti-clock" style="font-size:14px" aria-hidden="true"></i>
+      Respond within 15 minutes — request expires otherwise
+      <span style="font-weight:500;margin-left:auto">12:43 left</span>
+    </div>
+
+    <div class="tabs">
+      <div class="tab on" id="tab-details" onclick="swTab('details')">Job details</div>
+      <div class="tab" id="tab-customer" onclick="swTab('customer')">Customer</div>
+      <div class="tab" id="tab-history" onclick="swTab('history')">History</div>
+    </div>
+
+    <div class="tc on" id="tc-details">
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-label"><i class="ti ti-tool" style="font-size:12px" aria-hidden="true"></i>Service type</div>
+          <div class="ic-val">AC Technician</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label"><i class="ti ti-calendar" style="font-size:12px" aria-hidden="true"></i>Requested time</div>
+          <div class="ic-val">Today · 10:00 AM</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label"><i class="ti ti-map-pin" style="font-size:12px" aria-hidden="true"></i>Location</div>
+          <div class="ic-val">G-13/2, Islamabad</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label"><i class="ti ti-route" style="font-size:12px" aria-hidden="true"></i>Distance from you</div>
+          <div class="ic-val" style="color:#1D9E75">2.1 km away</div>
+        </div>
+      </div>
+
+      <div class="map-placeholder">
+        <div class="map-grid">
+          <div class="map-line"></div><div class="map-line"></div><div class="map-line"></div><div class="map-line"></div>
+          <div class="map-line"></div><div class="map-line"></div><div class="map-line"></div><div class="map-line"></div>
+        </div>
+        <i class="map-pin ti ti-map-pin" aria-hidden="true"></i>
+        <div class="map-label"><i class="ti ti-map-pin" style="font-size:11px;color:#E24B4A" aria-hidden="true"></i> G-13/2, Street 14, Islamabad</div>
+      </div>
+
+      <div class="notes-box">
+        <div class="notes-label"><i class="ti ti-notes" style="font-size:12px" aria-hidden="true"></i>Customer notes</div>
+        AC is not cooling properly. Makes a loud noise when starting. Last serviced 8 months ago. Please bring gas refill equipment.
+      </div>
+
+      <div class="price-row">
+        <div>
+          <div class="pr-label">Your estimated earning</div>
+          <div class="pr-sub">After Khadmat 5% platform fee</div>
+        </div>
+        <div style="text-align:right">
+          <div class="pr-val">PKR 1,140</div>
+          <div class="pr-sub">Customer pays PKR 1,200</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tc" id="tc-customer">
+      <div class="customer-card">
+        <div class="c-ava">AU</div>
+        <div class="c-info">
+          <div class="c-name">Ahmed Usman</div>
+          <div class="c-meta">
+            <span><i class="ti ti-star" style="font-size:11px;color:#EF9F27" aria-hidden="true"></i> 4.8 customer rating</span>
+            <span>12 bookings total</span>
+          </div>
+        </div>
+        <div class="c-actions">
+          <button class="call-btn"><i class="ti ti-phone" style="font-size:13px" aria-hidden="true"></i>Call</button>
+        </div>
+      </div>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-label"><i class="ti ti-calendar" style="font-size:12px" aria-hidden="true"></i>Member since</div>
+          <div class="ic-val">Jan 2025</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label"><i class="ti ti-check" style="font-size:12px" aria-hidden="true"></i>Completed bookings</div>
+          <div class="ic-val">11</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label"><i class="ti ti-x" style="font-size:12px" aria-hidden="true"></i>Cancellations</div>
+          <div class="ic-val">1</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label"><i class="ti ti-star" style="font-size:12px" aria-hidden="true"></i>Avg. rating given</div>
+          <div class="ic-val" style="color:#EF9F27">4.6 ★</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;margin-top:4px">
+        <i class="ti ti-info-circle" style="font-size:13px;margin-right:4px" aria-hidden="true"></i>
+        Full contact details (phone number) will be shared after you accept this request.
+      </div>
+    </div>
+
+    <div class="tc" id="tc-history">
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px">Your history with Ahmed Usman</div>
+      <div class="history-list">
+        <div class="h-row"><div class="h-dot" style="background:#1D9E75"></div><div class="h-info"><div class="h-title">AC gas refill — Completed</div><div class="h-sub">PKR 1,200 · Rated you ⭐ 5.0</div></div><div class="h-time">3 months ago</div></div>
+        <div class="h-row"><div class="h-dot" style="background:#1D9E75"></div><div class="h-info"><div class="h-title">AC filter clean — Completed</div><div class="h-sub">PKR 800 · Rated you ⭐ 5.0</div></div><div class="h-time">6 months ago</div></div>
+        <div style="font-size:12px;color:var(--color-text-secondary);text-align:center;padding:10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md)">
+          <i class="ti ti-star" style="font-size:14px;color:#EF9F27" aria-hidden="true"></i> Repeat customer — always rates 5 stars!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mfooter">
+    <button class="btn-decline"><i class="ti ti-x" style="font-size:14px" aria-hidden="true"></i> Decline</button>
+    <button class="btn-accept"><i class="ti ti-check" style="font-size:14px" aria-hidden="true"></i> Accept job — PKR 1,140</button>
+  </div>
+</div>
+</div>
+<script>
+function swTab(t){
+  ['details','customer','history'].forEach(function(id){
+    document.getElementById('tab-'+id).className='tab'+(id===t?' on':'');
+    document.getElementById('tc-'+id).className='tc'+(id===t?' on':'');
+  });
+}
+</script>
