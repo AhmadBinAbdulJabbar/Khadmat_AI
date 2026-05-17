@@ -75,3 +75,71 @@ async def customer_dashboard(user_id: str = None):
             }
         ]
     }
+
+@router.get("/bookings")
+async def customer_bookings(user_id: str = None):
+    # Mock data based on the design template
+    return {
+        "bookings": [
+            {
+                "id": "b1",
+                "service_type": "AC Technician",
+                "provider_name": "Ali AC Services",
+                "city": "Islamabad",
+                "area": "G-13",
+                "price": "PKR 1,200",
+                "status": "Confirmed",
+                "date": "Thu 21 May 2026",
+                "time": "10:00 AM",
+                "full_address": "G-13/2, Islamabad",
+                "provider_rating": "4.7",
+                "booking_ref": "BK-20250521-001",
+                "payment_status": "Pending"
+            },
+            {
+                "id": "b2",
+                "service_type": "Electrician",
+                "provider_name": "Rehman Electricals",
+                "city": "Islamabad",
+                "area": "G-13",
+                "price": "PKR 900",
+                "status": "Completed",
+                "date": "Mon 12 May 2026",
+                "time": "2:00 PM",
+                "full_address": "G-13, Islamabad",
+                "provider_rating": "4.8",
+                "booking_ref": "BK-20250512-008",
+                "payment_status": "Paid"
+            },
+            {
+                "id": "b3",
+                "service_type": "Plumber",
+                "provider_name": "Master Plumbers Pk",
+                "city": "Karachi",
+                "area": "DHA",
+                "price": "PKR 650",
+                "status": "Completed",
+                "date": "Fri 9 May 2026",
+                "time": "9:00 AM",
+                "full_address": "DHA, Karachi",
+                "provider_rating": "4.6",
+                "booking_ref": "BK-20250509-005",
+                "payment_status": "Paid"
+            },
+            {
+                "id": "b4",
+                "service_type": "Cleaner",
+                "provider_name": "HomeClean Pro",
+                "city": "Lahore",
+                "area": "DHA",
+                "price": "PKR 600-1,200",
+                "status": "Cancelled",
+                "date": "Tue 6 May 2026",
+                "time": "9:00 AM",
+                "full_address": "DHA, Lahore",
+                "provider_rating": "4.8",
+                "booking_ref": "BK-20250506-003",
+                "payment_status": "Refund pending"
+            }
+        ]
+    }
