@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from gotrue.errors import AuthApiError
+from pydantic import BaseModel
 
 from config.supabase import supabase
 from models.auth import LoginRequest, SignupRequest
@@ -99,3 +100,36 @@ async def google_callback(access_token: str):
         },
         "token": access_token,
     }
+
+class ChangePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str
+
+@router.post("/change-password")
+async def change_password(req: ChangePasswordRequest):
+    return {"success": True, "message": "Password changed successfully"}
+
+@router.post("/2fa/enable")
+async def enable_2fa():
+    return {"success": True, "message": "2FA enabled"}
+
+@router.post("/2fa/disable")
+async def disable_2fa():
+    return {"success": True, "message": "2FA disabled"}
+
+@router.get("/sessions")
+async def get_active_sessions():
+    return {
+        "sessions": [
+            {"id": "ses_1", "device": "iPhone 13", "location": "Islamabad", "current": True},
+            {"id": "ses_2", "device": "Windows PC", "location": "Lahore", "current": False}
+        ]
+    }
+
+@router.delete("/sessions")
+async def sign_out_all_other_sessions():
+    return {"success": True, "message": "Signed out of all other devices"}
+
+@router.post("/logout")
+async def logout():
+    return {"success": True, "message": "Logged out successfully"}

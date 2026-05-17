@@ -113,10 +113,10 @@ export default function ProviderProfilePage() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
                 <div>
                   <label className="text-[12px] text-[var(--text-secondary)] mb-1 block">Experience</label>
-                  <select className="w-full bg-[var(--bg-secondary)] border border-[var(--border-secondary)] rounded-lg px-3 py-2 text-[13px] text-[var(--text-primary)] outline-none focus:border-[#1D9E75] cursor-pointer">
+                  <select defaultValue="5–10 years" className="w-full bg-[var(--bg-secondary)] border border-[var(--border-secondary)] rounded-lg px-3 py-2 text-[13px] text-[var(--text-primary)] outline-none focus:border-[#1D9E75] cursor-pointer">
                     <option>1–2 years</option>
                     <option>3–5 years</option>
-                    <option selected>5–10 years</option>
+                    <option>5–10 years</option>
                     <option>10+ years</option>
                   </select>
                 </div>
