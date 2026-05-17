@@ -399,3 +399,138 @@ async def provider_earnings_report(provider_id: str, format: str = "pdf"):
     return Response(content=b"%PDF-1.4 mock pdf content", media_type="application/pdf", headers={"Content-Disposition": "attachment; filename=transactions_report.pdf"})
 
 
+@router.get("/provider/profile")
+async def get_provider_profile(provider_id: str):
+    return {
+        "user": {
+            "first_name": "Ali",
+            "last_name": "Hassan",
+            "email": "ali@example.com",
+            "phone": "0300-1234567",
+            "city": "Islamabad"
+        },
+        "profile": {
+            "professions": ["AC Technician"],
+            "experience": "5-10 years",
+            "price_min": 800,
+            "price_max": 1500,
+            "bio": "Experienced AC technician with 7+ years. Specialise in installation, gas refill, and servicing all major brands.",
+            "service_areas": ["G-13", "G-10", "F-10", "F-8"],
+            "photo_url": None
+        }
+    }
+
+
+@router.put("/provider/profile")
+async def update_provider_profile(req: dict):
+    # In a real app, update users and provider_profiles tables
+    return {"success": True, "message": "Profile updated", "data": req}
+
+
+from fastapi import UploadFile, File
+
+@router.post("/provider/profile/photo")
+async def upload_provider_photo(file: UploadFile = File(...)):
+    # In a real app, upload to storage bucket
+    return {"success": True, "photo_url": f"https://mock-storage.com/{file.filename}"}
+
+
+@router.get("/provider/reviews")
+async def get_provider_reviews(
+    provider_id: str, 
+    page: int = 1, 
+    limit: int = 5,
+    rating: Optional[int] = None,
+    filter: Optional[str] = None,
+    sort: Optional[str] = "newest"
+):
+    reviews = [
+        {
+            "id": "rev_1",
+            "customer_name": "Ahmed Usman",
+            "customer_initials": "AU",
+            "service_type": "AC filter clean",
+            "date": "2026-05-21",
+            "rating": 5,
+            "text": "Bahut acha kaam kiya! Punctual tha aur AC bilkul theek ho gaya. Definitely recommend karunga.",
+            "provider_reply": None,
+            "tags": ["Punctual", "Professional", "Fair price"],
+            "helpful_count": 12,
+            "created_at": "2026-05-21T10:00:00Z"
+        },
+        {
+            "id": "rev_2",
+            "customer_name": "Sara Khan",
+            "customer_initials": "SK",
+            "service_type": "AC gas refill",
+            "date": "2026-05-20",
+            "rating": 5,
+            "text": "Very professional. Came on time, explained everything clearly. Price was fair. Will book again.",
+            "provider_reply": "Shukria Sara ji! It was a pleasure serving you.",
+            "tags": ["On time", "Transparent pricing"],
+            "helpful_count": 8,
+            "created_at": "2026-05-20T10:00:00Z"
+        },
+        {
+            "id": "rev_3",
+            "customer_name": "Bilal Ahmed",
+            "customer_initials": "BA",
+            "service_type": "AC installation",
+            "date": "2026-05-19",
+            "rating": 4,
+            "text": "Good work overall. Took a bit longer than expected but the quality was solid. No complaints.",
+            "provider_reply": None,
+            "tags": ["Quality work", "Slightly slow"],
+            "helpful_count": 5,
+            "created_at": "2026-05-19T10:00:00Z"
+        }
+    ]
+    
+    if rating:
+        reviews = [r for r in reviews if r["rating"] == rating]
+    if filter == "unanswered":
+        reviews = [r for r in reviews if r["provider_reply"] is None]
+        
+    if sort == "lowest":
+        reviews.sort(key=lambda x: x["rating"])
+    elif sort == "oldest":
+        reviews.sort(key=lambda x: x["created_at"])
+    else: # newest
+        reviews.sort(key=lambda x: x["created_at"], reverse=True)
+
+    return {
+        "summary": {
+            "average": 4.7,
+            "total": 212,
+            "breakdown": { "5": 165, "4": 30, "3": 11, "2": 4, "1": 2 },
+            "ranking": "Top 5% of providers"
+        },
+        "reviews": reviews,
+        "total": 212,
+        "page": page
+    }
+
+
+@router.get("/provider/reviews/metrics")
+async def get_provider_review_metrics(provider_id: str):
+    return {
+        "would_recommend": 96,
+        "punctuality": 4.9,
+        "value_for_money": 4.8
+    }
+
+
+class ReplyRequest(BaseModel):
+    reply_text: str
+
+@router.post("/provider/reviews/{review_id}/reply")
+async def reply_to_review(review_id: str, req: ReplyRequest):
+    return {"success": True, "message": "Reply posted successfully", "reply": req.reply_text}
+
+
+@router.post("/reviews/{review_id}/helpful")
+async def mark_review_helpful(review_id: str):
+    return {"success": True, "message": "Marked as helpful"}
+
+
+
