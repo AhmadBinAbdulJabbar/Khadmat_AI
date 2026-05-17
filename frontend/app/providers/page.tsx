@@ -50,7 +50,7 @@ export default function ProvidersPage() {
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const cRes = await fetch("http://localhost:8001/api/providers/cities");
+        const cRes = await fetch("http://localhost:8000/api/providers/cities");
         setCities(await cRes.json());
       } catch (err) {
         console.error("Failed to load cities", err);
@@ -63,7 +63,7 @@ export default function ProvidersPage() {
     const fetchAreas = async () => {
       try {
         const qs = city !== "All cities" ? `?city=${encodeURIComponent(city)}` : "";
-        const aRes = await fetch(`http://localhost:8001/api/providers/areas${qs}`);
+        const aRes = await fetch(`http://localhost:8000/api/providers/areas${qs}`);
         setAreas(await aRes.json());
       } catch (err) {
         console.error("Failed to load areas", err);
@@ -84,7 +84,7 @@ export default function ProvidersPage() {
         if (debouncedSearch) qs.append("q", debouncedSearch);
         qs.append("sort", sort);
 
-        const res = await fetch(`http://localhost:8001/api/providers/search?${qs.toString()}`);
+        const res = await fetch(`http://localhost:8000/api/providers/search?${qs.toString()}`);
         setProviders(await res.json());
       } catch (err) {
         console.error("Failed to load providers", err);
