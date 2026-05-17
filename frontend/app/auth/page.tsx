@@ -1,16 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, Home, Wrench, ShieldCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase";
 
 const PROFESSIONS = ["AC Technician","Plumber","Electrician","Tutor","Cleaner","Carpenter","Painter","Security","Other"];
 const CITIES = ["Karachi","Lahore","Islamabad"];
 
-export default function AuthPage() {
+function AuthPageInner() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [nextUrl, setNextUrl] = useState("/");
+
+  useEffect(() => {
+    const next = searchParams.get("next");
+    if (next) setNextUrl(decodeURIComponent(next));
+  }, [searchParams]);
 
   const [tab, setTab] = useState<"login"|"signup">("login");
   const [role, setRole] = useState<"customer"|"worker">("customer");
@@ -65,7 +72,7 @@ export default function AuthPage() {
         name,
         role: user.user_metadata?.role ?? "customer",
       }));
-      router.push("/");
+      router.push(nextUrl);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Login failed. Please try again.");
     } finally {
@@ -118,7 +125,7 @@ export default function AuthPage() {
         name,
         role,
       }));
-      router.push("/");
+      router.push(nextUrl);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Signup failed. Please try again.");
     } finally {
@@ -132,7 +139,7 @@ export default function AuthPage() {
     const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextUrl)}`,
       },
     });
     if (oauthError) setError(oauthError.message);
@@ -449,5 +456,13 @@ export default function AuthPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense>
+      <AuthPageInner />
+    </Suspense>
   );
 }

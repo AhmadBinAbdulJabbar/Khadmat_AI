@@ -28,10 +28,12 @@ export default function RequireAuth({ children }: { children: React.ReactNode })
         if (session?.user) {
           setAuthenticated(true);
         } else {
-          router.push("/auth");
+          const next = encodeURIComponent(window.location.pathname + window.location.search);
+          router.replace(`/auth?next=${next}`);
         }
-      } catch (err) {
-        router.push("/auth");
+      } catch {
+        const next = encodeURIComponent(window.location.pathname + window.location.search);
+        router.replace(`/auth?next=${next}`);
       } finally {
         setLoading(false);
       }

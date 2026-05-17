@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from typing import Optional
+from pydantic import BaseModel
 
 router = APIRouter()
 
@@ -177,3 +178,64 @@ async def get_provider(id: str):
         if p["id"] == id:
             return p
     return {"error": "Not found"}
+
+
+class AvailabilityUpdate(BaseModel):
+    is_available: bool
+
+@router.patch("/providers/{id}/availability")
+async def toggle_availability(id: str, req: AvailabilityUpdate):
+    for p in MOCK_PROVIDERS:
+        if p["id"] == id:
+            p["is_available"] = req.is_available
+            return p
+    return {"error": "Not found"}
+
+
+@router.get("/provider/dashboard")
+async def provider_dashboard(provider_id: str):
+    return {
+        "today_jobs": { "total": 3, "pending": 1, "confirmed": 2 },
+        "month_earnings": 38400,
+        "rating": 4.7,
+        "total_reviews": 212,
+        "total_completed": 212
+    }
+
+
+@router.get("/provider/jobs")
+async def provider_jobs(provider_id: str, status: Optional[str] = None, limit: int = 5):
+    return [
+        {
+            "id": "req_1",
+            "title": "AC service request",
+            "type": "new",
+            "customer": "Ahmed Usman",
+            "location": "G-13/2",
+            "time": "Today 10:00 AM",
+            "price": "PKR 1,200 est."
+        },
+        {
+            "id": "req_2",
+            "title": "AC gas refill",
+            "type": "confirmed",
+            "customer": "Sara Khan",
+            "location": "G-13/4",
+            "time": "Today 2:00 PM",
+            "price": "PKR 1,500"
+        },
+        {
+            "id": "req_3",
+            "title": "AC installation",
+            "type": "completed",
+            "customer": "Bilal Ahmed",
+            "location": "F-10/1",
+            "time": "Yesterday 11:00 AM",
+            "price": "PKR 2,200"
+        }
+    ]
+
+
+@router.get("/provider/notifications/count")
+async def get_notification_count(provider_id: str):
+    return {"unread": 3}
