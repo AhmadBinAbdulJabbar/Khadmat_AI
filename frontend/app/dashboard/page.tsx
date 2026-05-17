@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   Plus,
   Search,
@@ -19,9 +18,9 @@ import {
   Loader2
 } from "lucide-react";
 
+const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 export default function DashboardPage() {
-  const router = useRouter();
-  
   const [stats, setStats] = useState<any>(null);
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,7 +33,7 @@ export default function DashboardPage() {
   const fetchDashboardData = async () => {
     setLoading(true);
     try {
-      const statsRes = await fetch("http://localhost:8001/api/bookings/stats");
+      const statsRes = await fetch(`${API}/api/bookings/stats`);
       const statsData = await statsRes.json();
       setStats(statsData);
 
@@ -45,7 +44,7 @@ export default function DashboardPage() {
       if (filter !== "All") qs.append("status", filter.toUpperCase());
       if (search) qs.append("search", search);
 
-      const listRes = await fetch(`http://localhost:8001/api/bookings?${qs.toString()}`);
+      const listRes = await fetch(`${API}/api/bookings?${qs.toString()}`);
       const listData = await listRes.json();
       
       setBookings(listData.bookings);
@@ -68,7 +67,7 @@ export default function DashboardPage() {
   const handleCancel = async (id: string) => {
     if (!confirm("Are you sure you want to cancel this booking?")) return;
     try {
-      await fetch(`http://localhost:8001/api/bookings/${id}/status`, {
+      await fetch(`${API}/api/bookings/${id}/status`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: "CANCELLED" })
@@ -83,7 +82,7 @@ export default function DashboardPage() {
     const rating = prompt("Rate provider (1-5):", "5");
     if (!rating) return;
     try {
-      await fetch(`http://localhost:8001/api/bookings/${id}/rate`, {
+      await fetch(`${API}/api/bookings/${id}/rate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ rating: parseInt(rating), review_text: "Good" })

@@ -24,8 +24,8 @@ import {
   Paintbrush,
   Menu,
   X,
-  ExternalLink,
 } from "lucide-react";
+import NavUser from "@/components/NavUser";
 
 /* ─────────────── data ─────────────── */
 
@@ -161,12 +161,7 @@ export default function LandingPage() {
           >
             Providers
           </Link>
-          <Link
-            href="/auth"
-            className="inline-flex items-center gap-2 bg-[var(--accent)] text-white text-sm font-medium px-5 py-2 rounded-lg hover:bg-[var(--accent-dark)] transition-all active:scale-[0.97] shadow-sm hover:shadow-md no-underline"
-          >
-            Sign in
-          </Link>
+          <NavUser />
         </div>
 
         {/* Mobile hamburger */}
@@ -212,12 +207,9 @@ export default function LandingPage() {
             >
               Providers
             </Link>
-            <Link
-              href="/auth"
-              className="mt-4 flex items-center justify-center gap-2 bg-[var(--accent)] text-white text-base font-medium py-3 rounded-lg hover:bg-[var(--accent-dark)] transition-all no-underline"
-            >
-              Sign in
-            </Link>
+            <div className="mt-4 flex justify-center">
+              <NavUser />
+            </div>
           </div>
         </div>
       )}
