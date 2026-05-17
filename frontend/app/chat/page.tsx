@@ -14,6 +14,7 @@ import {
   CheckCircle2,
   Loader2
 } from "lucide-react";
+import RequireAuth from "@/components/RequireAuth";
 
 interface TraceStep {
   agent_name: string;
@@ -284,12 +285,14 @@ function ChatInterface() {
 
 export default function ChatBookingPage() {
   return (
-    <Suspense fallback={
-      <div className="flex items-center justify-center min-h-screen bg-[var(--bg-primary)]">
-        <Loader2 className="animate-spin text-[var(--accent)]" size={32} />
-      </div>
-    }>
-      <ChatInterface />
-    </Suspense>
+    <RequireAuth>
+      <Suspense fallback={
+        <div className="flex items-center justify-center min-h-screen bg-[var(--bg-primary)]">
+          <Loader2 className="animate-spin text-[var(--accent)]" size={32} />
+        </div>
+      }>
+        <ChatInterface />
+      </Suspense>
+    </RequireAuth>
   );
 }

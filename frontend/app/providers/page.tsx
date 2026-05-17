@@ -20,6 +20,8 @@ import {
   ExternalLink,
   Loader2
 } from "lucide-react";
+import RequireAuth from "@/components/RequireAuth";
+import GlobalNavbar from "@/components/GlobalNavbar";
 
 export default function ProvidersPage() {
   const router = useRouter();
@@ -107,21 +109,9 @@ export default function ProvidersPage() {
   ];
 
   return (
+    <RequireAuth>
     <div className="bg-[var(--bg-primary)] min-h-screen pb-12">
-      {/* Navbar Minimal */}
-      <div className="flex items-center justify-between px-5 py-3 border-b border-[var(--border-tertiary)] sticky top-0 z-10 bg-[var(--bg-primary)]/95 backdrop-blur-md">
-        <Link href="/" className="flex items-center gap-2 no-underline group">
-          <div className="w-6 h-6 bg-[var(--accent)] rounded flex items-center justify-center text-white text-xs font-semibold group-hover:scale-105 transition-transform">
-            K
-          </div>
-          <span className="text-[13px] font-medium text-[var(--text-primary)]">
-            Khadmat AI
-          </span>
-        </Link>
-        <Link href="/dashboard" className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors no-underline">
-          My bookings
-        </Link>
-      </div>
+      <GlobalNavbar />
 
       <div className="p-5 sm:p-6 max-w-5xl mx-auto">
         {/* Page Header */}
@@ -294,5 +284,6 @@ export default function ProvidersPage() {
         </div>
       </div>
     </div>
+    </RequireAuth>
   );
 }

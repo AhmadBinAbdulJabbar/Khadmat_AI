@@ -26,6 +26,8 @@ import {
   Loader2,
   CheckCircle2
 } from "lucide-react";
+import RequireAuth from "@/components/RequireAuth";
+import GlobalNavbar from "@/components/GlobalNavbar";
 
 // Mock Data
 const SERVICES = [
@@ -492,42 +494,25 @@ function BookingForm() {
 
 export default function BookServicePage() {
   return (
-    <div className="bg-[var(--bg-primary)]">
-      {/* Navbar overlay similar to the one in page.tsx */}
-      <div className="flex items-center justify-between px-5 py-3 border-b border-[var(--border-tertiary)] sticky top-0 z-10 bg-[var(--bg-primary)]/95 backdrop-blur-md">
-        <Link href="/" className="flex items-center gap-2 no-underline group">
-          <div className="w-6 h-6 bg-[var(--accent)] rounded flex items-center justify-center text-white text-xs font-semibold group-hover:scale-105 transition-transform">
-            K
-          </div>
-          <span className="text-[13px] font-medium text-[var(--text-primary)]">
-            Khadmat AI
-          </span>
-        </Link>
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-full bg-[var(--feat-purple)] border border-[#CECBF6] flex items-center justify-center text-[10px] font-medium text-[#3C3489]">
-            AU
-          </div>
-          <span className="text-xs text-[var(--text-secondary)] hidden sm:block">
-            Ahmed Usman
-          </span>
-          <ChevronDown size={14} className="text-[var(--text-tertiary)]" />
-        </div>
-      </div>
+    <RequireAuth>
+      <div className="bg-[var(--bg-primary)]">
+        <GlobalNavbar />
 
-      <Suspense
-        fallback={
-          <div className="flex items-center justify-center min-h-[70vh]">
-            <Loader2 className="animate-spin text-[var(--accent)]" size={32} />
-          </div>
-        }
-      >
-        <BookingForm />
-      </Suspense>
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center min-h-[70vh]">
+              <Loader2 className="animate-spin text-[var(--accent)]" size={32} />
+            </div>
+          }
+        >
+          <BookingForm />
+        </Suspense>
 
       {/* Floating AI Button */}
       <Link href="/chat" className="fixed bottom-6 right-6 w-14 h-14 bg-[var(--accent)] rounded-full flex items-center justify-center text-white shadow-lg hover:bg-[var(--accent-dark)] hover:scale-105 transition-all z-50 group no-underline">
         <Sparkles size={24} className="group-hover:animate-pulse" />
       </Link>
     </div>
+    </RequireAuth>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -22,10 +22,8 @@ import {
   Shield,
   Wrench,
   Paintbrush,
-  Menu,
-  X,
 } from "lucide-react";
-import NavUser from "@/components/NavUser";
+import GlobalNavbar from "@/components/GlobalNavbar";
 
 /* ─────────────── data ─────────────── */
 
@@ -101,12 +99,10 @@ const STATS = [
 /* ─────────────── page ─────────────── */
 
 export default function LandingPage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [query, setQuery] = useState("");
   const router = useRouter();
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (query.trim()) {
       router.push(`/chat?q=${encodeURIComponent(query)}`);
@@ -115,104 +111,10 @@ export default function LandingPage() {
     }
   };
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
     <div className="flex flex-col min-h-screen">
       {/* ── Navbar ── */}
-      <nav
-        id="navbar"
-        className={`sticky top-0 z-50 flex items-center justify-between px-6 py-3.5 border-b transition-all duration-300 ${
-          scrolled
-            ? "bg-[var(--bg-primary)]/95 backdrop-blur-md border-[var(--border-primary)] shadow-sm"
-            : "bg-[var(--bg-primary)] border-[var(--border-tertiary)]"
-        }`}
-      >
-        <Link href="/" className="flex items-center gap-2 no-underline group">
-          <div className="w-8 h-8 bg-[var(--accent)] rounded-lg flex items-center justify-center text-white text-sm font-semibold group-hover:scale-105 transition-transform">
-            K
-          </div>
-          <span className="text-base font-semibold text-[var(--text-primary)]">
-            Khadmat AI
-          </span>
-        </Link>
-
-        {/* Desktop links */}
-        <div className="hidden md:flex items-center gap-6">
-          <a
-            href="#how-it-works"
-            className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors no-underline"
-          >
-            How it works
-          </a>
-          <a
-            href="#services"
-            className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors no-underline"
-          >
-            Services
-          </a>
-          <Link
-            href="/providers"
-            className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors no-underline"
-          >
-            Providers
-          </Link>
-          <NavUser />
-        </div>
-
-        {/* Mobile hamburger */}
-        <button
-          id="mobile-menu-toggle"
-          className="md:hidden flex items-center justify-center w-9 h-9 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen ? (
-            <X size={20} className="text-[var(--text-primary)]" />
-          ) : (
-            <Menu size={20} className="text-[var(--text-primary)]" />
-          )}
-        </button>
-      </nav>
-
-      {/* Mobile menu overlay */}
-      {mobileMenuOpen && (
-        <div
-          id="mobile-menu"
-          className="md:hidden fixed inset-0 top-[57px] z-40 bg-[var(--bg-primary)] border-t border-[var(--border-tertiary)] animate-fade-in"
-        >
-          <div className="flex flex-col p-6 gap-2">
-            <a
-              href="#how-it-works"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-base py-3 px-4 rounded-lg text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)] transition-all no-underline"
-            >
-              How it works
-            </a>
-            <a
-              href="#services"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-base py-3 px-4 rounded-lg text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)] transition-all no-underline"
-            >
-              Services
-            </a>
-            <Link
-              href="/providers"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-base py-3 px-4 rounded-lg text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)] transition-all no-underline"
-            >
-              Providers
-            </Link>
-            <div className="mt-4 flex justify-center">
-              <NavUser />
-            </div>
-          </div>
-        </div>
-      )}
+      <GlobalNavbar />
 
       {/* ── Hero ── */}
       <section id="hero" className="px-6 pt-16 pb-12 md:pt-20 md:pb-16 text-center border-b border-[var(--border-tertiary)]">

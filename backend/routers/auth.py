@@ -43,36 +43,31 @@ async def signup(req: SignupRequest):
         raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
 
     try:
-        response = supabase.auth.sign_up(
-            {
-                "email": req.email,
-                "password": req.password,
-                "options": {
-                    "data": {
-                        "first_name": req.first_name,
-                        "last_name": req.last_name,
-                        "phone": req.phone,
-                        "city": req.city,
-                        "role": req.role,
-                        "professions": req.professions,
-                        "experience": req.experience,
-                        "price_range": req.price_range,
-                    }
-                },
-            }
-        )
+        # Use admin API so the account is pre-confirmed — no email sent, no rate limit
+        response = supabase.auth.admin.create_user({
+            "email": req.email,
+            "password": req.password,
+            "email_confirm": True,
+            "user_metadata": {
+                "first_name": req.first_name,
+                "last_name": req.last_name,
+                "phone": req.phone,
+                "city": req.city,
+                "role": req.role,
+                "professions": req.professions,
+                "experience": req.experience,
+                "price_range": req.price_range,
+            },
+        })
     except AuthApiError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        msg = str(e)
+        if "already been registered" in msg or "already exists" in msg.lower():
+            raise HTTPException(status_code=409, detail="An account with this email already exists.")
+        raise HTTPException(status_code=400, detail=msg)
 
     user = response.user
-
-    # Supabase returns identities=[] when the email already exists
-    if user and not user.identities:
-        raise HTTPException(status_code=409, detail="An account with this email already exists.")
-
     return {
         "success": True,
-        "message": "Account created. Please check your email and click the confirmation link before logging in.",
         "user": {
             "id": str(user.id),
             "email": user.email,

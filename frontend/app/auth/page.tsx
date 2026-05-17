@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Home, Wrench, ShieldCheck } from "lucide-react";
-import { login, signup } from "@/lib/api";
 import { createClient } from "@/lib/supabase";
 
 const PROFESSIONS = ["AC Technician","Plumber","Electrician","Tutor","Cleaner","Carpenter","Painter","Security","Other"];
@@ -46,18 +45,27 @@ export default function AuthPage() {
     setSuccess("");
   };
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setLoading(true);
     try {
-      const result = await login({ email_or_phone: loginEmail, password: loginPassword }) as {
-        token: string;
-        user: { id: string; email: string; role: string; name: string };
-      };
-      localStorage.setItem("khadmat_token", result.token);
-      localStorage.setItem("khadmat_user", JSON.stringify(result.user));
-      router.push("/dashboard");
+      const supabase = createClient();
+      const { data, error: sbError } = await supabase.auth.signInWithPassword({
+        email: loginEmail,
+        password: loginPassword,
+      });
+      if (sbError) throw new Error(sbError.message);
+      const user = data.user!;
+      const name = `${user.user_metadata?.first_name ?? ""} ${user.user_metadata?.last_name ?? ""}`.trim() || user.email || "";
+      localStorage.setItem("khadmat_token", data.session!.access_token);
+      localStorage.setItem("khadmat_user", JSON.stringify({
+        id: user.id,
+        email: user.email,
+        name,
+        role: user.user_metadata?.role ?? "customer",
+      }));
+      router.push("/");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Login failed. Please try again.");
     } finally {
@@ -65,25 +73,52 @@ export default function AuthPage() {
     }
   };
 
-  const handleSignup = async (e: React.FormEvent) => {
+  const handleSignup = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setSuccess("");
     setLoading(true);
+    const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
     try {
-      await signup({
-        first_name: firstName,
-        last_name: lastName,
-        email: signupEmail,
-        phone,
-        city,
-        password: signupPassword,
-        role,
-        professions: selectedProfs.length ? selectedProfs : null,
-        experience: role === "worker" ? experience : null,
-        price_range: role === "worker" ? priceRange : null,
+      // Step 1: Create user via backend admin API (pre-confirmed, no email sent)
+      const res = await fetch(`${API}/api/auth/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          email: signupEmail,
+          phone,
+          city,
+          password: signupPassword,
+          role,
+          professions: selectedProfs.length ? selectedProfs : null,
+          experience: role === "worker" ? experience : null,
+          price_range: role === "worker" ? priceRange : null,
+        }),
       });
-      setSuccess("Account created! Check your email for a confirmation link, then sign in.");
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.detail || "Signup failed");
+      }
+
+      // Step 2: Sign in immediately — account is already confirmed
+      const supabase = createClient();
+      const { data, error: sbError } = await supabase.auth.signInWithPassword({
+        email: signupEmail,
+        password: signupPassword,
+      });
+      if (sbError) throw new Error(sbError.message);
+
+      const name = `${firstName} ${lastName}`.trim();
+      localStorage.setItem("khadmat_token", data.session!.access_token);
+      localStorage.setItem("khadmat_user", JSON.stringify({
+        id: data.user!.id,
+        email: data.user!.email,
+        name,
+        role,
+      }));
+      router.push("/");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Signup failed. Please try again.");
     } finally {

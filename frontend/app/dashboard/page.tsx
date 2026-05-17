@@ -17,6 +17,8 @@ import {
   ArrowRight,
   Loader2
 } from "lucide-react";
+import RequireAuth from "@/components/RequireAuth";
+import GlobalNavbar from "@/components/GlobalNavbar";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -94,26 +96,9 @@ export default function DashboardPage() {
   };
 
   return (
+    <RequireAuth>
     <div className="bg-[var(--bg-primary)] min-h-screen pb-12">
-      {/* Navbar Minimal */}
-      <div className="flex items-center justify-between px-5 py-3 border-b border-[var(--border-tertiary)] sticky top-0 z-10 bg-[var(--bg-primary)]/95 backdrop-blur-md">
-        <Link href="/" className="flex items-center gap-2 no-underline group">
-          <div className="w-6 h-6 bg-[var(--accent)] rounded flex items-center justify-center text-white text-xs font-semibold group-hover:scale-105 transition-transform">
-            K
-          </div>
-          <span className="text-[13px] font-medium text-[var(--text-primary)]">
-            Khadmat AI
-          </span>
-        </Link>
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-full bg-[var(--feat-purple)] border border-[#CECBF6] flex items-center justify-center text-[10px] font-medium text-[#3C3489]">
-            AU
-          </div>
-          <span className="text-xs text-[var(--text-secondary)] hidden sm:block">
-            Ahmed Usman
-          </span>
-        </div>
-      </div>
+      <GlobalNavbar />
 
       <div className="p-5 sm:p-6 max-w-3xl mx-auto mt-4">
         {/* Page Header */}
@@ -290,5 +275,6 @@ export default function DashboardPage() {
         )}
       </div>
     </div>
+    </RequireAuth>
   );
 }
