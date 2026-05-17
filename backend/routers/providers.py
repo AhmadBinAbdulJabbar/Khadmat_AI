@@ -203,37 +203,75 @@ async def provider_dashboard(provider_id: str):
     }
 
 
+@router.get("/provider/jobs/stats")
+async def provider_jobs_stats(provider_id: str):
+    return {
+        "new_requests": 2,
+        "confirmed_today": 3,
+        "total_completed": 212
+    }
+
+
 @router.get("/provider/jobs")
-async def provider_jobs(provider_id: str, status: Optional[str] = None, limit: int = 5):
-    return [
+async def provider_jobs(provider_id: str, status: Optional[str] = None, search: Optional[str] = None, limit: int = 5):
+    jobs = [
         {
             "id": "req_1",
             "title": "AC service request",
             "type": "new",
             "customer": "Ahmed Usman",
+            "customerInitials": "AU",
+            "phone": "0300-xxx-xxxx",
             "location": "G-13/2",
             "time": "Today 10:00 AM",
-            "price": "PKR 1,200 est."
+            "price": "PKR 1,200 est.",
+            "dateLabel": "Est. price",
+            "avatarBg": "#EEEDFE",
+            "avatarColor": "#3C3489"
         },
         {
             "id": "req_2",
             "title": "AC gas refill",
             "type": "confirmed",
             "customer": "Sara Khan",
+            "customerInitials": "SK",
+            "phone": "0302-xxx-xxxx",
             "location": "G-13/4",
             "time": "Today 2:00 PM",
-            "price": "PKR 1,500"
+            "price": "PKR 1,500",
+            "dateLabel": "Confirmed",
+            "avatarBg": "#FAEEDA",
+            "avatarColor": "#633806"
         },
         {
             "id": "req_3",
             "title": "AC installation",
             "type": "completed",
             "customer": "Bilal Ahmed",
+            "customerInitials": "BA",
+            "phone": "completed",
             "location": "F-10/1",
             "time": "Yesterday 11:00 AM",
-            "price": "PKR 2,200"
+            "price": "PKR 2,200",
+            "dateLabel": "Paid",
+            "avatarBg": "#E6F1FB",
+            "avatarColor": "#185FA5"
         }
     ]
+    
+    if status and status.lower() != "all":
+        jobs = [j for j in jobs if j["type"] == status.lower()]
+    
+    if search:
+        search_lower = search.lower()
+        jobs = [j for j in jobs if search_lower in j["customer"].lower()]
+        
+    return jobs[:limit]
+
+
+@router.post("/provider/jobs/{id}/request-review")
+async def request_review(id: str):
+    return {"success": True, "message": "Review requested"}
 
 
 @router.get("/provider/notifications/count")
