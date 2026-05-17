@@ -16,8 +16,4 @@ SERVICES_LIST = [
 
 @router.get("/services")
 async def get_services():
-    """
-    Returns list of available service categories.
-    Future: SELECT DISTINCT category FROM providers
-    """
     return SERVICES_LIST

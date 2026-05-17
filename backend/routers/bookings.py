@@ -1,29 +1,13 @@
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
 import uuid
+
+from models.bookings import BookingRequest, BookingStatusUpdate, RatingRequest
 
 router = APIRouter()
 
-class BookingRequest(BaseModel):
-    service_type: str
-    description: str
-    location: str
-    date: str
-    time: str
-    phone: str
-
-class BookingStatusUpdate(BaseModel):
-    status: str
-
-class RatingRequest(BaseModel):
-    rating: int
-    review_text: str
 
 @router.post("/bookings")
 async def create_booking(req: BookingRequest):
-    """
-    MVP: Create a new manual booking
-    """
     if not req.service_type or not req.location or not req.phone:
         raise HTTPException(status_code=400, detail="Missing required fields")
 
@@ -34,15 +18,24 @@ async def create_booking(req: BookingRequest):
             "id": booking_id,
             "service_type": req.service_type,
             "status": "pending",
-            "message": "Booking received! An AI agent is finding the best provider for you."
-        }
+            "message": "Booking received! An AI agent is finding the best provider for you.",
+        },
     }
+
+
+@router.get("/bookings/stats")
+async def booking_stats(user_id: str = None):
+    return {
+        "total": 12,
+        "confirmed": 3,
+        "completed": 8,
+        "cancelled": 1,
+        "pending": 0,
+    }
+
 
 @router.get("/bookings")
 async def list_bookings(user_id: str = None, status: str = None, page: int = 1, limit: int = 4, search: str = None):
-    """
-    MVP: List user bookings with pagination and filters
-    """
     return {
         "bookings": [
             {
@@ -55,7 +48,7 @@ async def list_bookings(user_id: str = None, status: str = None, page: int = 1, 
                 "scheduled_time": "Thu 21 May 2026 10:00 AM",
                 "status": "CONFIRMED",
                 "price_estimate": "PKR 800-1500",
-                "reminder": "Reminder set 9 AM"
+                "reminder": "Reminder set 9 AM",
             },
             {
                 "id": "b2",
@@ -66,7 +59,7 @@ async def list_bookings(user_id: str = None, status: str = None, page: int = 1, 
                 "city": "Karachi",
                 "scheduled_time": "Mon 12 May 2026 11:00 AM",
                 "status": "COMPLETED",
-                "price_estimate": "PKR 650"
+                "price_estimate": "PKR 650",
             },
             {
                 "id": "b3",
@@ -77,7 +70,7 @@ async def list_bookings(user_id: str = None, status: str = None, page: int = 1, 
                 "city": "Islamabad",
                 "scheduled_time": "Fri 9 May 2026 2:00 PM",
                 "status": "COMPLETED",
-                "price_estimate": "PKR 900"
+                "price_estimate": "PKR 900",
             },
             {
                 "id": "b4",
@@ -88,33 +81,18 @@ async def list_bookings(user_id: str = None, status: str = None, page: int = 1, 
                 "city": "Lahore",
                 "scheduled_time": "Tue 6 May 2026 9:00 AM",
                 "status": "CANCELLED",
-                "price_estimate": "PKR 600-1200"
-            }
+                "price_estimate": "PKR 600-1200",
+            },
         ],
         "total": 12,
         "page": page,
         "limit": limit,
-        "pages": 3
+        "pages": 3,
     }
 
-@router.get("/bookings/stats")
-async def booking_stats(user_id: str = None):
-    """
-    MVP: Get booking stats
-    """
-    return {
-        "total": 12,
-        "confirmed": 3,
-        "completed": 8,
-        "cancelled": 1,
-        "pending": 0
-    }
 
 @router.get("/bookings/{id}")
 async def get_booking(id: str):
-    """
-    MVP: Get booking by ID
-    """
     return {
         "id": id,
         "booking_ref": f"BK-20260521-{str(uuid.uuid4())[:3].upper()}",
@@ -127,7 +105,7 @@ async def get_booking(id: str):
             "city": "Islamabad",
             "rating": 4.7,
             "phone": "0300-1234567",
-            "distance": 2.1
+            "distance": 2.1,
         },
         "scheduled_time": "2026-05-21T10:00:00",
         "area": "G-13",
@@ -135,28 +113,17 @@ async def get_booking(id: str):
         "price_estimate": "PKR 800 – 1,500",
         "reminder": {
             "trigger_at": "2026-05-21T09:00:00",
-            "message": "Your AC technician appointment is in 1 hour"
+            "message": "Your AC technician appointment is in 1 hour",
         },
-        "created_at": "2026-05-20T12:00:00"
+        "created_at": "2026-05-20T12:00:00",
     }
+
 
 @router.patch("/bookings/{id}/status")
 async def update_booking_status(id: str, req: BookingStatusUpdate):
-    """
-    MVP: Update booking status
-    """
-    return {
-        "success": True,
-        "booking_id": id,
-        "status": req.status
-    }
+    return {"success": True, "booking_id": id, "status": req.status}
+
 
 @router.post("/bookings/{id}/rate")
 async def rate_booking(id: str, req: RatingRequest):
-    """
-    MVP: Rate a completed booking
-    """
-    return {
-        "success": True,
-        "message": "Rating submitted successfully"
-    }
+    return {"success": True, "message": "Rating submitted successfully"}

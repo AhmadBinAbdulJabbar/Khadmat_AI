@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api import stats, services, auth, bookings, process, providers
+from routers import stats, services, auth, bookings, process, providers
 
 app = FastAPI(
     title="Khadmat AI API",

@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Query
-from typing import Optional, List
+from fastapi import APIRouter
+from typing import Optional
 
 router = APIRouter()
 
@@ -20,7 +20,7 @@ MOCK_PROVIDERS = [
         "featured": True,
         "initials": "CT",
         "color_bg": "#E1F5EE",
-        "color_text": "#0F6E56"
+        "color_text": "#0F6E56",
     },
     {
         "id": "p2",
@@ -38,7 +38,7 @@ MOCK_PROVIDERS = [
         "featured": False,
         "initials": "RE",
         "color_bg": "#EEEDFE",
-        "color_text": "#534AB7"
+        "color_text": "#534AB7",
     },
     {
         "id": "p3",
@@ -56,7 +56,7 @@ MOCK_PROVIDERS = [
         "featured": False,
         "initials": "AA",
         "color_bg": "#E6F1FB",
-        "color_text": "#185FA5"
+        "color_text": "#185FA5",
     },
     {
         "id": "p4",
@@ -74,7 +74,7 @@ MOCK_PROVIDERS = [
         "featured": False,
         "initials": "MP",
         "color_bg": "#FAEEDA",
-        "color_text": "#854F0B"
+        "color_text": "#854F0B",
     },
     {
         "id": "p5",
@@ -92,7 +92,7 @@ MOCK_PROVIDERS = [
         "featured": False,
         "initials": "KC",
         "color_bg": "#FAECE7",
-        "color_text": "#993C1D"
+        "color_text": "#993C1D",
     },
     {
         "id": "p6",
@@ -110,13 +110,15 @@ MOCK_PROVIDERS = [
         "featured": False,
         "initials": "HP",
         "color_bg": "#EAF3DE",
-        "color_text": "#3B6D11"
-    }
+        "color_text": "#3B6D11",
+    },
 ]
+
 
 @router.get("/providers/cities")
 async def get_cities():
     return list(set(p["city"] for p in MOCK_PROVIDERS))
+
 
 @router.get("/providers/areas")
 async def get_areas(city: Optional[str] = None):
@@ -126,9 +128,11 @@ async def get_areas(city: Optional[str] = None):
         areas = list(set(p["area"] for p in MOCK_PROVIDERS))
     return areas
 
+
 @router.get("/providers")
 async def list_providers():
     return MOCK_PROVIDERS
+
 
 @router.get("/providers/search")
 async def search_providers(
@@ -137,34 +141,35 @@ async def search_providers(
     area: Optional[str] = None,
     q: Optional[str] = None,
     sort: str = "Rating",
-    available_only: bool = False
+    available_only: bool = False,
 ):
-    results = [p for p in MOCK_PROVIDERS]
-    
+    results = list(MOCK_PROVIDERS)
+
     if service and service.lower() != "all":
         results = [p for p in results if p["category"].lower() == service.lower()]
-    
+
     if city and city.lower() != "all cities":
         results = [p for p in results if p["city"].lower() == city.lower()]
-        
+
     if area and area.lower() != "all areas":
         results = [p for p in results if p["area"].lower() == area.lower()]
-        
+
     if q:
         q_low = q.lower()
         results = [p for p in results if q_low in p["name"].lower() or q_low in p["category"].lower()]
-        
+
     if available_only:
         results = [p for p in results if p["is_available"]]
-        
+
     if sort == "Distance":
         results.sort(key=lambda x: x["distance"])
     elif sort == "Price":
         results.sort(key=lambda x: x["price_min"])
     else:
         results.sort(key=lambda x: x["rating"], reverse=True)
-        
+
     return results
+
 
 @router.get("/providers/{id}")
 async def get_provider(id: str):
