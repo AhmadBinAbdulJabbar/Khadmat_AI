@@ -116,7 +116,7 @@ export default function NavUser() {
           </div>
           <div className="py-1">
             <Link
-              href="/dashboard"
+              href="/customer/dashboard"
               onClick={() => setOpen(false)}
               className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)] transition-colors no-underline"
             >

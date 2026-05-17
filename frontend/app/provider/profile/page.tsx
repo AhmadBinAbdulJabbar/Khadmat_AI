@@ -5,7 +5,6 @@ import { User, Star, Upload, UserCircle, Briefcase, MapPin, Check, Plus, X } fro
 
 export default function ProviderProfilePage() {
   const [professions, setProfessions] = useState(["AC Technician"]);
-  const [professions, setProfessions] = useState(["AC Technician"]);
   const allProfessions = ["AC Technician", "Plumber", "Electrician", "Carpenter", "Painter", "Cleaner", "Other"];
 
   const [areas, setAreas] = useState(["G-13", "G-10", "F-10", "F-8"]);
