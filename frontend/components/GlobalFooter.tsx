@@ -6,7 +6,7 @@ import { ExternalLink } from "lucide-react";
 export default function GlobalFooter() {
   const pathname = usePathname();
   
-  if (pathname.startsWith("/auth") || pathname.startsWith("/chat")) {
+  if (pathname.startsWith("/auth") || pathname.startsWith("/chat") || pathname.includes("/ai-chat")) {
     return null;
   }
 

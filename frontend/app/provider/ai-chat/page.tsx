@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Sparkles, Mic, ArrowUp, User as UserIcon, MapPin, Clock, CheckCircle2 } from "lucide-react";
+import { ViewDetailsConfirmedModal } from "../jobs/Modals";
 
 interface Message {
   id: string;
@@ -22,6 +23,7 @@ export default function ProviderAIChatPage() {
     }
   ]);
   const [input, setInput] = useState("");
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -84,7 +86,7 @@ export default function ProviderAIChatPage() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[var(--bg-primary)] relative">
+    <div className="flex flex-col h-[calc(100vh-52px)] bg-[var(--bg-primary)] relative">
       <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-tertiary)] bg-[var(--bg-primary)]">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-[#1D9E75] rounded-lg flex items-center justify-center text-white shrink-0">
@@ -148,7 +150,7 @@ export default function ProviderAIChatPage() {
                       </div>
                       <div className="flex gap-1.5">
                         <button className="bg-[#1D9E75] text-white border-none px-3 py-1.5 rounded-md text-[11px] font-medium cursor-pointer hover:bg-[#0F6E56]">✓ Accept</button>
-                        <button className="bg-[var(--bg-secondary)] text-[var(--text-secondary)] border border-[var(--border-tertiary)] px-3 py-1.5 rounded-md text-[11px] cursor-pointer hover:bg-[var(--bg-primary)]">View details</button>
+                        <button onClick={() => setIsDetailsOpen(true)} className="bg-[var(--bg-secondary)] text-[var(--text-secondary)] border border-[var(--border-tertiary)] px-3 py-1.5 rounded-md text-[11px] cursor-pointer hover:bg-[var(--bg-primary)]">View details</button>
                       </div>
                     </div>
 
@@ -165,7 +167,7 @@ export default function ProviderAIChatPage() {
                       </div>
                       <div className="flex gap-1.5">
                         <button className="bg-[#1D9E75] text-white border-none px-3 py-1.5 rounded-md text-[11px] font-medium cursor-pointer hover:bg-[#0F6E56]">✓ Accept</button>
-                        <button className="bg-[var(--bg-secondary)] text-[var(--text-secondary)] border border-[var(--border-tertiary)] px-3 py-1.5 rounded-md text-[11px] cursor-pointer hover:bg-[var(--bg-primary)]">View details</button>
+                        <button onClick={() => setIsDetailsOpen(true)} className="bg-[var(--bg-secondary)] text-[var(--text-secondary)] border border-[var(--border-tertiary)] px-3 py-1.5 rounded-md text-[11px] cursor-pointer hover:bg-[var(--bg-primary)]">View details</button>
                       </div>
                     </div>
                   </div>
@@ -235,6 +237,7 @@ export default function ProviderAIChatPage() {
           <ArrowUp size={18} />
         </button>
       </div>
+      <ViewDetailsConfirmedModal isOpen={isDetailsOpen} onClose={() => setIsDetailsOpen(false)} />
     </div>
   );
 }

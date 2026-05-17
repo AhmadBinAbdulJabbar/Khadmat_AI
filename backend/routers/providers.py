@@ -600,3 +600,34 @@ async def provider_ai_chat(req: ProviderAIChatRequest):
             "type": "text",
             "message": "Main samajh nahi paya. Kya aap tafseel se bta sakte hain?"
         }
+
+@router.post("/provider/jobs/{job_id}/request-review")
+async def request_review(job_id: str, channel: str = "wa", timing: str = "now"):
+    return {
+        "success": True,
+        "message": f"Review request for job {job_id} sent via {channel} at {timing}"
+    }
+
+@router.get("/provider/jobs/{job_id}/details")
+async def get_job_details(job_id: str):
+    # Mock data that would populate ViewDetailsConfirmedModal or ViewCompletedJobModal
+    return {
+        "success": True,
+        "job": {
+            "id": job_id,
+            "title": "AC service — filter clean",
+            "status": "confirmed",
+            "customer": {
+                "name": "Sara Khan",
+                "phone": "0302-xxx-xxxx",
+                "rating": 4.9,
+                "bookings": 7
+            },
+            "location": "G-13/4, Islamabad",
+            "time": "Today · 2:00 PM",
+            "price": "PKR 1,500",
+            "platform_fee": 75,
+            "net_earning": 1425,
+            "notes": "AC filter needs cleaning. Has been 6 months since last service."
+        }
+    }

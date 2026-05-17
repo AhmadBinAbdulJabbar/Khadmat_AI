@@ -1,0 +1,178 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.faux{background:rgba(0,0,0,0.7);display:flex;align-items:flex-start;justify-content:center;padding:16px;min-height:640px}
+.modal{background:#1a1a1a;border:0.5px solid #2a2a2a;border-radius:var(--border-radius-lg);width:100%;max-width:480px;overflow:hidden}
+.mh{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:0.5px solid #2a2a2a;background:#151515}
+.mh-left{display:flex;align-items:center;gap:10px}
+.mh-icon{width:36px;height:36px;border-radius:8px;background:#2a1e0d;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.mh-title{font-size:15px;font-weight:500;color:#fff}
+.mh-sub{font-size:11px;color:#666;margin-top:1px}
+.close-btn{width:30px;height:30px;border:0.5px solid #2a2a2a;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#666;font-size:16px;background:#111}
+.close-btn:hover{color:#ccc}
+.mbody{padding:18px}
+.job-recap{display:flex;align-items:center;gap:12px;background:#111;border:0.5px solid #222;border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:16px}
+.jr-icon{width:34px;height:34px;border-radius:8px;background:#1a2a0d;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.jr-info{flex:1}
+.jr-service{font-size:13px;font-weight:500;color:#ccc}
+.jr-meta{font-size:11px;color:#555;margin-top:2px;display:flex;gap:8px}
+.earned{font-size:13px;font-weight:500;color:#1D9E75;text-align:right}
+.section-label{font-size:11px;color:#555;margin-bottom:8px;letter-spacing:0.03em}
+.channel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:16px}
+.ch-card{background:#111;border:0.5px solid #222;border-radius:var(--border-radius-md);padding:10px 8px;text-align:center;cursor:pointer}
+.ch-card:hover{border-color:#333}
+.ch-card.on{border:1.5px solid #1D9E75;background:#0d2e1e}
+.ch-icon{font-size:20px;color:#555;display:block;margin-bottom:5px}
+.ch-card.on .ch-icon{color:#1D9E75}
+.ch-label{font-size:11px;color:#888;font-weight:500}
+.ch-card.on .ch-label{color:#1D9E75}
+.ch-sub{font-size:10px;color:#555;margin-top:2px}
+.msg-preview{background:#111;border:0.5px solid #1D9E75;border-radius:var(--border-radius-md);padding:14px;margin-bottom:16px;position:relative}
+.msg-corner{position:absolute;top:-1px;left:14px;font-size:10px;background:#1D9E75;color:#fff;padding:2px 8px;border-radius:0 0 6px 6px;font-weight:500}
+.msg-channel-icon{display:flex;align-items:center;gap:6px;font-size:11px;color:#1D9E75;margin-bottom:8px;font-weight:500}
+.msg-text{font-size:12px;color:#888;line-height:1.65}
+.msg-highlight{color:#1D9E75;font-weight:500}
+.edit-msg{display:flex;align-items:center;gap:5px;font-size:11px;color:#555;margin-top:8px;cursor:pointer}
+.edit-msg:hover{color:#1D9E75}
+.timing-row{display:flex;gap:6px;margin-bottom:16px}
+.timing-opt{flex:1;background:#111;border:0.5px solid #222;border-radius:var(--border-radius-md);padding:9px 8px;text-align:center;cursor:pointer}
+.timing-opt:hover{border-color:#333}
+.timing-opt.on{border:1.5px solid #1D9E75;background:#0d2e1e}
+.timing-label{font-size:12px;font-weight:500;color:#888}
+.timing-opt.on .timing-label{color:#1D9E75}
+.timing-sub{font-size:10px;color:#555;margin-top:2px}
+.timing-opt.on .timing-sub{color:#9FE1CB}
+.review-impact{background:#2a1e0d;border:0.5px solid #854F0B;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:16px;display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#EF9F27;line-height:1.55}
+.stats-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:16px}
+.sm{background:#111;border:0.5px solid #222;border-radius:var(--border-radius-md);padding:8px;text-align:center}
+.sm-val{font-size:14px;font-weight:500;color:#ccc}
+.sm-label{font-size:10px;color:#555;margin-top:2px}
+.mfooter{display:flex;gap:8px;padding:14px 18px;border-top:0.5px solid #2a2a2a;background:#151515}
+.f-primary{flex:2;background:#1D9E75;color:#fff;border:none;padding:11px;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.f-primary:hover{background:#0F6E56}
+.f-secondary{flex:1;background:#111;color:#888;border:0.5px solid #2a2a2a;padding:11px;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer}
+.f-secondary:hover{color:#ccc;border-color:#333}
+.sent-state{display:none;text-align:center;padding:24px 18px}
+.sent-state.show{display:block}
+.sent-icon{width:56px;height:56px;background:#0d2e1e;border:0.5px solid #1D9E75;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:24px;color:#1D9E75}
+.sent-title{font-size:15px;font-weight:500;color:#fff;margin-bottom:5px}
+.sent-sub{font-size:13px;color:#666;line-height:1.6}
+</style>
+<h2 class="sr-only">Request review modal for provider to send review request to customer via WhatsApp, SMS or in-app</h2>
+<div class="faux">
+<div class="modal">
+  <div class="mh">
+    <div class="mh-left">
+      <div class="mh-icon"><i class="ti ti-star" style="color:#EF9F27" aria-hidden="true"></i></div>
+      <div>
+        <div class="mh-title">Request a review</div>
+        <div class="mh-sub">Ask Bilal Ahmed to rate your service</div>
+      </div>
+    </div>
+    <div class="close-btn"><i class="ti ti-x" aria-hidden="true"></i></div>
+  </div>
+
+  <div class="mbody" id="main-body">
+    <div class="job-recap">
+      <div class="jr-icon"><i class="ti ti-air-conditioning" style="color:#639922" aria-hidden="true"></i></div>
+      <div class="jr-info">
+        <div class="jr-service">AC installation (split unit)</div>
+        <div class="jr-meta"><span>Bilal Ahmed</span><span>F-10/1</span><span>Yesterday 11:00 AM</span></div>
+      </div>
+      <div class="earned">PKR 2,090</div>
+    </div>
+
+    <div class="stats-mini">
+      <div class="sm"><div class="sm-val" style="color:#EF9F27">4.7</div><div class="sm-label">Your avg rating</div></div>
+      <div class="sm"><div class="sm-val">212</div><div class="sm-label">Total reviews</div></div>
+      <div class="sm"><div class="sm-val" style="color:#1D9E75">+0.1</div><div class="sm-label">5★ adds to avg</div></div>
+    </div>
+
+    <div class="review-impact">
+      <i class="ti ti-info-circle" style="font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i>
+      Providers with 50+ reviews get <strong style="color:#EF9F27">2× more booking requests</strong>. A 5★ from Bilal would raise your average to 4.71.
+    </div>
+
+    <div class="section-label">SEND REVIEW REQUEST VIA</div>
+    <div class="channel-grid">
+      <div class="ch-card on" id="ch-wa" onclick="selChannel('wa')">
+        <i class="ti ti-brand-whatsapp ch-icon" aria-hidden="true"></i>
+        <div class="ch-label">WhatsApp</div>
+        <div class="ch-sub">0300-xxx-xxxx</div>
+      </div>
+      <div class="ch-card" id="ch-sms" onclick="selChannel('sms')">
+        <i class="ti ti-message ch-icon" aria-hidden="true"></i>
+        <div class="ch-label">SMS</div>
+        <div class="ch-sub">Text message</div>
+      </div>
+      <div class="ch-card" id="ch-app" onclick="selChannel('app')">
+        <i class="ti ti-bell ch-icon" aria-hidden="true"></i>
+        <div class="ch-label">In-app</div>
+        <div class="ch-sub">Push notification</div>
+      </div>
+    </div>
+
+    <div class="section-label">MESSAGE PREVIEW</div>
+    <div class="msg-preview">
+      <div class="msg-corner">WhatsApp preview</div>
+      <div class="msg-channel-icon"><i class="ti ti-brand-whatsapp" style="font-size:14px" aria-hidden="true"></i>Message from Khadmat AI</div>
+      <div class="msg-text" id="msg-text">
+        Assalam alaikum <span class="msg-highlight">Bilal bhai</span>! Kal <span class="msg-highlight">AC installation</span> ka kaam complete hua. Agar service aapko pasand aayi ho toh 2 minute mein review dein — isse Ali bhai ko future customers milnay mein madad hogi.<br><br>
+        Review dein yahan: <span class="msg-highlight">khadmat.ai/review/BK-20250520-011</span>
+      </div>
+      <div class="edit-msg" onclick=""><i class="ti ti-edit" style="font-size:12px" aria-hidden="true"></i>Personalise message</div>
+    </div>
+
+    <div class="section-label">WHEN TO SEND</div>
+    <div class="timing-row">
+      <div class="timing-opt on" onclick="selTiming(this)">
+        <div class="timing-label">Now</div>
+        <div class="timing-sub">Send immediately</div>
+      </div>
+      <div class="timing-opt" onclick="selTiming(this)">
+        <div class="timing-label">In 1 hour</div>
+        <div class="timing-sub">3:00 PM today</div>
+      </div>
+      <div class="timing-opt" onclick="selTiming(this)">
+        <div class="timing-label">Tomorrow 9 AM</div>
+        <div class="timing-sub">Morning reminder</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sent-state" id="sent-state">
+    <div class="sent-icon"><i class="ti ti-send" aria-hidden="true"></i></div>
+    <div class="sent-title">Review request sent!</div>
+    <div class="sent-sub">Bilal Ahmed will receive your WhatsApp message shortly. You'll be notified when they leave a review.</div>
+    <div style="margin-top:16px;padding:10px 14px;background:#111;border:0.5px solid #222;border-radius:var(--border-radius-md);font-size:12px;color:#666;text-align:left">
+      <div style="color:#ccc;font-weight:500;margin-bottom:4px">What happens next?</div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div style="display:flex;gap:8px;align-items:center"><i class="ti ti-clock" style="color:#1D9E75;font-size:13px;flex-shrink:0" aria-hidden="true"></i>Bilal receives WhatsApp now</div>
+        <div style="display:flex;gap:8px;align-items:center"><i class="ti ti-star" style="color:#EF9F27;font-size:13px;flex-shrink:0" aria-hidden="true"></i>They tap the link to rate you</div>
+        <div style="display:flex;gap:8px;align-items:center"><i class="ti ti-bell" style="color:#1D9E75;font-size:13px;flex-shrink:0" aria-hidden="true"></i>You get notified when review is posted</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mfooter" id="footer-btns">
+    <button class="f-secondary">Skip for now</button>
+    <button class="f-primary" onclick="sendRequest()"><i class="ti ti-send" style="font-size:14px" aria-hidden="true"></i>Send review request</button>
+  </div>
+</div>
+</div>
+<script>
+function selChannel(id){
+  ['wa','sms','app'].forEach(c=>{
+    document.getElementById('ch-'+c).className='ch-card'+(c===id?' on':'');
+  });
+  var labels={'wa':'WhatsApp','sms':'SMS','app':'in-app notification'};
+  document.querySelector('.msg-corner').textContent=labels[id]+' preview';
+  document.querySelector('.msg-channel-icon').innerHTML='<i class="ti ti-'+(id==='wa'?'brand-whatsapp':id==='sms'?'message':'bell')+'" style="font-size:14px" aria-hidden="true"></i>Message from Khadmat AI';
+}
+function selTiming(el){document.querySelectorAll('.timing-opt').forEach(t=>t.className='timing-opt');el.className='timing-opt on'}
+function sendRequest(){
+  document.getElementById('main-body').style.display='none';
+  document.getElementById('sent-state').className='sent-state show';
+  document.getElementById('footer-btns').innerHTML='<button style="width:100%;background:#1D9E75;color:#fff;border:none;padding:11px;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;cursor:pointer">Close</button>';
+}
+</script>

@@ -4,8 +4,7 @@ import { useState } from "react";
 import { User, Star, Upload, UserCircle, Briefcase, MapPin, Check, Plus, X } from "lucide-react";
 
 export default function ProviderProfilePage() {
-  const [activeTab, setActiveTab] = useState<"profile" | "reviews">("profile");
-
+  const [professions, setProfessions] = useState(["AC Technician"]);
   const [professions, setProfessions] = useState(["AC Technician"]);
   const allProfessions = ["AC Technician", "Plumber", "Electrician", "Carpenter", "Painter", "Cleaner", "Other"];
 
@@ -29,27 +28,7 @@ export default function ProviderProfilePage() {
 
   return (
     <div className="flex flex-col h-full bg-[var(--bg-primary)]">
-      <div className="flex border-b border-[var(--border-tertiary)] bg-[var(--bg-secondary)] shrink-0">
-        <button
-          onClick={() => setActiveTab("profile")}
-          className={`px-5 py-3 text-[13px] flex items-center gap-1.5 transition-colors cursor-pointer border-b-2 ${
-            activeTab === "profile" ? "text-[#1D9E75] border-[#1D9E75] font-medium bg-[var(--bg-primary)]" : "text-[var(--text-secondary)] border-transparent hover:text-[var(--text-primary)]"
-          }`}
-        >
-          <User size={14} /> Profile
-        </button>
-        <button
-          onClick={() => setActiveTab("reviews")}
-          className={`px-5 py-3 text-[13px] flex items-center gap-1.5 transition-colors cursor-pointer border-b-2 ${
-            activeTab === "reviews" ? "text-[#1D9E75] border-[#1D9E75] font-medium bg-[var(--bg-primary)]" : "text-[var(--text-secondary)] border-transparent hover:text-[var(--text-primary)]"
-          }`}
-        >
-          <Star size={14} /> Reviews (212)
-        </button>
-      </div>
-
       <div className="p-5 flex-1 overflow-auto max-w-4xl">
-        {activeTab === "profile" && (
           <div className="flex flex-col gap-3.5">
             {/* Personal Info */}
             <div className="bg-[var(--bg-primary)] border border-[var(--border-tertiary)] rounded-xl p-4">
@@ -156,61 +135,6 @@ export default function ProviderProfilePage() {
               </button>
             </div>
           </div>
-        )}
-
-        {activeTab === "reviews" && (
-          <div>
-            <div className="grid grid-cols-[120px_1fr] sm:grid-cols-[140px_1fr] gap-5 bg-[var(--bg-secondary)] rounded-xl p-5 mb-4 border border-[var(--border-tertiary)] items-center">
-              <div className="text-center">
-                <div className="text-4xl font-medium text-[var(--text-primary)] leading-tight">4.7</div>
-                <div className="text-[#EF9F27] text-sm tracking-widest my-0.5">★★★★★</div>
-                <div className="text-[11px] text-[var(--text-secondary)]">212 reviews</div>
-              </div>
-              <div className="flex flex-col gap-1.5 justify-center w-full max-w-[200px]">
-                {[
-                  { star: "5", width: "78%", count: 165 },
-                  { star: "4", width: "14%", count: 30 },
-                  { star: "3", width: "5%", count: 11 },
-                  { star: "2", width: "2%", count: 4 },
-                  { star: "1", width: "1%", count: 2 },
-                ].map((row) => (
-                  <div key={row.star} className="flex items-center gap-2 text-[11px]">
-                    <span className="w-5 text-[var(--text-secondary)] text-right">{row.star}★</span>
-                    <div className="flex-1 h-1.5 bg-[var(--bg-primary)] border border-[var(--border-tertiary)] rounded-full overflow-hidden">
-                      <div className="h-full bg-[#EF9F27] rounded-full" style={{ width: row.width }}></div>
-                    </div>
-                    <span className="w-6 text-[var(--text-secondary)]">{row.count}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2.5">
-              {[
-                { name: "Ahmed Usman", ini: "AU", bg: "#EEEDFE", fg: "#3C3489", service: "AC filter clean", date: "21 May", text: "Bahut acha kaam kiya! Punctual tha aur AC bilkul theek ho gaya. Definitely recommend karunga.", stars: "★★★★★", rate: "5.0" },
-                { name: "Sara Khan", ini: "SK", bg: "#E1F5EE", fg: "#085041", service: "AC gas refill", date: "20 May", text: "Very professional. Came on time, explained everything clearly. Price was fair. Will book again.", stars: "★★★★★", rate: "5.0" },
-                { name: "Bilal Ahmed", ini: "BA", bg: "#FAEEDA", fg: "#633806", service: "AC installation", date: "19 May", text: "Good work overall. Took a bit longer than expected but the quality was solid. No complaints.", stars: "★★★★☆", rate: "4.0" },
-              ].map((r, i) => (
-                <div key={i} className="bg-[var(--bg-primary)] border border-[var(--border-tertiary)] rounded-xl p-4">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-[30px] h-[30px] rounded-full flex items-center justify-center text-[11px] font-medium shrink-0" style={{ backgroundColor: r.bg, color: r.fg }}>{r.ini}</div>
-                      <div>
-                        <div className="text-[13px] font-medium text-[var(--text-primary)]">{r.name}</div>
-                        <div className="text-[11px] text-[var(--text-secondary)]">{r.service} · {r.date}</div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-[13px] text-[#EF9F27] tracking-widest">{r.stars}</div>
-                      <div className="text-[11px] text-[var(--text-secondary)] mt-0.5">{r.rate}</div>
-                    </div>
-                  </div>
-                  <div className="text-[12px] text-[var(--text-secondary)] leading-relaxed">{r.text}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

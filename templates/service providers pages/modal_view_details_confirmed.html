@@ -1,0 +1,196 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.faux{background:rgba(0,0,0,0.7);display:flex;align-items:flex-start;justify-content:center;padding:16px;min-height:700px}
+.modal{background:#1a1a1a;border:0.5px solid #2a2a2a;border-radius:var(--border-radius-lg);width:100%;max-width:520px;overflow:hidden}
+.mh{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:0.5px solid #2a2a2a;background:#151515}
+.mh-left{display:flex;align-items:center;gap:10px}
+.mh-icon{width:36px;height:36px;border-radius:8px;background:#0d2e1e;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.mh-title{font-size:15px;font-weight:500;color:#fff}
+.mh-sub{font-size:11px;color:#666;margin-top:1px}
+.pill{font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500;margin-left:8px}
+.p-conf{background:#0d2e1e;color:#1D9E75;border:0.5px solid #1D9E75}
+.p-done{background:#1a2a0d;color:#639922;border:0.5px solid #3B6D11}
+.p-new{background:#2a1e0d;color:#EF9F27;border:0.5px solid #854F0B}
+.close-btn{width:30px;height:30px;border:0.5px solid #2a2a2a;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#666;font-size:16px;background:#111}
+.close-btn:hover{color:#ccc;background:#222}
+.tabs{display:flex;border-bottom:0.5px solid #2a2a2a;background:#151515}
+.tab{padding:10px 16px;font-size:13px;cursor:pointer;color:#666;border-bottom:2px solid transparent}
+.tab.on{color:#1D9E75;border-bottom-color:#1D9E75;font-weight:500}
+.tab:hover:not(.on){color:#ccc}
+.tc{padding:16px 18px;display:none}
+.tc.on{display:block}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.ic{background:#111;border:0.5px solid #222;border-radius:var(--border-radius-md);padding:10px 12px}
+.ic-label{font-size:10px;color:#555;margin-bottom:3px;display:flex;align-items:center;gap:4px;letter-spacing:0.03em}
+.ic-val{font-size:13px;font-weight:500;color:#ccc}
+.ic-val.green{color:#1D9E75}
+.customer-card{display:flex;align-items:center;gap:12px;background:#111;border:0.5px solid #222;border-radius:var(--border-radius-md);padding:12px;margin-bottom:12px}
+.c-ava{width:36px;height:36px;border-radius:50%;background:#534AB7;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:#fff;flex-shrink:0}
+.c-name{font-size:13px;font-weight:500;color:#ccc}
+.c-meta{display:flex;gap:8px;font-size:11px;color:#555;margin-top:2px;flex-wrap:wrap}
+.c-actions{display:flex;gap:6px;margin-left:auto}
+.ca-btn{background:#0d2e1e;color:#1D9E75;border:0.5px solid #1D9E75;border-radius:var(--border-radius-md);padding:5px 12px;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:4px;font-weight:500}
+.ca-btn:hover{background:#1D9E75;color:#fff}
+.map-box{background:#111;border:0.5px solid #222;border-radius:var(--border-radius-md);height:90px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;position:relative;overflow:hidden}
+.map-grid-line{position:absolute;inset:0;display:grid;grid-template-columns:repeat(10,1fr)}
+.mgl{border-right:0.5px solid #222}
+.map-rows{position:absolute;inset:0;display:grid;grid-template-rows:repeat(4,1fr)}
+.mr{border-bottom:0.5px solid #222}
+.map-pin{position:absolute;top:30%;left:50%;transform:translateX(-50%);color:#E24B4A;font-size:22px}
+.map-label{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:11px;background:#1a1a1a;border:0.5px solid #2a2a2a;border-radius:var(--border-radius-md);padding:3px 10px;color:#888;white-space:nowrap}
+.notes-box{background:#111;border:0.5px solid #222;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:12px}
+.nb-label{font-size:10px;color:#555;margin-bottom:5px;letter-spacing:0.03em}
+.nb-text{font-size:12px;color:#888;line-height:1.6}
+.price-strip{display:flex;align-items:center;justify-content:space-between;background:#0d2e1e;border:0.5px solid #1D9E75;border-radius:var(--border-radius-md);padding:11px 14px;margin-bottom:14px}
+.ps-label{font-size:12px;color:#9FE1CB}
+.ps-sub{font-size:10px;color:#1D9E75;margin-top:2px}
+.ps-val{font-size:18px;font-weight:500;color:#1D9E75}
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:flex;gap:12px;padding-bottom:14px;position:relative}
+.tl-item:last-child{padding-bottom:0}
+.tl-dot-wrap{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.tl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:2px}
+.tl-dot.done{background:#1D9E75}
+.tl-dot.now{background:#EF9F27;box-shadow:0 0 0 3px rgba(239,159,39,0.2)}
+.tl-dot.future{background:#333;border:0.5px solid #444}
+.tl-line{width:1px;flex:1;margin-top:4px}
+.tl-line.done{background:#1D9E75}
+.tl-line.future{background:#333}
+.tl-content{flex:1;padding-bottom:4px}
+.tl-title{font-size:12px;font-weight:500;color:#ccc}
+.tl-sub{font-size:11px;color:#555;margin-top:2px}
+.tl-time{font-size:10px;color:#444;margin-top:2px;font-family:var(--font-mono)}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.sg{background:#111;border:0.5px solid #222;border-radius:var(--border-radius-md);padding:10px;text-align:center}
+.sg-val{font-size:16px;font-weight:500;color:#ccc}
+.sg-label{font-size:10px;color:#555;margin-top:2px}
+.hist-list{display:flex;flex-direction:column;gap:6px}
+.hl{display:flex;align-items:center;gap:10px;padding:9px 10px;background:#111;border:0.5px solid #222;border-radius:var(--border-radius-md)}
+.hl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.hl-info{flex:1}
+.hl-title{font-size:12px;font-weight:500;color:#ccc}
+.hl-sub{font-size:11px;color:#555;margin-top:1px}
+.hl-time{font-size:10px;color:#444}
+.repeat-badge{text-align:center;padding:10px;background:#0d2e1e;border-radius:var(--border-radius-md);font-size:12px;color:#1D9E75;margin-top:6px}
+.mfooter{display:flex;gap:8px;padding:14px 18px;border-top:0.5px solid #2a2a2a;background:#151515}
+.f-primary{flex:2;background:#1D9E75;color:#fff;border:none;padding:11px;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.f-primary:hover{background:#0F6E56}
+.f-secondary{flex:1;background:#111;color:#888;border:0.5px solid #2a2a2a;padding:11px;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer}
+.f-secondary:hover{color:#ccc;border-color:#333}
+.f-danger{flex:1;background:#111;color:#E24B4A;border:0.5px solid #791F1F;padding:11px;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer}
+.f-danger:hover{background:#2a1515}
+</style>
+<h2 class="sr-only">View details modal for a confirmed job showing job info, customer, timeline and action buttons</h2>
+<div class="faux">
+<div class="modal">
+  <div class="mh">
+    <div class="mh-left">
+      <div class="mh-icon"><i class="ti ti-air-conditioning" style="color:#1D9E75" aria-hidden="true"></i></div>
+      <div>
+        <div style="display:flex;align-items:center">
+          <span class="mh-title">AC service — filter clean</span>
+          <span class="pill p-conf">Confirmed</span>
+        </div>
+        <div class="mh-sub">BK-20250521-003 · Sara Khan</div>
+      </div>
+    </div>
+    <div class="close-btn"><i class="ti ti-x" aria-hidden="true"></i></div>
+  </div>
+  <div class="tabs">
+    <div class="tab on" onclick="swTab(this,'t1')">Job details</div>
+    <div class="tab" onclick="swTab(this,'t2')">Customer</div>
+    <div class="tab" onclick="swTab(this,'t3')">Timeline</div>
+  </div>
+
+  <div class="tc on" id="t1">
+    <div class="info-grid">
+      <div class="ic"><div class="ic-label"><i class="ti ti-tool" style="font-size:11px" aria-hidden="true"></i>SERVICE</div><div class="ic-val">AC filter clean</div></div>
+      <div class="ic"><div class="ic-label"><i class="ti ti-calendar" style="font-size:11px" aria-hidden="true"></i>DATE &amp; TIME</div><div class="ic-val">Today · 2:00 PM</div></div>
+      <div class="ic"><div class="ic-label"><i class="ti ti-map-pin" style="font-size:11px" aria-hidden="true"></i>LOCATION</div><div class="ic-val">G-13/4, Islamabad</div></div>
+      <div class="ic"><div class="ic-label"><i class="ti ti-route" style="font-size:11px" aria-hidden="true"></i>DISTANCE</div><div class="ic-val green">1.4 km from you</div></div>
+    </div>
+    <div class="map-box">
+      <div class="map-grid-line"><div class="mgl"></div><div class="mgl"></div><div class="mgl"></div><div class="mgl"></div><div class="mgl"></div><div class="mgl"></div><div class="mgl"></div><div class="mgl"></div><div class="mgl"></div><div class="mgl"></div></div>
+      <div class="map-rows"><div class="mr"></div><div class="mr"></div><div class="mr"></div><div class="mr"></div></div>
+      <i class="map-pin ti ti-map-pin" aria-hidden="true"></i>
+      <div class="map-label"><i class="ti ti-map-pin" style="font-size:11px;color:#E24B4A" aria-hidden="true"></i> G-13/4, Street 7 — tap to open in Maps</div>
+    </div>
+    <div class="notes-box">
+      <div class="nb-label">CUSTOMER NOTES</div>
+      <div class="nb-text">AC filter needs cleaning. Has been 6 months since last service. The AC cools fine but airflow seems reduced. Please also check for any dust buildup in the unit.</div>
+    </div>
+    <div class="price-strip">
+      <div><div class="ps-label">Your earnings</div><div class="ps-sub">PKR 1,500 − 5% platform fee</div></div>
+      <div class="ps-val">PKR 1,425</div>
+    </div>
+  </div>
+
+  <div class="tc" id="t2">
+    <div class="customer-card">
+      <div class="c-ava">SK</div>
+      <div>
+        <div class="c-name">Sara Khan</div>
+        <div class="c-meta"><span><i class="ti ti-star" style="font-size:11px;color:#EF9F27" aria-hidden="true"></i>4.9 customer rating</span><span>7 bookings</span></div>
+      </div>
+      <div class="c-actions">
+        <button class="ca-btn"><i class="ti ti-phone" style="font-size:12px" aria-hidden="true"></i>0302-xxx-xxxx</button>
+      </div>
+    </div>
+    <div class="stat-grid">
+      <div class="sg"><div class="sg-val">7</div><div class="sg-label">Total bookings</div></div>
+      <div class="sg"><div class="sg-val" style="color:#1D9E75">0</div><div class="sg-label">Cancellations</div></div>
+      <div class="sg"><div class="sg-val" style="color:#EF9F27">4.9</div><div class="sg-label">Avg rating given</div></div>
+    </div>
+    <div style="font-size:11px;color:#555;margin-bottom:10px">YOUR HISTORY WITH SARA KHAN</div>
+    <div class="hist-list">
+      <div class="hl"><div class="hl-dot" style="background:#1D9E75"></div><div class="hl-info"><div class="hl-title">AC filter clean — Completed</div><div class="hl-sub">PKR 1,200 · Rated you ⭐ 5.0</div></div><div class="hl-time">4 months ago</div></div>
+      <div class="hl"><div class="hl-dot" style="background:#1D9E75"></div><div class="hl-info"><div class="hl-title">AC gas refill — Completed</div><div class="hl-sub">PKR 1,500 · Rated you ⭐ 5.0</div></div><div class="hl-time">8 months ago</div></div>
+    </div>
+    <div class="repeat-badge" style="margin-top:10px"><i class="ti ti-heart" style="font-size:13px;margin-right:4px" aria-hidden="true"></i>Repeat customer — always rates 5 stars!</div>
+  </div>
+
+  <div class="tc" id="t3">
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot-wrap"><div class="tl-dot done"></div><div class="tl-line done"></div></div>
+        <div class="tl-content"><div class="tl-title">Request received</div><div class="tl-sub">Customer sent booking request</div><div class="tl-time">Today · 8:30 AM</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot-wrap"><div class="tl-dot done"></div><div class="tl-line done"></div></div>
+        <div class="tl-content"><div class="tl-title">You accepted</div><div class="tl-sub">Booking confirmed by you</div><div class="tl-time">Today · 8:35 AM</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot-wrap"><div class="tl-dot done"></div><div class="tl-line done"></div></div>
+        <div class="tl-content"><div class="tl-title">Payment received</div><div class="tl-sub">Customer paid PKR 1,500 via Easypaisa</div><div class="tl-time">Today · 9:10 AM</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot-wrap"><div class="tl-dot now"></div><div class="tl-line future"></div></div>
+        <div class="tl-content"><div class="tl-title" style="color:#EF9F27">Job starts soon</div><div class="tl-sub">Reminder sent to both parties</div><div class="tl-time">Today · 2:00 PM — 1 hr away</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot-wrap"><div class="tl-dot future"></div><div class="tl-line future"></div></div>
+        <div class="tl-content"><div class="tl-title" style="color:#555">Mark as complete</div><div class="tl-sub">Mark job done when finished</div><div class="tl-time">After completion</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot-wrap"><div class="tl-dot future"></div></div>
+        <div class="tl-content"><div class="tl-title" style="color:#555">Customer leaves review</div><div class="tl-sub">Rating appears on your profile</div><div class="tl-time">After completion</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mfooter">
+    <button class="f-secondary">Get directions</button>
+    <button class="f-primary"><i class="ti ti-check" aria-hidden="true"></i>Mark as completed</button>
+    <button class="f-danger">Cancel job</button>
+  </div>
+</div>
+</div>
+<script>
+function swTab(el,id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('.tc').forEach(t=>t.className='tc');
+  document.getElementById(id).className='tc on';
+}
+</script>

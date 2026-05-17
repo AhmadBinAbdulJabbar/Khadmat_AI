@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { Search, MapPin, Clock, Check, Wind } from "lucide-react";
+import { RequestReviewModal, ViewCompletedJobModal, ViewDetailsConfirmedModal } from "./Modals";
 
 export default function ProviderMyJobsPage() {
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
+  const [activeModal, setActiveModal] = useState<"review" | "completed" | "details" | null>(null);
   const [jobs, setJobs] = useState([
     {
       id: "req_1",
@@ -74,8 +76,7 @@ export default function ProviderMyJobsPage() {
   };
 
   const handleRequestReview = (id: string) => {
-    // API logic to request review
-    alert("Review requested!");
+    setActiveModal("review");
   };
 
   const filteredJobs = jobs.filter(j => {
@@ -195,11 +196,11 @@ export default function ProviderMyJobsPage() {
                   </>
                 )}
                 {job.type === 'confirmed' && (
-                  <button className="bg-[var(--bg-secondary)] text-[var(--text-secondary)] border border-[var(--border-tertiary)] px-2.5 py-1 rounded text-[11px] font-medium hover:text-[var(--text-primary)] transition-colors cursor-pointer">View details</button>
+                  <button onClick={() => setActiveModal("details")} className="bg-[var(--bg-secondary)] text-[var(--text-secondary)] border border-[var(--border-tertiary)] px-2.5 py-1 rounded text-[11px] font-medium hover:text-[var(--text-primary)] transition-colors cursor-pointer">View details</button>
                 )}
                 {job.type === 'completed' && (
                   <>
-                    <button className="bg-[var(--bg-secondary)] text-[var(--text-secondary)] border border-[var(--border-tertiary)] px-2.5 py-1 rounded text-[11px] font-medium hover:text-[var(--text-primary)] transition-colors cursor-pointer">View</button>
+                    <button onClick={() => setActiveModal("completed")} className="bg-[var(--bg-secondary)] text-[var(--text-secondary)] border border-[var(--border-tertiary)] px-2.5 py-1 rounded text-[11px] font-medium hover:text-[var(--text-primary)] transition-colors cursor-pointer">View</button>
                     <button onClick={() => handleRequestReview(job.id)} className="bg-[#EEEDFE] text-[#3C3489] border border-[#CECBF6] px-2.5 py-1 rounded text-[11px] font-medium hover:bg-[#E0DEFA] transition-colors cursor-pointer">Request review</button>
                   </>
                 )}
@@ -208,6 +209,10 @@ export default function ProviderMyJobsPage() {
           </div>
         ))}
       </div>
+
+      <RequestReviewModal isOpen={activeModal === "review"} onClose={() => setActiveModal(null)} />
+      <ViewCompletedJobModal isOpen={activeModal === "completed"} onClose={() => setActiveModal(null)} />
+      <ViewDetailsConfirmedModal isOpen={activeModal === "details"} onClose={() => setActiveModal(null)} />
     </div>
   );
 }
