@@ -17,8 +17,15 @@ async function request<T>(
   });
 
   if (!res.ok) {
-    const error = await res.text();
-    throw new Error(error || `Request failed: ${res.status}`);
+    const errorText = await res.text();
+    let message = `Request failed: ${res.status}`;
+    try {
+      const json = JSON.parse(errorText);
+      message = json.detail ?? json.message ?? errorText;
+    } catch {
+      message = errorText || message;
+    }
+    throw new Error(message);
   }
 
   return res.json();
