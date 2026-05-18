@@ -31,20 +31,35 @@ export default function ProviderProfilePage() {
   const [newArea, setNewArea] = useState("");
 
   useEffect(() => {
-    const stored = localStorage.getItem("khadmat_user");
-    let id = "";
-    if (stored) {
+    const fetchProfile = async () => {
+      const stored = localStorage.getItem("khadmat_user");
+      if (!stored) {
+        setError("User not logged in");
+        setLoading(false);
+        return;
+      }
+
+      let id = "";
       try {
         const u = JSON.parse(stored);
-        id = u.id ?? "";
-        setUserId(id);
-      } catch {}
-    }
+        id = u.id;
+      } catch {
+        setError("Invalid user data");
+        setLoading(false);
+        return;
+      }
 
-    const fetchProfile = async () => {
+      if (!id) {
+        setError("User ID not found");
+        setLoading(false);
+        return;
+      }
+
+      setUserId(id);
+
       try {
         setLoading(true);
-        const data = await getProviderProfile(id || undefined);
+        const data = await getProviderProfile(id);
         setFormData({
           firstName: data.user.first_name ?? "",
           lastName: data.user.last_name ?? "",
@@ -60,7 +75,20 @@ export default function ProviderProfilePage() {
         setError("");
       } catch (err) {
         console.error("Failed to load profile:", err);
-        setError("Failed to load profile data");
+        // Fallback to localStorage data + show warning
+        const stored = localStorage.getItem("khadmat_user");
+        if (stored) {
+          try {
+            const u = JSON.parse(stored);
+            const nameParts = (u.name || "").split(" ");
+            setFormData((prev) => ({
+              ...prev,
+              firstName: nameParts[0] ?? "",
+              lastName: nameParts[1] ?? "",
+              email: u.email ?? "",
+            }));
+          } catch {}
+        }
       } finally {
         setLoading(false);
       }

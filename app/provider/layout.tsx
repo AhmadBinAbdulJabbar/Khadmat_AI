@@ -139,10 +139,19 @@ export default function ProviderLayout({ children }: { children: React.ReactNode
               <Bell size={15} />
               <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-[#E24B4A] rounded-full" />
             </button>
-            <div className="w-[30px] h-[30px] rounded-full bg-[#E1F5EE] border border-[#9FE1CB] flex items-center justify-center text-[11px] font-medium text-[#085041]">
-              {displayInitials}
+            <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[var(--bg-secondary)] transition-all cursor-pointer group">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--accent-dark)] flex items-center justify-center text-white text-xs font-bold shadow-md group-hover:shadow-lg transition-shadow">
+                {displayInitials}
+              </div>
+              <div className="hidden sm:flex flex-col items-start max-w-[100px]">
+                <div className="text-xs font-semibold text-[var(--text-primary)] leading-tight truncate">
+                  {displayName.split(" ")[0]}
+                </div>
+                <div className="text-[10px] text-[var(--text-tertiary)] leading-tight">
+                  Provider
+                </div>
+              </div>
             </div>
-            <span className="text-[13px] text-[var(--text-secondary)] hidden sm:block">{displayName.split(" ")[0]}</span>
           </div>
         </nav>
 
@@ -154,7 +163,7 @@ export default function ProviderLayout({ children }: { children: React.ReactNode
           <aside className={`absolute md:static top-0 bottom-0 left-0 z-40 w-[200px] bg-[var(--bg-secondary)] border-r border-[var(--border-tertiary)] transition-transform duration-300 transform ${mobileMenu ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
             <div className="py-4">
               <div className="px-3.5 pb-3.5 mb-2.5 border-b border-[var(--border-tertiary)]">
-                <div className="w-11 h-11 rounded-full bg-[#E1F5EE] border border-[#9FE1CB] flex items-center justify-center text-sm font-medium text-[#085041] mb-2">
+                <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--accent-dark)] flex items-center justify-center text-sm font-bold text-white shadow-md mb-2">
                   {displayInitials}
                 </div>
                 <div className="text-[13px] font-medium text-[var(--text-primary)]">{displayName}</div>

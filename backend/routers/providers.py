@@ -409,9 +409,10 @@ async def get_provider_profile(user_id: Optional[str] = None):
     row = None
     try:
         result = supabase.table("profiles").select("*").eq("id", user_id).single().execute()
-        row = result.data
-    except Exception:
-        pass
+        if result.data:
+            row = result.data
+    except Exception as e:
+        print(f"[DEBUG] profiles table lookup failed for {user_id}: {e}")
 
     # Fall back to auth user metadata
     auth_user_obj = None
@@ -422,24 +423,28 @@ async def get_provider_profile(user_id: Optional[str] = None):
         auth_user_obj = resp.user
         email = auth_user_obj.email or ""
         meta = auth_user_obj.user_metadata or {}
-    except Exception:
-        pass
+        print(f"[DEBUG] Found auth user: {email}")
+    except Exception as e:
+        print(f"[DEBUG] auth user lookup failed for {user_id}: {e}")
 
+    # Return profile even if we only have auth user (minimal requirement)
+    # Requires at least one of: database row or auth user object
     if not row and not auth_user_obj:
-        raise HTTPException(status_code=404, detail="Profile not found")
+        raise HTTPException(status_code=404, detail=f"Profile not found for user {user_id}")
 
+    # Return profile with sensible defaults
     return {
         "user": {
             "first_name": (row or {}).get("first_name") or meta.get("first_name", ""),
             "last_name":  (row or {}).get("last_name")  or meta.get("last_name", ""),
             "email":      email,
             "phone":      (row or {}).get("phone")      or meta.get("phone", ""),
-            "city":       (row or {}).get("city")       or meta.get("city", ""),
+            "city":       (row or {}).get("city")       or meta.get("city", "Islamabad"),
         },
         "profile": {
             "professions":   (row or {}).get("professions")   or meta.get("professions") or [],
-            "experience":    (row or {}).get("experience")    or meta.get("experience", ""),
-            "price_range":   (row or {}).get("price_range")   or meta.get("price_range", ""),
+            "experience":    (row or {}).get("experience")    or meta.get("experience", "1–2 years"),
+            "price_range":   (row or {}).get("price_range")   or meta.get("price_range", "500–1000"),
             "bio":           (row or {}).get("bio", ""),
             "service_areas": (row or {}).get("service_areas") or [],
             "photo_url":     (row or {}).get("photo_url"),

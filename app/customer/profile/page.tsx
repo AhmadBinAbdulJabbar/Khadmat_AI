@@ -21,20 +21,35 @@ export default function CustomerProfilePage() {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem("khadmat_user");
-    let id = "";
-    if (stored) {
+    const fetchProfile = async () => {
+      const stored = localStorage.getItem("khadmat_user");
+      if (!stored) {
+        setError("User not logged in");
+        setLoading(false);
+        return;
+      }
+
+      let id = "";
       try {
         const u = JSON.parse(stored);
-        id = u.id ?? "";
-        setUserId(id);
-      } catch {}
-    }
+        id = u.id;
+      } catch {
+        setError("Invalid user data");
+        setLoading(false);
+        return;
+      }
 
-    const fetchProfile = async () => {
+      if (!id) {
+        setError("User ID not found");
+        setLoading(false);
+        return;
+      }
+
+      setUserId(id);
+
       try {
         setLoading(true);
-        const data = await getCustomerProfile(id || undefined);
+        const data = await getCustomerProfile(id);
         setFormData({
           firstName: data.user.first_name ?? "",
           lastName: data.user.last_name ?? "",
@@ -45,7 +60,7 @@ export default function CustomerProfilePage() {
         setError("");
       } catch (err) {
         console.error("Failed to load profile:", err);
-        setError("Failed to load profile data");
+        setError(err instanceof Error ? err.message : "Failed to load profile data");
       } finally {
         setLoading(false);
       }

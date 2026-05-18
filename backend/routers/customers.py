@@ -24,13 +24,14 @@ async def get_customer_profile(user_id: Optional[str] = None):
     try:
         result = supabase.table("profiles").select("*").eq("id", user_id).single().execute()
         profile_row = result.data
-    except Exception:
+    except Exception as e:
+        print(f"profiles table error: {e}")
         pass
 
     # Fall back to auth user for email / metadata
     auth_user = _get_auth_user(user_id)
     if not profile_row and not auth_user:
-        raise HTTPException(status_code=404, detail="Profile not found")
+        raise HTTPException(status_code=404, detail=f"Profile not found for user {user_id}")
 
     meta = auth_user.user_metadata if auth_user else {}
     email = (auth_user.email if auth_user else "") or ""
@@ -41,7 +42,7 @@ async def get_customer_profile(user_id: Optional[str] = None):
             "last_name":  (profile_row or {}).get("last_name")  or meta.get("last_name", ""),
             "email":      email,
             "phone":      (profile_row or {}).get("phone")      or meta.get("phone", ""),
-            "city":       (profile_row or {}).get("city")       or meta.get("city", ""),
+            "city":       (profile_row or {}).get("city")       or meta.get("city", "Islamabad"),
         }
     }
 
