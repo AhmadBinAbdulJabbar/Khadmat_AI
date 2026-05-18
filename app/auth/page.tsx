@@ -32,6 +32,7 @@ function AuthPageInner() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [phoneError, setPhoneError] = useState("");
 
   // Login fields
   const [loginEmail, setLoginEmail] = useState("");
@@ -46,6 +47,45 @@ function AuthPageInner() {
   const [signupPassword, setSignupPassword] = useState("");
   const [experience, setExperience] = useState("1–2 years");
   const [priceRange, setPriceRange] = useState("Under 500");
+
+  // Pakistan phone validation function
+  const validatePakistaniPhone = (value: string): { isValid: boolean; formatted: string; error: string } => {
+    const cleaned = value.replace(/\D/g, "");
+    
+    if (!cleaned) {
+      return { isValid: false, formatted: "", error: "" };
+    }
+    
+    // Check if it starts with 0 and has 11 digits
+    if (!cleaned.startsWith("0") || cleaned.length !== 11) {
+      return { isValid: false, formatted: cleaned, error: "Phone number must be 11 digits starting with 0 (e.g., 03001234567)" };
+    }
+    
+    // Check if it's a mobile number (03XX format) - not PTCL landline (021, 022, 041, etc.)
+    const secondDigit = cleaned.substring(1, 3);
+    if (secondDigit !== "30" && secondDigit !== "31" && secondDigit !== "32" && secondDigit !== "33" && secondDigit !== "34" && secondDigit !== "35" && secondDigit !== "36" && secondDigit !== "37" && secondDigit !== "38") {
+      return { isValid: false, formatted: cleaned, error: "Only Pakistani mobile numbers are accepted (03XX format). Landlines not supported." };
+    }
+    
+    // Format as 0300-XXXXXXX
+    const formatted = `${cleaned.slice(0, 4)}-${cleaned.slice(4)}`;
+    return { isValid: true, formatted, error: "" };
+  };
+
+  const handlePhoneChange = (value: string) => {
+    // Remove all non-digits and limit to 11 digits maximum
+    const digitsOnly = value.replace(/\D/g, "").slice(0, 11);
+    
+    const { formatted, error, isValid } = validatePakistaniPhone(digitsOnly);
+    setPhoneError(error);
+    
+    // If valid, use formatted version; otherwise show raw digits
+    if (isValid) {
+      setPhone(formatted);
+    } else {
+      setPhone(digitsOnly);
+    }
+  };
 
   const toggleProf = (p: string) =>
     setSelectedProfs((prev) =>
@@ -111,6 +151,15 @@ function AuthPageInner() {
     setError("");
     setSuccess("");
     setLoading(true);
+
+    // Validate phone number before submission
+    const { isValid, error: phoneValidationError } = validatePakistaniPhone(phone);
+    if (!isValid || phoneValidationError) {
+      setPhoneError(phoneValidationError || "Invalid phone number");
+      setLoading(false);
+      return;
+    }
+
     const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
     try {
       // Step 1: Create user via backend admin API (pre-confirmed, no email sent)
@@ -121,7 +170,7 @@ function AuthPageInner() {
           first_name: firstName,
           last_name: lastName,
           email: signupEmail,
-          phone,
+          phone: phone.replace(/-/g, ""), // Send without formatting
           city,
           password: signupPassword,
           role,
@@ -348,14 +397,32 @@ function AuthPageInner() {
                 </div>
               </div>
 
-              <label className="text-xs text-[var(--text-secondary)] mb-1">Phone number</label>
+              <label className="text-xs text-[var(--text-secondary)] mb-1">Phone number <span className="text-red-500">*</span></label>
               <input
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="w-full bg-[var(--bg-secondary)] border border-[var(--border-secondary)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent-light)] mb-3 placeholder:text-[var(--text-tertiary)] text-[var(--text-primary)]"
-                placeholder="0300-0000000"
+                onChange={(e) => handlePhoneChange(e.target.value)}
+                className={`w-full bg-[var(--bg-secondary)] border rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 placeholder:text-[var(--text-tertiary)] text-[var(--text-primary)] transition-all ${
+                  phoneError
+                    ? "border-red-300 focus:border-red-500 focus:ring-red-100"
+                    : phone && !phoneError
+                    ? "border-green-300 focus:border-[var(--accent)] focus:ring-[var(--accent-light)]"
+                    : "border-[var(--border-secondary)] focus:border-[var(--accent)] focus:ring-[var(--accent-light)]"
+                }`}
+                placeholder="0300-1234567"
                 required
               />
+              {phoneError && (
+                <div className="text-xs text-red-500 mb-3 flex items-start gap-1">
+                  <span>⚠</span>
+                  <span>{phoneError}</span>
+                </div>
+              )}
+              {phone && !phoneError && (
+                <div className="text-xs text-green-600 mb-3 flex items-start gap-1">
+                  <span>✓</span>
+                  <span>Valid Pakistani mobile number</span>
+                </div>
+              )}
 
               <label className="text-xs text-[var(--text-secondary)] mb-1">Email</label>
               <input
