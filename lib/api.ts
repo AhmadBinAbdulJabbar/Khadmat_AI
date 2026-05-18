@@ -62,3 +62,53 @@ export async function signup(data: Record<string, unknown>) {
     body: JSON.stringify(data),
   });
 }
+
+// ─── Customer Profile ───
+export async function getCustomerProfile(userId?: string) {
+  const url = userId ? `/api/customer/profile?user_id=${userId}` : "/api/customer/profile";
+  return request<{
+    user: {
+      first_name: string;
+      last_name: string;
+      email: string;
+      phone: string;
+      city: string;
+    };
+  }>(url);
+}
+
+export async function updateCustomerProfile(userId: string, data: Record<string, unknown>) {
+  return request(`/api/customer/profile?user_id=${userId}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+}
+
+// ─── Provider Profile ───
+export async function getProviderProfile(userId?: string) {
+  const url = userId ? `/api/provider/profile?user_id=${userId}` : "/api/provider/profile";
+  return request<{
+    user: {
+      first_name: string;
+      last_name: string;
+      email: string;
+      phone: string;
+      city: string;
+    };
+    profile: {
+      professions: string[];
+      experience: string;
+      price_range: string;
+      bio: string;
+      service_areas: string[];
+      photo_url: string | null;
+    };
+  }>(url);
+}
+
+export async function updateProviderProfile(userId: string, data: Record<string, unknown>) {
+  return request(`/api/provider/profile?user_id=${userId}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+}

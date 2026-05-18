@@ -400,31 +400,73 @@ async def provider_earnings_report(provider_id: str, format: str = "pdf"):
 
 
 @router.get("/provider/profile")
-async def get_provider_profile(provider_id: str):
+async def get_provider_profile(user_id: Optional[str] = None):
+    from fastapi import HTTPException
+    if not user_id:
+        raise HTTPException(status_code=400, detail="user_id is required")
+
+    # Try profiles table first
+    row = None
+    try:
+        result = supabase.table("profiles").select("*").eq("id", user_id).single().execute()
+        row = result.data
+    except Exception:
+        pass
+
+    # Fall back to auth user metadata
+    auth_user_obj = None
+    email = ""
+    meta = {}
+    try:
+        resp = supabase.auth.admin.get_user_by_id(user_id)
+        auth_user_obj = resp.user
+        email = auth_user_obj.email or ""
+        meta = auth_user_obj.user_metadata or {}
+    except Exception:
+        pass
+
+    if not row and not auth_user_obj:
+        raise HTTPException(status_code=404, detail="Profile not found")
+
     return {
         "user": {
-            "first_name": "Ali",
-            "last_name": "Hassan",
-            "email": "ali@example.com",
-            "phone": "0300-1234567",
-            "city": "Islamabad"
+            "first_name": (row or {}).get("first_name") or meta.get("first_name", ""),
+            "last_name":  (row or {}).get("last_name")  or meta.get("last_name", ""),
+            "email":      email,
+            "phone":      (row or {}).get("phone")      or meta.get("phone", ""),
+            "city":       (row or {}).get("city")       or meta.get("city", ""),
         },
         "profile": {
-            "professions": ["AC Technician"],
-            "experience": "5-10 years",
-            "price_min": 800,
-            "price_max": 1500,
-            "bio": "Experienced AC technician with 7+ years. Specialise in installation, gas refill, and servicing all major brands.",
-            "service_areas": ["G-13", "G-10", "F-10", "F-8"],
-            "photo_url": None
+            "professions":   (row or {}).get("professions")   or meta.get("professions") or [],
+            "experience":    (row or {}).get("experience")    or meta.get("experience", ""),
+            "price_range":   (row or {}).get("price_range")   or meta.get("price_range", ""),
+            "bio":           (row or {}).get("bio", ""),
+            "service_areas": (row or {}).get("service_areas") or [],
+            "photo_url":     (row or {}).get("photo_url"),
         }
     }
 
 
 @router.put("/provider/profile")
-async def update_provider_profile(req: dict):
-    # In a real app, update users and provider_profiles tables
-    return {"success": True, "message": "Profile updated", "data": req}
+async def update_provider_profile(user_id: Optional[str] = None, req: dict = {}):
+    from fastapi import HTTPException
+    if not user_id:
+        raise HTTPException(status_code=400, detail="user_id is required")
+
+    allowed = {"first_name", "last_name", "phone", "city", "professions", "experience", "price_range", "bio", "service_areas"}
+    update_fields = {k: v for k, v in req.items() if k in allowed}
+
+    try:
+        # Upsert so it works even if the profiles row doesn't exist yet
+        supabase.table("profiles").upsert({
+            "id": user_id,
+            "role": "worker",
+            **update_fields,
+        }).execute()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    return {"success": True, "message": "Profile updated"}
 
 
 from fastapi import UploadFile, File

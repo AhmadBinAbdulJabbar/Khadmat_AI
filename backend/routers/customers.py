@@ -1,145 +1,72 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
+from typing import Optional
+
+from config.supabase import supabase
 
 router = APIRouter()
 
-@router.get("/dashboard")
-async def customer_dashboard(user_id: str = None):
-    # Returns combined mock data for the customer dashboard
+
+def _get_auth_user(user_id: str):
+    try:
+        resp = supabase.auth.admin.get_user_by_id(user_id)
+        return resp.user
+    except Exception:
+        return None
+
+
+@router.get("/profile")
+async def get_customer_profile(user_id: Optional[str] = None):
+    if not user_id:
+        raise HTTPException(status_code=400, detail="user_id is required")
+
+    # Try profiles table first
+    profile_row = None
+    try:
+        result = supabase.table("profiles").select("*").eq("id", user_id).single().execute()
+        profile_row = result.data
+    except Exception:
+        pass
+
+    # Fall back to auth user for email / metadata
+    auth_user = _get_auth_user(user_id)
+    if not profile_row and not auth_user:
+        raise HTTPException(status_code=404, detail="Profile not found")
+
+    meta = auth_user.user_metadata if auth_user else {}
+    email = (auth_user.email if auth_user else "") or ""
+
     return {
         "user": {
-            "name": "Muhammad Umair",
-            "email": "umairbwp202@gmail.com",
-            "location": "Islamabad, Pakistan",
-            "initials": "MU",
-            "date": "Thursday, 21 May 2026"
-        },
-        "stats": {
-            "total_bookings": 12,
-            "total_spent": 14200,
-            "reviews_given": 8,
-            "avg_rating": 4.6,
-            "saved_providers": 4
-        },
-        "upcoming_booking": {
-            "title": "AC Technician \u2014 Ali AC Services",
-            "time": "Today at 10:00 AM \u00b7 G-13, Islamabad",
-            "price": "PKR 1,200",
-            "provider_initials": "AA"
-        },
-        "recent_bookings": [
-            {
-                "service": "AC Technician",
-                "provider": "Ali AC Services \u00b7 21 May",
-                "price": "PKR 1,200",
-                "status": "Confirmed"
-            },
-            {
-                "service": "Electrician",
-                "provider": "Rehman Electricals \u00b7 12 May",
-                "price": "PKR 900",
-                "status": "Completed"
-            },
-            {
-                "service": "Plumber",
-                "provider": "Master Plumbers \u00b7 5 May",
-                "price": "PKR 650",
-                "status": "Completed"
-            },
-            {
-                "service": "Cleaner",
-                "provider": "HomeClean Pro \u00b7 28 Apr",
-                "price": "PKR 800",
-                "status": "Cancelled"
-            }
-        ],
-        "saved_providers": [
-            {
-                "name": "Ali AC Services",
-                "category": "AC Technician \u00b7 \u2B50 4.7",
-                "initials": "AA"
-            },
-            {
-                "name": "Rehman Electricals",
-                "category": "Electrician \u00b7 \u2B50 4.8",
-                "initials": "RE"
-            },
-            {
-                "name": "Master Plumbers Pk",
-                "category": "Plumber \u00b7 \u2B50 4.6",
-                "initials": "MP"
-            },
-            {
-                "name": "City Tutor Network",
-                "category": "Tutor \u00b7 \u2B50 4.9",
-                "initials": "CT"
-            }
-        ]
+            "first_name": (profile_row or {}).get("first_name") or meta.get("first_name", ""),
+            "last_name":  (profile_row or {}).get("last_name")  or meta.get("last_name", ""),
+            "email":      email,
+            "phone":      (profile_row or {}).get("phone")      or meta.get("phone", ""),
+            "city":       (profile_row or {}).get("city")       or meta.get("city", ""),
+        }
     }
 
-@router.get("/bookings")
-async def customer_bookings(user_id: str = None):
-    # Mock data based on the design template
-    return {
-        "bookings": [
-            {
-                "id": "b1",
-                "service_type": "AC Technician",
-                "provider_name": "Ali AC Services",
-                "city": "Islamabad",
-                "area": "G-13",
-                "price": "PKR 1,200",
-                "status": "Confirmed",
-                "date": "Thu 21 May 2026",
-                "time": "10:00 AM",
-                "full_address": "G-13/2, Islamabad",
-                "provider_rating": "4.7",
-                "booking_ref": "BK-20250521-001",
-                "payment_status": "Pending"
-            },
-            {
-                "id": "b2",
-                "service_type": "Electrician",
-                "provider_name": "Rehman Electricals",
-                "city": "Islamabad",
-                "area": "G-13",
-                "price": "PKR 900",
-                "status": "Completed",
-                "date": "Mon 12 May 2026",
-                "time": "2:00 PM",
-                "full_address": "G-13, Islamabad",
-                "provider_rating": "4.8",
-                "booking_ref": "BK-20250512-008",
-                "payment_status": "Paid"
-            },
-            {
-                "id": "b3",
-                "service_type": "Plumber",
-                "provider_name": "Master Plumbers Pk",
-                "city": "Karachi",
-                "area": "DHA",
-                "price": "PKR 650",
-                "status": "Completed",
-                "date": "Fri 9 May 2026",
-                "time": "9:00 AM",
-                "full_address": "DHA, Karachi",
-                "provider_rating": "4.6",
-                "booking_ref": "BK-20250509-005",
-                "payment_status": "Paid"
-            },
-            {
-                "id": "b4",
-                "service_type": "Cleaner",
-                "provider_name": "HomeClean Pro",
-                "city": "Lahore",
-                "area": "DHA",
-                "price": "PKR 600-1,200",
-                "status": "Cancelled",
-                "date": "Tue 6 May 2026",
-                "time": "9:00 AM",
-                "full_address": "DHA, Lahore",
-                "provider_rating": "4.8",
-                "booking_ref": "BK-20250506-003",
-                "payment_status": "Refund pending"
-            }
-        ]
-    }
+
+@router.put("/profile")
+async def update_customer_profile(user_id: Optional[str] = None, data: dict = {}):
+    if not user_id:
+        raise HTTPException(status_code=400, detail="user_id is required")
+
+    allowed = {"first_name", "last_name", "phone", "city"}
+    update_fields = {k: v for k, v in data.items() if k in allowed}
+
+    try:
+        # Upsert so it works even if the row doesn't exist yet
+        supabase.table("profiles").upsert({
+            "id": user_id,
+            **update_fields,
+            "role": "customer",
+        }).execute()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    return {"success": True, "message": "Profile updated"}
+
+
+@router.post("/profile/photo")
+async def upload_customer_photo(file=None):
+    return {"success": True, "photo_url": "https://mock-storage.com/photo.jpg"}
