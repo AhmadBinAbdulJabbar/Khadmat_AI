@@ -4,56 +4,88 @@
 `/` → `app/page.tsx`
 
 ## Purpose
-Public-facing marketing page that introduces Khadmat AI, explains how it works, showcases features and available services, and drives users to either book via AI chat or browse providers.
+Public-facing marketing page that introduces Khadmat AI, showcases platform features, explains how it works, and drives unauthenticated users to sign up. Automatically redirects authenticated users to their dashboard.
+
+## Authentication Behavior
+- **Not logged in**: Shows full landing page with marketing content
+- **Logged in as customer**: Redirects to `/customer/dashboard`
+- **Logged in as provider**: Redirects to `/provider/dashboard`
 
 ## UI Sections
 
-### 1. Navigation Bar
-- Logo: K badge + "Khadmat AI"
-- Links: "How it works", "Services", "Providers"
-- CTA button: "Try now" → navigates to `/book`
+### 1. Navigation Bar (sticky)
+- **Left**: Logo "K" badge + "Khadmat AI" text
+- **Center** (desktop only): Navigation links "How it works", "Services", "Cities", "About" (anchor links)
+- **Right**: "Get started" button → `/auth?role=customer`
+- **Mobile**: Hamburger menu with all navigation items + "Get started" button
+- **Note**: Profile icon hidden on landing page (only shown when authenticated)
 
-### 2. Hero Section
-- Badge pill: "Powered by Google Antigravity" (with sparkle icon)
-- Headline: "Book any home service in **your language**"
-- Subtext describing Urdu/Roman Urdu/English support
-- Two buttons: "Book a service" (primary → `/book`) | "Browse providers" (secondary → `/providers`)
-- Demo input preview showing example query: "Mujhe kal subah G-13 mein AC technician chahiye"
-- Send button (visual only on landing, navigates to chat on click)
+### 2. Hero Section (id="hero")
+- Badge: "Powered by Google Antigravity" with Sparkles icon (animated pulse)
+- Headline: "Pakistan's smartest home services platform"
+- Subtext: "Find trusted plumbers, electricians, AC technicians, tutors and more — in your language, in your city, instantly."
+- Two buttons:
+  - "Book a service" (primary, green) → `/auth?role=customer`
+  - "Join as a provider" (secondary, outlined) → `/auth?role=worker`
+- Demo search box with example query: "Mujhe kal subah G-13 mein AC technician chahiye"
 - Language pills: Urdu, Roman Urdu, English
+- Search submit → navigates to `/chat?q={query}`
 
-### 3. Stats Bar (3 columns)
+### 3. Stats Section (3 columns, bordered grid)
 | Stat | Value |
 |---|---|
 | Bookings completed | 5,000+ |
 | Verified providers | 200+ |
 | Cities | 3 cities (Karachi · Lahore · Islamabad) |
 
-### 4. Features Grid (6 cards)
-| Feature | Icon | Description |
-|---|---|---|
-| Multilingual | language | Urdu, Roman Urdu, English |
-| Location aware | map-pin | Finds closest providers |
-| Smart ranking | stars | Distance + rating + availability |
-| Instant booking | calendar-check | Confirmed in seconds |
-| Auto reminders | bell | AI schedules follow-ups |
-| Agent trace | activity | Real-time reasoning visibility |
+### 4. How It Works Section (id="how")
+- Section label: "HOW IT WORKS"
+- Headline: "From message to booking in 4 steps"
+- 4-step grid with numbered circles
+- Each step: title and description
 
-### 5. How It Works (4 steps with arrows)
-1. Describe your need → 2. AI finds providers → 3. Best match selected → 4. Booking confirmed
+### 5. Services Section (id="services")
+- Section label: "SERVICES"
+- Headline: "What can we help with?"
+- 8 service chips: AC technician, Plumber, Electrician, Tutor, Cleaner, Carpenter, Painter, Security
+- Each with icon + label, hover effect
 
-### 6. Services Grid (8 service chips)
-AC Technician, Plumber, Electrician, Tutor, Cleaner, Security, Carpenter, Painter — each clickable → navigates to `/book`
+### 6. Tech Strip
+- Text: "Powered by Google Antigravity — 5 AI agents working together"
+- 5 agent pills: Intent Agent, Discovery Agent, Decision Agent, Booking Agent, Follow-up Agent
 
-### 7. CTA Section
-- Headline: "Ready to try Khadmat AI?"
-- Subtext + "Start booking" button → `/book`
+### 7. Who Is It For Section (id="about")
+- Headline: "Built for everyone"
+- 2 large cards:
+  - **Customer** (green border, clickable → `/auth?role=customer`): "Create customer account" button
+  - **Provider** (gray border, clickable → `/auth?role=worker`): "Join as a provider" button
+- Each with icon, title, description, 5 feature checkmarks
 
-### 8. Footer
-- Left: "© 2026 Khadmat AI · Google Antigravity Hackathon"
-- Right links: GitHub, Docs, About
+### 8. Trust & Safety Section
+- Headline: "Why customers trust Khadmat AI"
+- 4 trust pillars: Verified providers, Real reviews, Transparent pricing, 24/7 support
 
-## States
-- **Default**: Static content, all stats hardcoded (MVP)
-- **Responsive**: Single column on mobile, grid collapses
-- **Authenticated user**: Navigation shows user avatar + name instead of "Try now"
+### 9. Reviews Section
+- Headline: "What people are saying"
+- 3 review cards with rating, quote, user avatar + name
+
+### 10. Cities Section (id="cities")
+- Headline: "Now live in 3 cities"
+- 3 city cards with provider count + progress bar
+
+### 11. CTA Section
+- Headline: "Ready to get started?"
+- Two buttons: "Create customer account" → `/auth?role=customer`, "Join as a provider" → `/auth?role=worker`
+
+### 12. Global Footer
+- Copyright + links (GitHub, Docs, About)
+
+## Styling
+- **Theme**: Light (white bg, dark text #1a1a1a)
+- **Accent**: #1D9E75 (teal)
+- **Borders**: #e0e0e0 (light gray)
+- **Typography**: Responsive, clear hierarchy
+
+## Button URLs
+- All CTA buttons pass role parameter to `/auth?role=customer` or `/auth?role=worker`
+- Auth page pre-selects role based on parameter

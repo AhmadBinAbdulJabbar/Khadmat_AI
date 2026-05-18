@@ -17,6 +17,12 @@ function AuthPageInner() {
   useEffect(() => {
     const next = searchParams.get("next");
     if (next) setNextUrl(decodeURIComponent(next));
+    
+    const roleParam = searchParams.get("role");
+    if (roleParam === "worker" || roleParam === "customer") {
+      setRole(roleParam);
+      setTab("signup");
+    }
   }, [searchParams]);
 
   const [tab, setTab] = useState<"login"|"signup">("login");
