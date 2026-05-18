@@ -108,12 +108,8 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
                   K
                 </div>
                 <span className="hidden sm:block">Khadmat AI</span>
+                <span className="text-[10px] bg-[#E1F5EE] text-[#085041] px-2 py-0.5 rounded-full font-medium">Customer</span>
               </Link>
-            </div>
-
-            <div className="hidden md:flex items-center gap-5">
-              <Link href="/providers" className="text-[13px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Providers</Link>
-              <Link href="/chat" className="text-[13px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">AI Booking</Link>
             </div>
           </div>
 
@@ -126,7 +122,7 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
               className="flex items-center gap-1.5 cursor-pointer px-2 py-1 rounded-md hover:bg-[var(--bg-secondary)] transition-colors"
               onClick={() => setDropdownOpen(!dropdownOpen)}
             >
-              <div className="w-[28px] h-[28px] rounded-full bg-[#EEEDFE] border border-[#CECBF6] flex items-center justify-center text-[11px] font-medium text-[#3C3489] shrink-0">
+              <div className="w-[28px] h-[28px] rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--accent-dark)] flex items-center justify-center text-white text-[11px] font-bold shadow-md shrink-0">
                 {displayInitials}
               </div>
               <span className="text-[13px] font-medium text-[var(--text-primary)] hidden sm:block">{displayName}</span>
@@ -168,7 +164,7 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
           <aside className={`absolute md:static top-0 bottom-0 left-0 z-40 w-[220px] bg-[var(--bg-secondary)] border-r border-[var(--border-tertiary)] transition-transform duration-300 transform ${mobileMenu ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
             <div className="py-5 flex flex-col h-full overflow-y-auto">
               <div className="px-4 pb-4 mb-2.5 border-b border-[var(--border-tertiary)]">
-                <div className="w-11 h-11 rounded-full bg-[#EEEDFE] border border-[#CECBF6] flex items-center justify-center text-sm font-medium text-[#3C3489] mb-2">
+                <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--accent-dark)] flex items-center justify-center text-sm font-bold text-white shadow-md mb-2">
                   {displayInitials}
                 </div>
                 <div className="text-[13px] font-medium text-[var(--text-primary)]">{displayName}</div>
