@@ -1,6 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from typing import Optional
 from pydantic import BaseModel
+
+from config.supabase import supabase
 
 router = APIRouter()
 

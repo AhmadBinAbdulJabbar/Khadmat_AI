@@ -29,6 +29,10 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
     if (stored) {
       try {
         const u = JSON.parse(stored);
+        if (u.role === "worker") {
+          router.replace("/provider/dashboard");
+          return;
+        }
         const name = u.name || u.email || "User";
         setUser({
           name,
@@ -44,6 +48,10 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
         const u = session.user;
+        if (u.user_metadata?.role === "worker") {
+          router.replace("/provider/dashboard");
+          return;
+        }
         const name = u.user_metadata?.full_name ||
           `${u.user_metadata?.first_name ?? ""} ${u.user_metadata?.last_name ?? ""}`.trim() ||
           u.email || "User";
@@ -56,7 +64,7 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
       }
     };
     load();
-  }, []);
+  }, [router]);
 
   const handleLogout = async () => {
     localStorage.removeItem("khadmat_token");
