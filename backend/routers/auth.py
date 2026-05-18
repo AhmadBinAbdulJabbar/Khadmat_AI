@@ -67,11 +67,29 @@ async def signup(req: SignupRequest):
         raise HTTPException(status_code=400, detail=msg)
 
     user = response.user
+
+    # Insert into profiles table so we can query by role/city/profession
+    try:
+        supabase.table("profiles").insert({
+            "id": str(user.id),
+            "first_name": req.first_name,
+            "last_name": req.last_name,
+            "phone": req.phone,
+            "city": req.city,
+            "role": req.role,
+            "professions": req.professions or [],
+            "experience": req.experience,
+            "price_range": req.price_range,
+        }).execute()
+    except Exception as e:
+        print(f"[warn] profile insert failed: {e}")
+
     return {
         "success": True,
         "user": {
             "id": str(user.id),
             "email": user.email,
+            "role": req.role,
         },
     }
 

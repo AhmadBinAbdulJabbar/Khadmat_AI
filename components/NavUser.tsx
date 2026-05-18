@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase";
 interface UserInfo {
   name: string;
   email: string;
+  role: string;
   avatar?: string;
   initials: string;
 }
@@ -21,7 +22,6 @@ export default function NavUser() {
 
   useEffect(() => {
     const load = async () => {
-      // Email/password login — stored in localStorage
       const stored = localStorage.getItem("khadmat_user");
       if (stored) {
         try {
@@ -30,13 +30,14 @@ export default function NavUser() {
           setUser({
             name,
             email: u.email ?? "",
+            role: u.role ?? "customer",
             initials: name.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase(),
           });
           return;
         } catch {}
       }
 
-      // Google OAuth — Supabase session
+      // Supabase session fallback (Google OAuth)
       const supabase = createClient();
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
@@ -45,6 +46,7 @@ export default function NavUser() {
         setUser({
           name,
           email: u.email ?? "",
+          role: u.user_metadata?.role ?? "customer",
           avatar: u.user_metadata?.avatar_url,
           initials: name.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase(),
         });
@@ -53,7 +55,6 @@ export default function NavUser() {
     load();
   }, []);
 
-  // Close on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
@@ -84,6 +85,8 @@ export default function NavUser() {
     );
   }
 
+  const dashboardHref = user.role === "worker" ? "/provider/dashboard" : "/customer/dashboard";
+
   return (
     <div className="relative" ref={ref}>
       <button
@@ -109,14 +112,17 @@ export default function NavUser() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-52 bg-[var(--bg-primary)] border border-[var(--border-secondary)] rounded-xl shadow-lg z-50 overflow-hidden animate-fade-in">
+        <div className="absolute right-0 top-full mt-2 w-56 bg-[var(--bg-primary)] border border-[var(--border-secondary)] rounded-xl shadow-lg z-50 overflow-hidden animate-fade-in">
           <div className="px-4 py-3 border-b border-[var(--border-tertiary)]">
             <div className="text-xs font-medium text-[var(--text-primary)] truncate">{user.name}</div>
             <div className="text-[11px] text-[var(--text-tertiary)] truncate">{user.email}</div>
+            <div className="text-[10px] mt-0.5 font-medium text-[var(--accent)]">
+              {user.role === "worker" ? "Service Provider" : "Customer"}
+            </div>
           </div>
           <div className="py-1">
             <Link
-              href="/customer/dashboard"
+              href={dashboardHref}
               onClick={() => setOpen(false)}
               className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)] transition-colors no-underline"
             >

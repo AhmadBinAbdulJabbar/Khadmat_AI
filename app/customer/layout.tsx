@@ -2,23 +2,70 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { 
-  Bell, LayoutDashboard, Calendar, MessageCircle, Users, 
+import { usePathname, useRouter } from "next/navigation";
+import {
+  Bell, LayoutDashboard, Calendar, MessageCircle, Users,
   Receipt, User, Star, Settings, LogOut, Menu, X, MapPin, ChevronDown
 } from "lucide-react";
 import RequireAuth from "@/components/RequireAuth";
+import { createClient } from "@/lib/supabase";
+
+type UserInfo = { name: string; email: string; initials: string; city?: string };
 
 export default function CustomerLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileMenu, setMobileMenu] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [user, setUser] = useState<UserInfo | null>(null);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileMenu(false);
     setDropdownOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("khadmat_user");
+    if (stored) {
+      try {
+        const u = JSON.parse(stored);
+        const name = u.name || u.email || "User";
+        setUser({
+          name,
+          email: u.email ?? "",
+          city: u.city ?? "",
+          initials: name.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase(),
+        });
+        return;
+      } catch {}
+    }
+    const load = async () => {
+      const supabase = createClient();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const u = session.user;
+        const name = u.user_metadata?.full_name ||
+          `${u.user_metadata?.first_name ?? ""} ${u.user_metadata?.last_name ?? ""}`.trim() ||
+          u.email || "User";
+        setUser({
+          name,
+          email: u.email ?? "",
+          city: u.user_metadata?.city ?? "",
+          initials: name.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase(),
+        });
+      }
+    };
+    load();
+  }, []);
+
+  const handleLogout = async () => {
+    localStorage.removeItem("khadmat_token");
+    localStorage.removeItem("khadmat_user");
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/");
+    router.refresh();
+  };
 
   const navItems = [
     { name: "Dashboard", href: "/customer/dashboard", icon: LayoutDashboard },
@@ -33,6 +80,10 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
     { name: "My reviews", href: "/customer/reviews", icon: Star },
     { name: "Settings", href: "/customer/settings", icon: Settings },
   ];
+
+  const displayName = user?.name ?? "Loading...";
+  const displayInitials = user?.initials ?? "??";
+  const displayEmail = user?.email ?? "";
 
   return (
     <RequireAuth>
@@ -51,11 +102,10 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
                 <span className="hidden sm:block">Khadmat AI</span>
               </Link>
             </div>
-            
+
             <div className="hidden md:flex items-center gap-5">
-              <Link href="#" className="text-[13px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">How it works</Link>
-              <Link href="#" className="text-[13px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Services</Link>
               <Link href="/providers" className="text-[13px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Providers</Link>
+              <Link href="/chat" className="text-[13px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">AI Booking</Link>
             </div>
           </div>
 
@@ -64,14 +114,14 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
               <Bell size={15} />
               <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-[#E24B4A] rounded-full" />
             </button>
-            <div 
+            <div
               className="flex items-center gap-1.5 cursor-pointer px-2 py-1 rounded-md hover:bg-[var(--bg-secondary)] transition-colors"
               onClick={() => setDropdownOpen(!dropdownOpen)}
             >
               <div className="w-[28px] h-[28px] rounded-full bg-[#EEEDFE] border border-[#CECBF6] flex items-center justify-center text-[11px] font-medium text-[#3C3489] shrink-0">
-                MU
+                {displayInitials}
               </div>
-              <span className="text-[13px] font-medium text-[var(--text-primary)] hidden sm:block">Muhammad Umair</span>
+              <span className="text-[13px] font-medium text-[var(--text-primary)] hidden sm:block">{displayName}</span>
               <ChevronDown size={13} className="text-[var(--text-tertiary)] hidden sm:block" />
             </div>
 
@@ -80,20 +130,20 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
                 <div className="fixed inset-0 z-40" onClick={() => setDropdownOpen(false)}></div>
                 <div className="absolute top-[44px] right-0 bg-[var(--bg-primary)] border border-[var(--border-tertiary)] rounded-xl p-1.5 min-w-[200px] z-50 shadow-sm">
                   <div className="p-2 border-b border-[var(--border-tertiary)] mb-1">
-                    <div className="text-[13px] font-medium text-[var(--text-primary)]">Muhammad Umair</div>
-                    <div className="text-[11px] text-[var(--text-secondary)]">umairbwp202@gmail.com</div>
+                    <div className="text-[13px] font-medium text-[var(--text-primary)]">{displayName}</div>
+                    <div className="text-[11px] text-[var(--text-secondary)]">{displayEmail}</div>
                   </div>
-                  <Link href="/customer/dashboard" className="flex items-center gap-2 px-2.5 py-1.5 text-[13px] text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)] rounded-md transition-colors">
+                  <Link href="/customer/dashboard" onClick={() => setDropdownOpen(false)} className="flex items-center gap-2 px-2.5 py-1.5 text-[13px] text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)] rounded-md transition-colors no-underline">
                     <LayoutDashboard size={15} /> My Dashboard
                   </Link>
-                  <Link href="/customer/bookings" className="flex items-center gap-2 px-2.5 py-1.5 text-[13px] text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)] rounded-md transition-colors">
+                  <Link href="/customer/bookings" onClick={() => setDropdownOpen(false)} className="flex items-center gap-2 px-2.5 py-1.5 text-[13px] text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)] rounded-md transition-colors no-underline">
                     <Calendar size={15} /> My Bookings
                   </Link>
-                  <Link href="/customer/settings" className="flex items-center gap-2 px-2.5 py-1.5 text-[13px] text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)] rounded-md transition-colors">
+                  <Link href="/customer/settings" onClick={() => setDropdownOpen(false)} className="flex items-center gap-2 px-2.5 py-1.5 text-[13px] text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)] rounded-md transition-colors no-underline">
                     <Settings size={15} /> Settings
                   </Link>
                   <div className="h-px bg-[var(--border-tertiary)] my-1"></div>
-                  <button className="w-full flex items-center gap-2 px-2.5 py-1.5 text-[13px] text-[#A32D2D] hover:bg-[#FCEBEB] rounded-md transition-colors cursor-pointer border-none text-left bg-transparent">
+                  <button onClick={handleLogout} className="w-full flex items-center gap-2 px-2.5 py-1.5 text-[13px] text-[#A32D2D] hover:bg-[#FCEBEB] rounded-md transition-colors cursor-pointer border-none text-left bg-transparent">
                     <LogOut size={15} /> Logout
                   </button>
                 </div>
@@ -103,35 +153,35 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
         </nav>
 
         <div className="flex flex-1 overflow-hidden relative">
-          {/* Sidebar overlay for mobile */}
           {mobileMenu && (
             <div className="fixed inset-0 bg-black/20 z-30 md:hidden" onClick={() => setMobileMenu(false)} />
           )}
-          
-          {/* Sidebar */}
+
           <aside className={`absolute md:static top-0 bottom-0 left-0 z-40 w-[220px] bg-[var(--bg-secondary)] border-r border-[var(--border-tertiary)] transition-transform duration-300 transform ${mobileMenu ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
             <div className="py-5 flex flex-col h-full overflow-y-auto">
               <div className="px-4 pb-4 mb-2.5 border-b border-[var(--border-tertiary)]">
                 <div className="w-11 h-11 rounded-full bg-[#EEEDFE] border border-[#CECBF6] flex items-center justify-center text-sm font-medium text-[#3C3489] mb-2">
-                  MU
+                  {displayInitials}
                 </div>
-                <div className="text-[13px] font-medium text-[var(--text-primary)]">Muhammad Umair</div>
-                <div className="text-[11px] text-[var(--text-secondary)]">umairbwp202@gmail.com</div>
-                <div className="text-[11px] text-[var(--text-tertiary)] mt-0.5 flex items-center gap-1">
-                  <MapPin size={12} /> Islamabad, Pakistan
-                </div>
+                <div className="text-[13px] font-medium text-[var(--text-primary)]">{displayName}</div>
+                <div className="text-[11px] text-[var(--text-secondary)]">{displayEmail}</div>
+                {user?.city && (
+                  <div className="text-[11px] text-[var(--text-tertiary)] mt-0.5 flex items-center gap-1">
+                    <MapPin size={12} /> {user.city}, Pakistan
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col">
                 {navItems.map((item) => {
-                  const isActive = pathname === item.href || (pathname === '/' && item.name === 'Dashboard');
+                  const isActive = pathname === item.href;
                   return (
                     <Link key={item.name} href={item.href} className={`flex items-center gap-2 px-4 py-2 text-[13px] no-underline transition-colors ${isActive ? 'bg-[var(--bg-primary)] text-[#1D9E75] font-medium border-r-2 border-[#1D9E75]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-primary)] hover:text-[var(--text-primary)]'}`}>
-                      <item.icon size={16} /> 
+                      <item.icon size={16} />
                       {item.name}
                       {item.badge && <span className="ml-auto bg-[#E24B4A] text-white text-[10px] px-1.5 py-0.5 rounded-full leading-none">{item.badge}</span>}
                     </Link>
-                  )
+                  );
                 })}
 
                 <div className="text-[10px] text-[var(--text-tertiary)] px-4 pt-2.5 pb-1 tracking-wider mt-1">ACCOUNT</div>
@@ -141,17 +191,16 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
                     <Link key={item.name} href={item.href} className={`flex items-center gap-2 px-4 py-2 text-[13px] no-underline transition-colors ${isActive ? 'bg-[var(--bg-primary)] text-[#1D9E75] font-medium border-r-2 border-[#1D9E75]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-primary)] hover:text-[var(--text-primary)]'}`}>
                       <item.icon size={16} /> {item.name}
                     </Link>
-                  )
+                  );
                 })}
                 <div className="h-px bg-[var(--border-tertiary)] my-2 mx-4"></div>
-                <button className="flex items-center gap-2 px-4 py-2 text-[13px] text-[#A32D2D] hover:bg-[var(--bg-primary)] transition-colors cursor-pointer border-none text-left bg-transparent w-full">
+                <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 text-[13px] text-[#A32D2D] hover:bg-[var(--bg-primary)] transition-colors cursor-pointer border-none text-left bg-transparent w-full">
                   <LogOut size={16} /> Logout
                 </button>
               </div>
             </div>
           </aside>
 
-          {/* Main content */}
           <main className="flex-1 bg-[var(--bg-primary)] overflow-y-auto">
             {children}
           </main>
