@@ -5,9 +5,12 @@
   "main": "expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
+    "start:tunnel": "expo start -c --tunnel --go",
+    "start:lan": "expo start -c --lan --go",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
+    "export:android": "expo export --platform android",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
