@@ -11,7 +11,7 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { OrchestratorResult, runServiceOrchestration } from "../lib/agentic";
+import { OrchestratorResult, runServiceOrchestration } from "./src/agentic";
 
 const EXAMPLES = [
   "Mujhe kal subah G-13 mein AC technician chahiye",

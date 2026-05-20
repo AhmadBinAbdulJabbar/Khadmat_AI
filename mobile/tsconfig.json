@@ -4,5 +4,5 @@
     "strict": true,
     "baseUrl": "."
   },
-  "include": ["App.tsx", "../lib/**/*.ts"]
+  "include": ["App.tsx", "src/**/*.ts"]
 }
