@@ -2,6 +2,8 @@
 
 # dependencies
 /node_modules
+mobile/node_modules/
+**/node_modules/
 
 # python virtual environment
 venv/
@@ -25,6 +27,10 @@ __pycache__/
 # next.js
 /.next/
 /out/
+
+# expo
+mobile/.expo/
+mobile/dist/
 
 # production
 /build

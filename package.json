@@ -6,7 +6,10 @@
     "dev": "cross-env NODE_OPTIONS=--max-old-space-size=4096 next dev",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "mobile": "npm --prefix mobile run start",
+    "mobile:android": "npm --prefix mobile run android",
+    "backend": "cd backend && uvicorn main:app --reload --port 8000"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.3",

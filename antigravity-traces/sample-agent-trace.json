@@ -1,0 +1,42 @@
+{
+  "session_id": "sess_demo_ac_g13",
+  "input": "Mujhe kal subah G-13 mein AC technician chahiye",
+  "trace_steps": [
+    {
+      "agent_name": "Planner Agent",
+      "status": "done",
+      "detail": "Created workflow: understand intent, discover providers, rank options, book slot, schedule follow-up.",
+      "tool_called": "antigravity.plan_workflow()"
+    },
+    {
+      "agent_name": "Intent Agent",
+      "status": "done",
+      "detail": "Extracted AC Technician, G-13, Islamabad, Tomorrow morning; language=Roman Urdu; confidence=90%.",
+      "tool_called": "parse_multilingual_intent()"
+    },
+    {
+      "agent_name": "Discovery Agent",
+      "status": "done",
+      "detail": "Searched mock Maps/Places dataset for AC Technician near G-13, Islamabad; found 3 candidate providers.",
+      "tool_called": "mock_places_search()"
+    },
+    {
+      "agent_name": "Decision Agent",
+      "status": "done",
+      "detail": "Ali AC Services selected with highest score because it is 2.1 km away, available at 10:00 AM, rated 4.7, and has 212 completed jobs.",
+      "tool_called": "rank_by_distance_availability_rating()"
+    },
+    {
+      "agent_name": "Booking Agent",
+      "status": "done",
+      "detail": "Created mock booking reference, assigned Ali AC Services, and generated confirmation receipt.",
+      "tool_called": "create_mock_booking_record()"
+    },
+    {
+      "agent_name": "Follow-up Agent",
+      "status": "done",
+      "detail": "Scheduled reminder 1 hour before appointment and a post-job completion confirmation.",
+      "tool_called": "schedule_reminder_and_completion_check()"
+    }
+  ]
+}

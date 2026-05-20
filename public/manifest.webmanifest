@@ -1,0 +1,29 @@
+{
+  "name": "Khadmat AI",
+  "short_name": "Khadmat",
+  "description": "Agentic AI service booking for Pakistan's informal economy.",
+  "start_url": "/mobile",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fbfdfc",
+  "theme_color": "#1d9e75",
+  "icons": [
+    {
+      "src": "/khadmat-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Book service",
+      "url": "/mobile"
+    },
+    {
+      "name": "Agent chat",
+      "url": "/chat"
+    }
+  ]
+}

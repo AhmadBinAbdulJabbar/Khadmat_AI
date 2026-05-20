@@ -14,7 +14,6 @@ import {
   CheckCircle2,
   Loader2
 } from "lucide-react";
-import RequireAuth from "@/components/RequireAuth";
 
 interface TraceStep {
   agent_name: string;
@@ -63,7 +62,7 @@ function ChatInterface() {
     setMessages((prev) => [...prev, { role: "ai", loading: true }]);
 
     try {
-      const res = await fetch("http://localhost:8001/api/process", {
+      const res = await fetch("/api/process", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMessage }),
@@ -199,8 +198,8 @@ function ChatInterface() {
                             </div>
                             <div className="bg-[var(--bg-primary)] border border-[var(--border-tertiary)] rounded-lg p-3 text-xs space-y-1.5 text-[var(--text-primary)]">
                               <div className="flex justify-between"><span className="text-[var(--text-secondary)]">Ref</span><span className="font-mono">{msg.booking.booking_ref}</span></div>
-                              <div className="flex justify-between"><span className="text-[var(--text-secondary)]">Provider</span><span>Ali AC Services</span></div>
-                              <div className="flex justify-between"><span className="text-[var(--text-secondary)]">Time</span><span>Tomorrow 10:00 AM</span></div>
+                              <div className="flex justify-between"><span className="text-[var(--text-secondary)]">Provider</span><span>{msg.booking.provider_name}</span></div>
+                              <div className="flex justify-between"><span className="text-[var(--text-secondary)]">Time</span><span>{msg.booking.scheduled_time}</span></div>
                               {msg.reminder && <div className="flex justify-between"><span className="text-[var(--text-secondary)]">Reminder</span><span className="text-[var(--accent)] font-medium">{msg.reminder.trigger_at}</span></div>}
                             </div>
                           </div>
@@ -285,14 +284,12 @@ function ChatInterface() {
 
 export default function ChatBookingPage() {
   return (
-    <RequireAuth>
-      <Suspense fallback={
-        <div className="flex items-center justify-center min-h-screen bg-[var(--bg-primary)]">
-          <Loader2 className="animate-spin text-[var(--accent)]" size={32} />
-        </div>
-      }>
-        <ChatInterface />
-      </Suspense>
-    </RequireAuth>
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen bg-[var(--bg-primary)]">
+        <Loader2 className="animate-spin text-[var(--accent)]" size={32} />
+      </div>
+    }>
+      <ChatInterface />
+    </Suspense>
   );
 }

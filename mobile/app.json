@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "Khadmat AI",
+    "slug": "khadmat-ai-mobile",
+    "scheme": "khadmat",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#fbfdfc",
+    "splash": {
+      "backgroundColor": "#1d9e75",
+      "resizeMode": "contain"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.khadmat.ai"
+    },
+    "android": {
+      "package": "com.khadmat.ai",
+      "adaptiveIcon": {
+        "backgroundColor": "#1d9e75"
+      }
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "extra": {
+      "challenge": "AI Service Orchestrator for Informal Economy",
+      "orchestrator": "Google Antigravity workflow compatible"
+    }
+  }
+}

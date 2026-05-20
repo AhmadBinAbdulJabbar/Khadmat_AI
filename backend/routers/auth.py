@@ -10,6 +10,19 @@ router = APIRouter()
 
 @router.post("/login")
 async def login(req: LoginRequest):
+    if supabase is None:
+        return {
+            "success": True,
+            "mock": True,
+            "user": {
+                "id": "mock_customer_1",
+                "email": req.email_or_phone,
+                "role": "customer",
+                "name": "Demo Customer",
+            },
+            "token": "mock-token",
+        }
+
     try:
         response = supabase.auth.sign_in_with_password(
             {"email": req.email_or_phone, "password": req.password}
@@ -42,6 +55,17 @@ async def login(req: LoginRequest):
 async def signup(req: SignupRequest):
     if len(req.password) < 8:
         raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
+
+    if supabase is None:
+        return {
+            "success": True,
+            "mock": True,
+            "user": {
+                "id": "mock_user_1",
+                "email": req.email,
+                "role": req.role,
+            },
+        }
 
     try:
         # Use admin API so the account is pre-confirmed — no email sent, no rate limit
@@ -101,6 +125,20 @@ async def google_callback(access_token: str):
     Frontend passes the access_token from supabase.auth.getSession().
     We verify it and return a clean user object.
     """
+    if supabase is None:
+        return {
+            "success": True,
+            "mock": True,
+            "user": {
+                "id": "mock_google_user",
+                "email": "demo@khadmat.ai",
+                "name": "Demo Google User",
+                "avatar": "",
+                "role": "customer",
+            },
+            "token": access_token or "mock-token",
+        }
+
     try:
         user_response = supabase.auth.get_user(access_token)
     except AuthApiError as e:

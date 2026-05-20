@@ -90,11 +90,11 @@ export default function LandingPage() {
 
         <div className="flex items-center justify-center gap-2.5 flex-wrap mb-10">
           <Link
-            href="/auth?role=customer"
+            href="/mobile"
             className="inline-flex items-center gap-2 bg-[#1D9E75] text-white text-sm font-medium px-7 py-3 rounded-lg hover:bg-[#0F6E56] transition-all no-underline"
           >
             <MessageCircle size={16} />
-            Book a service
+            Open mobile app
           </Link>
           <Link
             href="/auth?role=worker"
@@ -250,7 +250,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {/* Customer Card */}
             <Link
-              href="/auth?role=customer"
+              href="/mobile"
               className="bg-white border-2 border-[#1D9E75] rounded-2xl p-6 no-underline hover:bg-[#e8f5f0] transition-all"
             >
               <div className="w-11 h-11 rounded-lg bg-[#e8f5f0] flex items-center justify-center mb-3.5">
@@ -275,7 +275,7 @@ export default function LandingPage() {
                 ))}
               </div>
               <button className="w-full bg-[#1D9E75] text-white border-none rounded-lg px-4 py-2.5 text-sm font-medium cursor-pointer hover:bg-[#0F6E56] transition-all" type="button">
-                Create customer account
+                Try mobile booking
               </button>
             </Link>
 
@@ -412,11 +412,11 @@ export default function LandingPage() {
         </p>
         <div className="flex items-center justify-center gap-2.5 flex-wrap">
           <Link
-            href="/auth?role=customer"
+            href="/mobile"
             className="inline-flex items-center gap-2 bg-[#1D9E75] text-white text-sm font-medium px-7 py-3 rounded-lg hover:bg-[#0F6E56] transition-all no-underline"
           >
             <MessageCircle size={16} />
-            Create customer account
+            Launch mobile demo
           </Link>
           <Link
             href="/auth?role=worker"
