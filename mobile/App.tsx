@@ -1,16 +1,17 @@
 import { StatusBar } from "expo-status-bar";
-import { type ReactNode, useMemo, useState } from "react";
+import { type ReactNode, useMemo, useRef, useState } from "react";
 import {
+  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { OrchestratorResult, runServiceOrchestration } from "./src/agentic";
 
 const EXAMPLES = [
@@ -20,8 +21,12 @@ const EXAMPLES = [
 ];
 
 export default function App() {
+  const scrollRef = useRef<ScrollView>(null);
   const [input, setInput] = useState(EXAMPLES[0]);
   const [thinking, setThinking] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [runCount, setRunCount] = useState(1);
+  const [lastRequest, setLastRequest] = useState(EXAMPLES[0]);
   const [result, setResult] = useState<OrchestratorResult>(() =>
     runServiceOrchestration(EXAMPLES[0], {
       sessionId: "sess_demo_ac_g13",
@@ -33,66 +38,117 @@ export default function App() {
   const providers = useMemo(() => result.providers.slice(0, 3), [result.providers]);
 
   const submit = (value = input) => {
-    if (!value.trim() || thinking) return;
-    setInput(value);
+    const request = value.trim();
+    if (!request || thinking) return;
+    const nextRun = runCount + 1;
+
+    setInput(request);
+    setLastRequest(request);
+    setErrorMessage("");
     setThinking(true);
+    scrollRef.current?.scrollTo({ y: 0, animated: true });
+
     setTimeout(() => {
-      setResult(runServiceOrchestration(value));
-      setThinking(false);
-    }, 350);
+      try {
+        setResult(
+          runServiceOrchestration(request, {
+            sessionId: `sess_mobile_${nextRun}`,
+            now: new Date(`2026-05-20T10:00:${String(nextRun).padStart(2, "0")}+05:00`),
+            bookingRef: `BK-20260520-R${String(nextRun).padStart(2, "0")}`,
+          }),
+        );
+        setRunCount(nextRun);
+      } catch (error) {
+        setErrorMessage(error instanceof Error ? error.message : "Could not run the workflow.");
+      } finally {
+        setThinking(false);
+      }
+    }, 700);
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar style="dark" />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        style={styles.keyboard}
-      >
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.kicker}>GOOGLE ANTIGRAVITY</Text>
-            <Text style={styles.title}>Khadmat AI</Text>
-          </View>
-          <View style={styles.logo}>
-            <Text style={styles.logoText}>K</Text>
-          </View>
-        </View>
+    <SafeAreaProvider>
+      <SafeAreaView edges={["top", "left", "right"]} style={styles.safeArea}>
+        <StatusBar style="dark" />
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          style={styles.keyboard}
+        >
+          <View style={styles.stickyHeader}>
+            <View style={styles.header}>
+              <View>
+                <Text style={styles.kicker}>GOOGLE ANTIGRAVITY</Text>
+                <Text style={styles.title}>Khadmat AI</Text>
+              </View>
+              <View style={styles.logo}>
+                <Text style={styles.logoText}>K</Text>
+              </View>
+            </View>
 
-        <View style={styles.inputPanel}>
-          <Text style={styles.inputLabel}>Service request</Text>
-          <View style={styles.inputRow}>
-            <TextInput
-              value={input}
-              onChangeText={setInput}
-              placeholder="Urdu, Roman Urdu, or English"
-              placeholderTextColor="#7d8b86"
-              style={styles.input}
-              multiline
-            />
-            <Pressable
-              accessibilityRole="button"
-              disabled={thinking}
-              onPress={() => submit()}
-              style={({ pressed }) => [
-                styles.sendButton,
-                pressed ? styles.sendButtonPressed : null,
-                thinking ? styles.sendButtonDisabled : null,
-              ]}
-            >
-              <Text style={styles.sendText}>{thinking ? "..." : "Go"}</Text>
-            </Pressable>
+            <View style={styles.inputPanel}>
+              <Text style={styles.inputLabel}>Service request</Text>
+              <View style={styles.inputRow}>
+                <TextInput
+                  value={input}
+                  onChangeText={setInput}
+                  onSubmitEditing={() => submit()}
+                  placeholder="Urdu, Roman Urdu, or English"
+                  placeholderTextColor="#7d8b86"
+                  returnKeyType="send"
+                  style={styles.input}
+                />
+                <Pressable
+                  accessibilityLabel="Run service workflow"
+                  accessibilityRole="button"
+                  disabled={thinking}
+                  hitSlop={10}
+                  onPress={() => submit()}
+                  style={({ pressed }) => [
+                    styles.sendButton,
+                    pressed ? styles.sendButtonPressed : null,
+                    thinking ? styles.sendButtonDisabled : null,
+                  ]}
+                >
+                  {thinking ? (
+                    <ActivityIndicator color="white" size="small" />
+                  ) : (
+                    <Text style={styles.sendText}>Go</Text>
+                  )}
+                </Pressable>
+              </View>
+            </View>
           </View>
-        </View>
 
-        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-          <View style={styles.examples}>
-            {EXAMPLES.map((example) => (
-              <Pressable key={example} onPress={() => submit(example)} style={styles.exampleChip}>
-                <Text style={styles.exampleText}>{example}</Text>
-              </Pressable>
-            ))}
-          </View>
+          <ScrollView
+            ref={scrollRef}
+            contentContainerStyle={styles.content}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.runStatus}>
+              <View style={styles.runPulse} />
+              <View style={styles.flex}>
+                <Text style={styles.runLabel}>{thinking ? "Agents running" : `Run #${runCount} complete`}</Text>
+                <Text style={styles.runText} numberOfLines={2}>
+                  {lastRequest}
+                </Text>
+              </View>
+              <Text style={styles.runBadge}>{thinking ? "LIVE" : result.booking.booking_ref}</Text>
+            </View>
+
+            {errorMessage ? (
+              <View style={styles.errorBox}>
+                <Text style={styles.errorText}>{errorMessage}</Text>
+              </View>
+            ) : null}
+
+            <View style={styles.examples}>
+              {EXAMPLES.map((example) => (
+                <Pressable key={example} onPress={() => submit(example)} style={styles.exampleChip}>
+                  <Text style={styles.exampleText}>{example}</Text>
+                </Pressable>
+              ))}
+            </View>
 
           <Card>
             <View style={styles.cardHeader}>
@@ -171,9 +227,10 @@ export default function App() {
               </View>
             ))}
           </Card>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
@@ -220,6 +277,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fbfdfc",
   },
+  stickyHeader: {
+    backgroundColor: "#fbfdfc",
+    borderBottomWidth: 1,
+    borderColor: "#cfe4dc",
+    elevation: 8,
+    shadowColor: "#21362f",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    zIndex: 10,
+  },
   header: {
     paddingHorizontal: 18,
     paddingTop: 8,
@@ -227,8 +295,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    borderBottomWidth: 1,
-    borderColor: "#dfe7e3",
   },
   kicker: {
     color: "#1d9e75",
@@ -258,8 +324,6 @@ const styles = StyleSheet.create({
   inputPanel: {
     padding: 14,
     backgroundColor: "#e9f7f2",
-    borderBottomWidth: 1,
-    borderColor: "#cfe4dc",
   },
   inputLabel: {
     marginBottom: 8,
@@ -281,9 +345,9 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     minHeight: 42,
-    maxHeight: 84,
     color: "#17211f",
     fontSize: 14,
+    paddingVertical: 0,
   },
   sendButton: {
     width: 44,
@@ -308,6 +372,48 @@ const styles = StyleSheet.create({
     padding: 14,
     paddingBottom: 30,
     gap: 12,
+  },
+  runStatus: {
+    alignItems: "center",
+    backgroundColor: "#14231f",
+    borderRadius: 18,
+    flexDirection: "row",
+    gap: 10,
+    padding: 12,
+  },
+  runPulse: {
+    backgroundColor: "#5dffbd",
+    borderRadius: 5,
+    height: 10,
+    width: 10,
+  },
+  runLabel: {
+    color: "#d7fff0",
+    fontSize: 12,
+    fontWeight: "800",
+    textTransform: "uppercase",
+  },
+  runText: {
+    color: "#b9c7c2",
+    fontSize: 12,
+    marginTop: 2,
+  },
+  runBadge: {
+    color: "white",
+    fontSize: 11,
+    fontWeight: "800",
+  },
+  errorBox: {
+    backgroundColor: "#fff0f0",
+    borderColor: "#f3c5c5",
+    borderRadius: 14,
+    borderWidth: 1,
+    padding: 12,
+  },
+  errorText: {
+    color: "#9b1c1c",
+    fontSize: 13,
+    fontWeight: "700",
   },
   examples: {
     flexDirection: "row",
